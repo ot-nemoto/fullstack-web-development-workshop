@@ -51,9 +51,6 @@ services:
 		- mv next_app/.eslintrc.json .
 		- mv next_app/.gitignore .
 		- rmdir next_app/
-	- VS Code起動時にyarnコマンドが自動実行されるように設定する
-		- echo '' >> .devcontainer/Dockerfile
-		- echo 'RUN yarn' >> .devcontainer/Dockerfile
 	- yarn dev
 ## フロントエンド追加設定
 - next.config.js
@@ -89,7 +86,7 @@ async rewrites() {
 	- echo -e 'djangorestframework\nmysqlclient' > requirements.txt
 	- pip install -r requirements.txt
 	- pip freeze > requirements.lock
-	- VS Code起動時にpip installコマンドが自動実行されるように設定する
+	- VS Code起動時にpip installコマンドが自動実行されるように設定する（import "rest_framework.response" could not be resolvedエラーの回避にもなる）
 		- echo '' >> .devcontainer/Dockerfile
 		- echo 'COPY requirements.lock .' >> .devcontainer/Dockerfile
 		- echo 'RUN pip install -r requirements.lock' >> .devcontainer/Dockerfile
@@ -104,13 +101,14 @@ async rewrites() {
 	- INSTALLED_APPSに"rest_framework"を追加する
 	- ALLOWED_HOSTSに['*']を設定する
 ## VS Code操作
-- .devcontainerの内容を再実行する場合は F1 > Remote-Containers: Rebuild Container を実施
+- .devcontainerの内容を再実行する場合は F1 > Rebuild Container を実施
 ## Git Cloneからの起動方法
 - 【TODO】Gitクライアントのインストール手順
 - Windowsから見ると`\\wsl$\Ubuntu\usr\local\src\dev\app`にClone
 - フロントエンド起動
 	- cd /usr/local/src/dev/app/frontend
 	- code .
+	- yarn
 	- yarn dev
 - バックエンド起動
 	- cd /usr/local/src/dev/app/backend
