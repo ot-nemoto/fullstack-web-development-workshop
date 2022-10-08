@@ -46,12 +46,14 @@ services:
 	- code .
 	- F1 > Dev Containers: Open Folder in Containerで「/usr/local/src/dev/app/frontend/」フォルダでOK > Node.js > 18 > OK
 	- yarn create next-app next_app
-	- mv next_app/* .
-	- mv next_app/.eslintrc.json .
-	- mv next_app/.gitignore .
-	- rmdir next_app/
-	- echo '' >> .devcontainer/Dockerfile
-	- echo 'RUN yarn' >> .devcontainer/Dockerfile
+	- next_app配下に作成されたアプリケーションを一階層上に上げる
+		- mv next_app/* .
+		- mv next_app/.eslintrc.json .
+		- mv next_app/.gitignore .
+		- rmdir next_app/
+	- VS Code起動時にyarnコマンドが自動実行されるように設定する
+		- echo '' >> .devcontainer/Dockerfile
+		- echo 'RUN yarn' >> .devcontainer/Dockerfile
 	- yarn dev
 ## フロントエンド追加設定
 - next.config.js
@@ -87,9 +89,10 @@ async rewrites() {
 	- echo -e 'djangorestframework\nmysqlclient' > requirements.txt
 	- pip install -r requirements.txt
 	- pip freeze > requirements.lock
-	- echo '' >> .devcontainer/Dockerfile
-	- echo 'COPY requirements.lock .' >> .devcontainer/Dockerfile
-	- echo 'RUN pip install -r requirements.lock' >> .devcontainer/Dockerfile
+	- VS Code起動時にpip installコマンドが自動実行されるように設定する
+		- echo '' >> .devcontainer/Dockerfile
+		- echo 'COPY requirements.lock .' >> .devcontainer/Dockerfile
+		- echo 'RUN pip install -r requirements.lock' >> .devcontainer/Dockerfile
 	- django-admin startproject config .
 	- `echo '__pycache__/' > .gitignore`
 	- mkdir config/settings
@@ -100,6 +103,8 @@ async rewrites() {
 - settings.py
 	- INSTALLED_APPSに"rest_framework"を追加する
 	- ALLOWED_HOSTSに['*']を設定する
+## VS Code操作
+- .devcontainerの内容を再実行する場合は F1 > Remote-Containers: Rebuild Container を実施
 ## Git Cloneからの起動方法
 - 【TODO】Gitクライアントのインストール手順
 - Windowsから見ると`\\wsl$\Ubuntu\usr\local\src\dev\app`にClone
