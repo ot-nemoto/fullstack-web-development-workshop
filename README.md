@@ -50,6 +50,8 @@ services:
 	- mv next_app/.eslintrc.json .
 	- mv next_app/.gitignore .
 	- rmdir next_app/
+	- echo '' >> .devcontainer/Dockerfile
+	- echo 'RUN yarn' >> .devcontainer/Dockerfile
 	- yarn dev
 ## フロントエンド追加設定
 - next.config.js
@@ -85,6 +87,9 @@ async rewrites() {
 	- echo -e 'djangorestframework\nmysqlclient' > requirements.txt
 	- pip install -r requirements.txt
 	- pip freeze > requirements.lock
+	- echo '' >> .devcontainer/Dockerfile
+	- echo 'COPY requirements.lock .' >> .devcontainer/Dockerfile
+	- echo 'RUN pip install -r requirements.lock' >> .devcontainer/Dockerfile
 	- django-admin startproject config .
 	- `echo '__pycache__/' > .gitignore`
 	- mkdir config/settings
@@ -101,12 +106,10 @@ async rewrites() {
 - フロントエンド起動
 	- cd /usr/local/src/dev/app/frontend
 	- code .
-	- yarn
 	- yarn dev
 - バックエンド起動
 	- cd /usr/local/src/dev/app/backend
 	- code .
-	- pip install -r requirements.lock
 	- python manage.py runserver --settings config.settings.development
 # バックエンド開発
 ## アプリケーション追加
