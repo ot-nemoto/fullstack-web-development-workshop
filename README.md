@@ -96,6 +96,7 @@ async rewrites() {
 	- INSTALLED_APPSに"rest_framework"を追加する
 	- ALLOWED_HOSTSに['*']を設定する
 ## Git Cloneからの起動方法
+- 【TODO】Gitクライアントのインストール手順
 - Windowsから見ると`\\wsl$\Ubuntu\usr\local\src\dev\app`にClone
 - フロントエンド起動
 	- cd /usr/local/src/dev/app/frontend
