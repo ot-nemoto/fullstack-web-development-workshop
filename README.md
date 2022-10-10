@@ -159,6 +159,8 @@ DATABASES = {
 	- バックエンドのAPI疎通
 - api/hello_db
 	- バックエンドDBのAPI疎通
+- api/product
+	- 商品API
 - common
 	- 共通ソース
 	- DATABASE定義を含む
