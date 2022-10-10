@@ -142,7 +142,7 @@ DATABASES = {
 }
 ```
 - マイグレーションファイルを作成
-	- python manage.py makemigrations --settings config.settings.development
+	- python manage.py makemigrations --settings config.settings.development common
 - マイグレーション
 	- python manage.py migrate --settings config.settings.development
 - ※マイグレーション対象のアプリケーション（例：common）がINSTALLED_APPSに追加されていること
