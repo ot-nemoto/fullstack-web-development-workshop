@@ -27,7 +27,7 @@ class Price(models.Model):
     start_date = models.DateField(verbose_name='開始日')
     end_date = models.DateField(verbose_name='終了日')
     product = models.ForeignKey(
-        Product, on_delete=models.PROTECT, verbose_name='商品')
+        Product, on_delete=models.PROTECT, verbose_name='商品', related_name='price_product')
 
     class Meta:
         db_table = 'price'
