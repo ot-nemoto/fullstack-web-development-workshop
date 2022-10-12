@@ -100,6 +100,24 @@ async rewrites() {
 - settings.py
 	- INSTALLED_APPSに"rest_framework"を追加する
 	- ALLOWED_HOSTSに['*']を設定する
+	- 実行SQLを標準出力に出力する
+```
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        }
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+        }
+    }
+}
+```
 ## VS Code操作
 - 起動時に「Reopen in Container」を促された際には、「Reopen in Container」を実施する
 - .devcontainerの内容を再実行する場合は F1 > Rebuild Container を実施
