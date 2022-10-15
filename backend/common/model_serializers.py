@@ -10,7 +10,7 @@ class PriceSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    price_product = PriceSerializer(many=True)
+    price_product = PriceSerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
