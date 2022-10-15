@@ -172,8 +172,8 @@ DATABASES = {
 	- バックエンドへのAPI疎通
 - hello_backend_db.js
 	- バックエンドDBへのAPI疎通
-- product.js
-	- 商品APIを呼び出し
+- product_list.js
+	- 商品の一覧
 # バックエンド成果物
 - api/hello
 	- バックエンドのAPI疎通
