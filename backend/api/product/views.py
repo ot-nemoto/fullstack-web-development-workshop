@@ -17,6 +17,7 @@ class ProductView(views.APIView):
 
 class ProductViewSet(viewsets.ModelViewSet):
     # http://127.0.0.1:8000/api/product/modelview/product/
+    # http://127.0.0.1:8000/api/product/modelview/product/1/
     # 子テーブルも含めて取得
     queryset = Product.objects.all().prefetch_related('price_product')
     serializer_class = ProductSerializer
