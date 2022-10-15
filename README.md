@@ -172,8 +172,10 @@ DATABASES = {
 	- バックエンドへのAPI疎通
 - hello_backend_db.js
 	- バックエンドDBへのAPI疎通
-- product_list.js
-	- 商品の一覧
+- product
+	- 商品
+	- 一覧 http://localhost:3000/product
+	- 詳細 http://localhost:3000/product/[id]
 # バックエンド成果物
 - api/hello
 	- バックエンドのAPI疎通
