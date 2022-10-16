@@ -2,6 +2,7 @@
 // https://swr.vercel.app/docs/data-fetching
 
 import axios from 'axios'
+import { useState } from 'react'
 import useSWR from 'swr'
 import { useRouter } from 'next/router';
 
@@ -12,6 +13,26 @@ export default function swr() {
 }
 
 function Profile() {
+  const [name, setName] = useState()
+
+  const onChangeName = ((e) => {
+    setName(e.target.value)
+  })
+
+  const doUpdate = ((e) => {
+    const ob = {
+      name: name,
+    }
+    console.log(ob)
+    axios.put(`/api/product/modelview/product/${id}`, ob)
+      .then(function (response) {
+        console.log(response.data);
+        alert('更新完了')
+      })
+  })
+
+
+
   const router = useRouter();
   let id = router.query.id
   console.log(id)
@@ -26,6 +47,8 @@ function Profile() {
     <div>
       <div>id:{data.id}</div>
       <div>name:{data.name}</div>
+      <input type="text" onChange={onChangeName} />
+      <button onClick={doUpdate}>Update</button>
     </div>
   )
 }
