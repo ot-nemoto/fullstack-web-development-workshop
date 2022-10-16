@@ -4,6 +4,7 @@
 import axios from 'axios'
 import useSWR from 'swr'
 import { DataGrid } from '@mui/x-data-grid';
+import { useState } from 'react'
 import Box from '@mui/material/Box';
 import Link from "next/link";
 
@@ -15,6 +16,11 @@ export default function swr() {
 
 function Profile() {
   const { data, error } = useSWR('/api/product/modelview/product/', fetcher)
+
+  const [name, setName] = useState()
+  const onChangeName = ((e) => {
+    setName(e.target.value)
+  })
 
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading...</div>
@@ -29,6 +35,18 @@ function Profile() {
       headerName: 'name',
     },
   ];
+
+  const doAdd = ((e) => {
+    const ob = {
+      name: name,
+    }
+    console.log(ob)
+    axios.post(`/api/product/modelview/product/`, ob)
+      .then(function (response) {
+        console.log(response.data);
+        alert('作成完了')
+      })
+  })
 
   // データをレンダリングする
   return (
@@ -64,6 +82,9 @@ function Profile() {
           experimentalFeatures={{ newEditingApi: true }}
         />
       </Box>
+
+      <input type="text" onChange={onChangeName} />
+      <button onClick={doAdd}>Add</button>
     </div>
   )
 }
