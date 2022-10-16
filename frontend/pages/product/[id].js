@@ -31,6 +31,13 @@ function Profile() {
       })
   })
 
+  const doDelete = ((e) => {
+    axios.delete(`/api/product/modelview/product/${id}`)
+      .then(function (response) {
+        console.log(response.data);
+        alert('削除完了')
+      })
+  })
 
 
   const router = useRouter();
@@ -49,6 +56,7 @@ function Profile() {
       <div>name:{data.name}</div>
       <input type="text" onChange={onChangeName} />
       <button onClick={doUpdate}>Update</button>
+      <button onClick={doDelete}>Delete</button>
     </div>
   )
 }
