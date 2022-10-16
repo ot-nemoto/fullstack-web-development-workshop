@@ -5,6 +5,7 @@ import axios from 'axios'
 import useSWR from 'swr'
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
+import Link from "next/link";
 
 const fetcher = url => axios.get(url).then(res => res.data)
 
@@ -43,7 +44,9 @@ function Profile() {
         <tbody>
           {data.map((data) => (
             <tr key={data.id}>
-              <td>{data.id}</td>
+              <Link href={`/product/${data.id}`}>
+                <a>{data.id}</a>
+              </Link>
               <td>{data.name}</td>
             </tr>
           ))}
