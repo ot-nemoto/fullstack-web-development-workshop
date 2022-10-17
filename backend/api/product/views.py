@@ -1,8 +1,8 @@
-from common.model_serializers import ProductSerializer,PriceSerializer
-from common.models import Product, Price
-from django.shortcuts import render
 from rest_framework import status, views, viewsets
 from rest_framework.response import Response
+
+from .models import Product
+from .serializers import ProductSerializer
 
 
 class ProductView(views.APIView):
@@ -16,11 +16,11 @@ class ProductView(views.APIView):
 
 
 class ProductViewSet(viewsets.ModelViewSet):
-    # 一覧 GET http://127.0.0.1:8000/api/product/modelview/product/
+    # 一覧 GET http://127.0.0.1:8000/api/product/
     #
-    # 詳細 GET http://127.0.0.1:8000/api/product/modelview/product/1/
+    # 詳細 GET http://127.0.0.1:8000/api/product/1/
     #
-    # 更新 PUT http://127.0.0.1:8000/api/product/modelview/product/1/ 
+    # 更新 PUT http://127.0.0.1:8000/api/product/1/
     # {
     # "name": "hoge2",
     # "id": 1,
@@ -35,14 +35,14 @@ class ProductViewSet(viewsets.ModelViewSet):
     #     ]
     # }
     #
-    # 追加 POST http://127.0.0.1:8000/api/product/modelview/product/
+    # 追加 POST http://127.0.0.1:8000/api/product/
     # {
     #   "name": "追加",
     #   "id": 8,
     #   "price_product": []
     # }
     #
-    # 削除 DELETE /api/product/modelview/product/1/
+    # 削除 DELETE /api/product/1/
     #
     # 子テーブルも含めて取得
     queryset = Product.objects.all().prefetch_related('price_product')

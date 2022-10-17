@@ -118,6 +118,16 @@ LOGGING = {
     }
 }
 ```
+- devcontainer.json
+	- 「Class '{モデル名}' has no 'objects' member pylint」のようなDjango特有の警告を誤検出しないようpylint_djangoを設定
+```
+"python.linting.pylintArgs": [
+	"--load-plugins",
+	"pylint_django",
+	"--django-settings-module",
+	"config.settings.development"
+],
+```
 ## VS Code操作
 - 起動時に「Reopen in Container」を促された際には、「Reopen in Container」を実施する
 - .devcontainerの内容を再実行する場合は F1 > Rebuild Container を実施
@@ -160,10 +170,11 @@ DATABASES = {
 }
 ```
 - マイグレーションファイルを作成
-	- python manage.py makemigrations --settings config.settings.development common
+	- python manage.py makemigrations --settings config.settings.development
 - マイグレーション
 	- python manage.py migrate --settings config.settings.development
-- ※マイグレーション対象のアプリケーション（例：common）がINSTALLED_APPSに追加されていること
+- ※マイグレーション対象のアプリケーション（例：api.hello_dbやcommonなど）がINSTALLED_APPSに追加されていること
+- ※apps.py > AppConfig > nameがFullPath（例：api.hello_db）になっていること
 # 成果物
 # フロントエンド成果物
 - hello_frontend.js
@@ -185,4 +196,3 @@ DATABASES = {
 	- 商品API
 - common
 	- 共通ソース
-	- DATABASE定義を含む

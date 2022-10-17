@@ -15,7 +15,7 @@ export default function swr() {
 }
 
 function Profile() {
-  const { data, error } = useSWR('/api/product/modelview/product/', fetcher)
+  const { data, error } = useSWR('/api/product/', fetcher)
 
   const [name, setName] = useState()
   const onChangeName = ((e) => {
@@ -41,7 +41,7 @@ function Profile() {
       name: name,
     }
     console.log(ob)
-    axios.post(`/api/product/modelview/product/`, ob)
+    axios.post(`/api/product/`, ob)
       .then(function (response) {
         console.log(response.data);
         alert('作成完了')

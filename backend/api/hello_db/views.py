@@ -1,6 +1,7 @@
-from common.models import Hello
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from .models import Hello
 
 
 class Db(APIView):

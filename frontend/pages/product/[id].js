@@ -24,18 +24,20 @@ function Profile() {
       name: name,
     }
     console.log(ob)
-    axios.put(`/api/product/modelview/product/${id}`, ob)
+    axios.put(`/api/product/${id}`, ob)
       .then(function (response) {
         console.log(response.data);
         alert('更新完了')
+        router.push('/product');
       })
   })
 
   const doDelete = ((e) => {
-    axios.delete(`/api/product/modelview/product/${id}`)
+    axios.delete(`/api/product/${id}`)
       .then(function (response) {
         console.log(response.data);
         alert('削除完了')
+        router.push('/product');
       })
   })
 
@@ -44,7 +46,7 @@ function Profile() {
   let id = router.query.id
   console.log(id)
 
-  const { data, error } = useSWR(`/api/product/modelview/product/${id}/`, fetcher)
+  const { data, error } = useSWR(`/api/product/${id}/`, fetcher)
 
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading...</div>
