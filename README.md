@@ -184,9 +184,12 @@ DATABASES = {
 - hello_backend_db.js
 	- バックエンドDBへのAPI疎通
 - product
+	- 単一ModelのREST API
 	- 商品
 	- 一覧 http://localhost:3000/product
 	- 詳細 http://localhost:3000/product/[id]
+- validation
+	- バリデーション
 # バックエンド成果物
 - api/hello
 	- バックエンドのAPI疎通
@@ -194,5 +197,7 @@ DATABASES = {
 	- バックエンドDBのAPI疎通
 - api/product
 	- 商品API
+- api/validation
+	- バリデーション
 - common
 	- 共通ソース
