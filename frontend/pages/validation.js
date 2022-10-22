@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../plugins/axios'
 import { useState } from 'react'
 
 export default function App() {
@@ -28,22 +28,8 @@ export default function App() {
         setMessage([]);
       })
       .catch(function (error) {
-        // https://github.com/axios/axios#handling-errors
         if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
           setMessage(error.response.data);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
         }
       });
   })
