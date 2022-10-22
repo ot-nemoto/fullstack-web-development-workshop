@@ -28,9 +28,7 @@ export default function App() {
         setMessage([]);
       })
       .catch(function (error) {
-        if (error.response) {
-          setMessage(error.response.data);
-        }
+        setMessage(error.response.data);
       });
   })
 
