@@ -13,9 +13,13 @@ export default function App() {
     setStore(e.target.value)
   })
   const doAdd = ((e) => {
+    const sub = [{
+      store: store
+    }]
     const params = {
       delivery_date: deliveryDate,
       store: store,
+      price_product: sub
     }
     console.log(params)
     axios.post(`/api/validation/`, params)
