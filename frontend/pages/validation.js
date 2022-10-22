@@ -21,6 +21,7 @@ export default function App() {
     axios.post(`/api/validation/`, params)
       .then(function (response) {
         console.log(response);
+        setMessage([]);
       })
       .catch(function (error) {
         // https://github.com/axios/axios#handling-errors
