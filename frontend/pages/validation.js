@@ -4,14 +4,18 @@ import { useState } from 'react'
 export default function App() {
   const [message, setMessage] = useState([]);
 
-  const [name, setName] = useState()
-  const onChangeName = ((e) => {
-    setName(e.target.value)
+  const [deliveryDate, setDeliveryDate] = useState()
+  const [store, setStore] = useState()
+  const onChangeDeliveryDate = ((e) => {
+    setDeliveryDate(e.target.value)
   })
-
+  const onChangeStore = ((e) => {
+    setStore(e.target.value)
+  })
   const doAdd = ((e) => {
     const params = {
-      name: name,
+      delivery_date: deliveryDate,
+      store: store,
     }
     console.log(params)
     axios.post(`/api/validation/`, params)
@@ -46,7 +50,10 @@ export default function App() {
           <li key={key}>{key}: {message[key]}</li>
         ))}
       </ul>
-      <input type="text" onChange={onChangeName} />
+      <label>配信日:</label>
+      <input type="text" onChange={onChangeDeliveryDate} />
+      <label>ストア:</label>
+      <input type="text" onChange={onChangeStore} />
       <button onClick={doAdd}>Add</button>
     </div>
   )
