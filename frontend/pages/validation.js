@@ -2,6 +2,8 @@ import axios from 'axios'
 import { useState } from 'react'
 
 export default function App() {
+  const [message, setMessage] = useState([]);
+
   const [name, setName] = useState()
   const onChangeName = ((e) => {
     setName(e.target.value)
@@ -24,6 +26,7 @@ export default function App() {
           console.log(error.response.data);
           console.log(error.response.status);
           console.log(error.response.headers);
+          setMessage(error.response.data);
         } else if (error.request) {
           // The request was made but no response was received
           // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
@@ -38,6 +41,11 @@ export default function App() {
 
   return (
     <div>
+      <ul>
+        {Object.keys(message).map(key => (
+          <li key={key}>{key}: {message[key]}</li>
+        ))}
+      </ul>
       <input type="text" onChange={onChangeName} />
       <button onClick={doAdd}>Add</button>
     </div>
