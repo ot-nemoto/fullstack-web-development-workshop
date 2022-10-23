@@ -34,11 +34,7 @@ export default function App() {
 
   return (
     <div>
-      <ul>
-        {Object.keys(message).map(key => (
-          <li key={key}>{key}: {message[key]}</li>
-        ))}
-      </ul>
+      <h4>{message}</h4>
       <label>配信日:</label>
       <input type="text" onChange={onChangeDeliveryDate} />
       <label>ストア:</label>
