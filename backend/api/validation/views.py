@@ -1,3 +1,4 @@
+from api.exception import CustomValidationError
 from api.validation.serializers import ValidationSerializer
 from django.shortcuts import render
 from rest_framework import status, views
@@ -11,4 +12,6 @@ class ValidationView(views.APIView):
         # POST {"delivery_date":"2022-10-10", "store":"111","price_product":[{"store":"222"}]}
         serializer = ValidationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        if serializer.data.get('store') == '123':
+            raise CustomValidationError('store＝123は使用できません')
         return Response(serializer.data, status.HTTP_200_OK)
