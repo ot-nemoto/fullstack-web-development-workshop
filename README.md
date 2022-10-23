@@ -192,6 +192,8 @@ DATABASES = {
 - validation
 	- バリデーション
 # バックエンド成果物
+- api/exception
+	- カスタム例外
 - api/hello
 	- バックエンドのAPI疎通
 - api/hello_db
