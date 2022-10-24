@@ -1,3 +1,12 @@
+# 【執筆メモStart】
+# F1 > Dev Containers: Open Folder in Containerで「/usr/local/src/dev/app/frontend/」フォルダでOK > Node.js > 18 > OK
+# により自動生成されます。
+# 
+# 好みに応じて、カスタマイズすることが可能です。
+#
+# 自動生成されたままです。
+# 執筆にあたり、本書籍の環境に最適化したものも紹介できればと思います。
+# 【執筆メモEnd】
 # [Choice] Node.js version (use -bullseye variants on local arm64/Apple Silicon): 18-bullseye, 16-bullseye, 14-bullseye, 18-buster, 16-buster, 14-buster
 ARG VARIANT=16-bullseye
 FROM node:${VARIANT}

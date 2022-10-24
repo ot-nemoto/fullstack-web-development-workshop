@@ -1,3 +1,10 @@
+"""
+【執筆メモStart】
+商品モデル（テーブル）と、その子供の価格モデルを定義しています。
+db_tableで実際のテーブル名を設定しています。
+https://docs.djangoproject.com/ja/4.1/topics/db/models/
+【執筆メモEnd】
+"""
 from django.db import models
 
 

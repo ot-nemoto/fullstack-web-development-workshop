@@ -1,3 +1,10 @@
+"""
+【執筆メモStart】
+URLと、各アプリケーションのurls.pyと紐づけています。
+https://www.django-rest-framework.org/api-guide/routers/
+【執筆メモEnd】
+"""
+
 """config URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:

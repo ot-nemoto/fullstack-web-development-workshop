@@ -1,3 +1,18 @@
+/*
+【執筆メモStart】
+F1 > Dev Containers: Open Folder in Containerで「/usr/local/src/dev/app/backend/」フォルダでOK > Python3 > 3.10 > Node=none > OK
+により自動生成されます。
+
+linting（静的チェック）、フォーマッタ、pylance（開発支援）について、デフォルトで設定されます。
+
+好みに応じて、カスタマイズすることが可能です。
+
+今回は、通常のpylintだとDjango特有の警告を誤検出されてしまうので、pylint_djangoの設定を追加しました。
+
+それ以外は自動生成されたままです。
+執筆にあたり、本書籍の環境に最適化（lintingやフォーマッタを一つに絞る？、NODEの記載が不要なので削除する？…など）したものも紹介できればと思います。
+【執筆メモEnd】
+*/
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.245.2/containers/python-3
 {

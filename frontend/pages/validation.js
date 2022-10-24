@@ -1,3 +1,15 @@
+/*
+【執筆メモStart】
+バックエンドへのバリデーションの疎通が行えます。
+
+http://localhost:3000/validation で表示します。
+
+【シリアライザNG】配信日:"2022-10-10" ストア:"11111"
+【業務エラー】配信日:"2022-10-10" ストア:"123"
+【OK】配信日:"2022-10-10" ストア:"135"
+
+【執筆メモEnd】
+*/
 import axios from '../plugins/axios'
 import { useState } from 'react'
 

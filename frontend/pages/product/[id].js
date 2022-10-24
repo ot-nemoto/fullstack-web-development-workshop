@@ -1,6 +1,15 @@
-// https://swr.vercel.app/ja/docs/getting-started
-// https://swr.vercel.app/docs/data-fetching
+/*
+【執筆メモStart】
+商品の詳細表示、更新、削除が行えます。
 
+http://localhost:3000/product/1 で参照します。
+Updateボタンで更新します。
+Deleteボタンで削除します。
+
+https://swr.vercel.app/ja/docs/getting-started
+https://swr.vercel.app/docs/data-fetching
+【執筆メモEnd】
+*/
 import axios from 'axios'
 import { useState } from 'react'
 import useSWR from 'swr'

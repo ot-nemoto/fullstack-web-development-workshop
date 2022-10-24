@@ -1,3 +1,16 @@
+/*
+【執筆メモStart】
+F1 > Dev Containers: Open Folder in Containerで「/usr/local/src/dev/app/frontend/」フォルダでOK > Node.js > 18 > OK
+により自動生成されます。
+
+eslint（静的チェック）について、デフォルトで設定されます。
+
+好みに応じて、カスタマイズすることが可能です。
+
+自動生成されたままです。
+執筆にあたり、本書籍の環境に最適化したものも紹介できればと思います。
+【執筆メモEnd】
+*/
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.245.2/containers/javascript-node
 {

@@ -1,6 +1,20 @@
-// https://swr.vercel.app/ja/docs/getting-started
-// https://swr.vercel.app/docs/data-fetching
+/*
+【執筆メモStart】
+商品の一覧表示と追加が行えます。
 
+http://localhost:3000/product/ で表示します。
+
+通常のtableの表示の他に
+MUIのDataGridも表示しています。 https://mui.com/x/react-data-grid/
+
+IDを押下することで、詳細画面に移動します。
+
+Addボタンで追加します。
+
+https://swr.vercel.app/ja/docs/getting-started
+https://swr.vercel.app/docs/data-fetching
+【執筆メモEnd】
+*/
 import axios from 'axios'
 import useSWR from 'swr'
 import { DataGrid } from '@mui/x-data-grid';

@@ -1,6 +1,13 @@
-// https://swr.vercel.app/ja/docs/getting-started
-// https://swr.vercel.app/docs/data-fetching
+/*
+【執筆メモStart】
+フロントエンド内でのAPI疎通が行えます。
 
+http://localhost:3000/hello_frontend で表示します。
+
+https://swr.vercel.app/ja/docs/getting-started
+https://swr.vercel.app/docs/data-fetching
+【執筆メモEnd】
+*/
 import axios from 'axios'
 import useSWR from 'swr'
 

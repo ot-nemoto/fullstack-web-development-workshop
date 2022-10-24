@@ -1,3 +1,8 @@
+/*
+【執筆メモStart】
+yarn create next-appで自動生成されたままの状態です。
+【執筆メモEnd】
+*/
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
