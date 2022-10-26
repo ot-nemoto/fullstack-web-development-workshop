@@ -54,7 +54,7 @@ services:
 		- rmdir next_app/
 	- yarn dev
 ## フロントエンド追加設定
-- next.config.js
+- next.config.js　　→app/frontendフォルダの直下
 	- バックエンドへの疎通設定
 		- https://nextjs.org/docs/api-reference/next.config.js/rewrites
 ```
