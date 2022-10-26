@@ -45,8 +45,9 @@ services:
 	- cd app/frontend
 	- code .
 	- F1 > Dev Containers: Open Folder in Containerで「/usr/local/src/dev/app/frontend/」フォルダでOK > Node.js > 18 > OK
-	- yarn create next-app next_app
+	- yarn create next-app next_app　　→VS Codeのターミナル上で実行
 	- next_app配下に作成されたアプリケーションを一階層上に上げる
+	- 　→「yarn create next-app .」だと、ルート直下にアプリをつくれるはずなのですが既に「.devcontainer」ディレクトリ（VS Codeの設定ファイル）が存在していてエラーになってしまいます。なので、一時的にnext_app下につくってディレクトリ移動している…ということになります
 		- mv next_app/* .
 		- mv next_app/.eslintrc.json .
 		- mv next_app/.gitignore .
