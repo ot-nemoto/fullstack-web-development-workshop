@@ -29,4 +29,5 @@ urlpatterns = [
     path('api/hello_db/', include('api.hello_db.urls')),
     path('api/product/', include('api.product.urls')),
     path('api/validation/', include('api.validation.urls')),
+    path('api/file/', include('api.file.urls')),
 ]

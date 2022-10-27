@@ -192,6 +192,8 @@ DATABASES = {
 	- 詳細 http://localhost:3000/product/[id]
 - validation
 	- バリデーション
+- file
+	- ファイル操作
 # バックエンド成果物
 - api/exception
 	- カスタム例外
@@ -203,5 +205,7 @@ DATABASES = {
 	- 商品API
 - api/validation
 	- バリデーション
+- api/file
+	- ファイル操作
 - common
 	- 共通ソース
