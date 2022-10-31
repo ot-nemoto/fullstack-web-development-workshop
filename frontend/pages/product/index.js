@@ -76,9 +76,7 @@ function Profile() {
         <tbody>
           {data.map((data) => (
             <tr key={data.id}>
-              <Link href={`/product/${data.id}`}>
-                <a>{data.id}</a>
-              </Link>
+              <Link href={`/product/${data.id}`}>{data.id}</Link>
               <td>{data.name}</td>
             </tr>
           ))}
