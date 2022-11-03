@@ -45,9 +45,14 @@ services:
 	- cd app/frontend
 	- code .
 	- F1 > Dev Containers: Open Folder in Containerで「/usr/local/src/dev/app/frontend/」フォルダでOK > Node.js > 18 > OK
-	- yarn create next-app frontend　　→VS Codeのターミナル上で実行
+	- yarn create next-app frontend --ts --eslint --experimental-app
+		- VS Codeのターミナル上で実行
+		- https://nextjs.org/docs/api-reference/create-next-app
+		- 「--ts Initialize as a TypeScript project. (default)」とTypeScriptがdefaultなので指定する
+		- 「--eslint」を指定してeslintを有効化する
+		- 「--experimental-app」を指定して https://nextjs.org/blog/next-13 の新機能(app/ Directory (beta)）を使用する
 	- frontend配下に作成されたアプリケーションを一階層上に上げる
-	- 　→「yarn create next-app .」だと、ルート直下にアプリをつくれるはずなのですが既に「.devcontainer」ディレクトリ（VS Codeの設定ファイル）が存在していてエラーになってしまいます。なので、一時的にfrontend下につくってディレクトリ移動している…ということになります
+		- 「yarn create next-app .」だと、ルート直下にアプリをつくれるはずなのですが既に「.devcontainer」ディレクトリ（VS Codeの設定ファイル）が存在していてエラーになってしまいます。なので、一時的にfrontend下につくってディレクトリ移動している…ということになります
 		- mv frontend/* .
 		- mv frontend/.eslintrc.json .
 		- mv frontend/.gitignore .
