@@ -10,8 +10,9 @@ rewritesでバックエンドへの疎通を設定しました。
 */
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
+  experimental: {
+    appDir: true,
+  },
   async rewrites() {
     return [
       {
