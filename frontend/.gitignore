@@ -1,5 +1,10 @@
 # 【執筆メモStart】
-# yarn create next-appで自動生成されたままの状態です。
+# yarn create next-appで自動生成されたものを変更しています。
+# 
+# 
+# ■変更点
+# .vscodeを設定しました。
+# 
 # 【執筆メモEnd】
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
@@ -37,3 +42,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# vscode
+/.vscode/
