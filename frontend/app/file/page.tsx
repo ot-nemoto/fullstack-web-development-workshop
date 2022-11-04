@@ -11,25 +11,27 @@ http://localhost:3000/file で表示します。
 
 【執筆メモEnd】
 */
-import axios from '../plugins/axios'
+'use client';
+
+import axios from '../../plugins/axios'
 import { useState } from 'react'
 
-export default function App() {
+export default function Page() {
   const [message, setMessage] = useState([]);
   const [file1, setFile1] = useState()
   const [file2, setFile2] = useState()
   const [text, setText] = useState()
-  const onChangeFile1 = ((e) => {
+  const onChangeFile1 = ((e: any) => {
     setFile1(e.target.files[0])
   })
-  const onChangeFile2 = ((e) => {
+  const onChangeFile2 = ((e: any) => {
     setFile2(e.target.files[0])
   })
-  const onChangeText = ((e) => {
+  const onChangeText = ((e: any) => {
     setText(e.target.value)
   })
 
-  const doAdd = ((e) => {
+  const doAdd = ((e: any) => {
     console.log(file1)
     console.log(file2)
     console.log(text)

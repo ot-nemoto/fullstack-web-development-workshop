@@ -8,16 +8,14 @@ https://swr.vercel.app/ja/docs/getting-started
 https://swr.vercel.app/docs/data-fetching
 【執筆メモEnd】
 */
+'use client';
+
 import axios from 'axios'
 import useSWR from 'swr'
 
-const fetcher = url => axios.get(url).then(res => res.data)
+const fetcher = (url: string) => axios.get(url).then(res => res.data)
 
-export default function swr() {
-  return Profile()
-}
-
-function Profile() {
+export default function Page() {
   const { data, error } = useSWR('/api/hello', fetcher)
 
   if (error) return <div>failed to load</div>

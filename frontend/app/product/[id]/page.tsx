@@ -8,27 +8,28 @@ Deleteボタンで削除します。
 
 https://swr.vercel.app/ja/docs/getting-started
 https://swr.vercel.app/docs/data-fetching
+https://beta.nextjs.org/docs/api-reference/use-router
 【執筆メモEnd】
 */
+'use client';
+
 import axios from 'axios'
 import { useState } from 'react'
 import useSWR from 'swr'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
-const fetcher = url => axios.get(url).then(res => res.data)
+const fetcher = (url: string) => axios.get(url).then(res => res.data)
 
-export default function swr() {
-  return Profile()
-}
-
-function Profile() {
+export default function Page({ params }: {
+  params: { id: string },
+}) {
   const [name, setName] = useState()
 
-  const onChangeName = ((e) => {
+  const onChangeName = ((e: any) => {
     setName(e.target.value)
   })
 
-  const doUpdate = ((e) => {
+  const doUpdate = ((e: any) => {
     const ob = {
       name: name,
     }
@@ -41,7 +42,7 @@ function Profile() {
       })
   })
 
-  const doDelete = ((e) => {
+  const doDelete = ((e: any) => {
     axios.delete(`/api/product/${id}`)
       .then(function (response) {
         console.log(response.data);
@@ -50,9 +51,8 @@ function Profile() {
       })
   })
 
-
   const router = useRouter();
-  let id = router.query.id
+  let id = params.id
   console.log(id)
 
   const { data, error } = useSWR(`/api/product/${id}/`, fetcher)

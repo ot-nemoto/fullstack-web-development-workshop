@@ -15,6 +15,8 @@ https://swr.vercel.app/ja/docs/getting-started
 https://swr.vercel.app/docs/data-fetching
 【執筆メモEnd】
 */
+'use client';
+
 import axios from 'axios'
 import useSWR from 'swr'
 import { DataGrid } from '@mui/x-data-grid';
@@ -22,17 +24,13 @@ import { useState } from 'react'
 import Box from '@mui/material/Box';
 import Link from "next/link";
 
-const fetcher = url => axios.get(url).then(res => res.data)
+const fetcher = (url: string) => axios.get(url).then(res => res.data)
 
-export default function swr() {
-  return Profile()
-}
-
-function Profile() {
+export default function Page() {
   const { data, error } = useSWR('/api/product/', fetcher)
 
   const [name, setName] = useState()
-  const onChangeName = ((e) => {
+  const onChangeName = ((e: any) => {
     setName(e.target.value)
   })
 
@@ -50,7 +48,7 @@ function Profile() {
     },
   ];
 
-  const doAdd = ((e) => {
+  const doAdd = ((e: any) => {
     const ob = {
       name: name,
     }
@@ -74,7 +72,7 @@ function Profile() {
           </tr>
         </thead>
         <tbody>
-          {data.map((data) => (
+          {data.map((data: any) => (
             <tr key={data.id}>
               <Link href={`/product/${data.id}`}>{data.id}</Link>
               <td>{data.name}</td>

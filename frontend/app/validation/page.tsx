@@ -10,21 +10,23 @@ http://localhost:3000/validation で表示します。
 
 【執筆メモEnd】
 */
-import axios from '../plugins/axios'
+'use client';
+
+import axios from '../../plugins/axios'
 import { useState } from 'react'
 
-export default function App() {
+export default function Page() {
   const [message, setMessage] = useState([]);
 
   const [deliveryDate, setDeliveryDate] = useState()
   const [store, setStore] = useState()
-  const onChangeDeliveryDate = ((e) => {
+  const onChangeDeliveryDate = ((e: any) => {
     setDeliveryDate(e.target.value)
   })
-  const onChangeStore = ((e) => {
+  const onChangeStore = ((e: any) => {
     setStore(e.target.value)
   })
-  const doAdd = ((e) => {
+  const doAdd = ((e: any) => {
     const sub = [{
       store: store
     }]
