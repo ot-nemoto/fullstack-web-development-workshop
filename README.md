@@ -187,11 +187,11 @@ DATABASES = {
 - ※apps.py > AppConfig > nameがFullPath（例：api.hello_db）になっていること
 # 成果物
 # フロントエンド成果物
-- hello_frontend.js
+- hello_frontend
 	- フロントエンド内でのAPI疎通
-- hello_backend.js
+- hello_backend
 	- バックエンドへのAPI疎通
-- hello_backend_db.js
+- hello_backend_db
 	- バックエンドDBへのAPI疎通
 - product
 	- 単一ModelのREST API
