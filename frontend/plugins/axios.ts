@@ -30,6 +30,7 @@ axios_instance.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
   if (error.response && error.response.status != 422) {
+    // ※【TODO】Next.js13にしてから正常に動作しない
     Router.push(String(error.response.status))
   } else {
     return Promise.reject(error);

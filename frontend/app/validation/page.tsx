@@ -4,7 +4,7 @@
 
 http://localhost:3000/validation で表示します。
 
-【シリアライザNG】配信日:"2022-10-10" ストア:"11111"
+【シリアライザNG】配信日:"2022-10-10" ストア:"11111" ※【TODO】Next.js13にしてから正常に動作しない
 【業務エラー】配信日:"2022-10-10" ストア:"123"
 【OK】配信日:"2022-10-10" ストア:"135"
 
@@ -42,6 +42,7 @@ export default function Page() {
         setMessage([]);
       })
       .catch(function (error) {
+        // ※【TODO】Next.js13にしてから正常に動作しない
         setMessage(error.response.data);
       });
   })
