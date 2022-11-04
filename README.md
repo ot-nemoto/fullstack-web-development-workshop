@@ -72,6 +72,9 @@ async rewrites() {
   ]
 }
 ```
+
+- .gitignore
+	- .vscodeを設定
 ## フロントエンド追加モジュール
 - React UI tools
 	- https://mui.com/material-ui/getting-started/installation/
