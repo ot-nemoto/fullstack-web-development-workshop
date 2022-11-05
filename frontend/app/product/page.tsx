@@ -15,7 +15,7 @@ https://swr.vercel.app/ja/docs/getting-started
 https://swr.vercel.app/docs/data-fetching
 【執筆メモEnd】
 */
-'use client';
+'use client'
 
 import axios from 'axios'
 import useSWR from 'swr'
@@ -60,7 +60,6 @@ export default function Page() {
       })
   })
 
-  // データをレンダリングする
   return (
     <div>
       <h2>通常のtable</h2>

@@ -10,7 +10,7 @@ http://localhost:3000/validation で表示します。
 
 【執筆メモEnd】
 */
-'use client';
+'use client'
 
 import axios from '../../plugins/axios'
 import { useState } from 'react'

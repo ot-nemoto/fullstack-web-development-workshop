@@ -11,13 +11,13 @@ http://localhost:3000/file で表示します。
 
 【執筆メモEnd】
 */
-'use client';
+'use client'
 
 import axios from '../../plugins/axios'
 import { useState } from 'react'
 
 export default function Page() {
-  const [message, setMessage] = useState([]);
+  const [message, setMessage] = useState([])
   const [file1, setFile1] = useState()
   const [file2, setFile2] = useState()
   const [text, setText] = useState()

@@ -11,12 +11,12 @@ https://swr.vercel.app/docs/data-fetching
 https://beta.nextjs.org/docs/api-reference/use-router
 【執筆メモEnd】
 */
-'use client';
+'use client'
 
 import axios from 'axios'
 import { useState } from 'react'
 import useSWR from 'swr'
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'
 
 const fetcher = (url: string) => axios.get(url).then(res => res.data)
 
@@ -60,7 +60,6 @@ export default function Page({ params }: {
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading...</div>
 
-  // データをレンダリングする
   return (
     <div>
       <div>id:{data.id}</div>

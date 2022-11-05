@@ -8,7 +8,7 @@ https://swr.vercel.app/ja/docs/getting-started
 https://swr.vercel.app/docs/data-fetching
 【執筆メモEnd】
 */
-'use client';
+'use client'
 
 import axios from 'axios'
 import useSWR from 'swr'
@@ -21,6 +21,5 @@ export default function Page() {
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading...</div>
 
-  // データをレンダリングする
   return <div>hello {data.name}!</div>
 }
