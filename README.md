@@ -106,7 +106,7 @@ async rewrites() {
 	- echo 'from .base import *' > config/settings/development.py
 	- python manage.py runserver --settings config.settings.development
 ## バックエンド追加設定
-- settings.py
+- config/settings/base.py
 	- INSTALLED_APPSに"rest_framework"を追加する
 	- ALLOWED_HOSTSに['*']を設定する
 	- LANGUAGE_CODEに"ja-jp"を設定する
