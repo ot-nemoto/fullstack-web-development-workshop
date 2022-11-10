@@ -110,7 +110,7 @@ async rewrites() {
 	- INSTALLED_APPSに"rest_framework"を追加する
 	- ALLOWED_HOSTSに['*']を設定する
 	- LANGUAGE_CODEに"ja-jp"を設定する
-	- 実行SQLを標準出力に出力する
+	- 実行SQLを標準出力に出力する　→base.pyのどこかにLOGGING以下を足せ
 ```
 LOGGING = {
     'version': 1,
