@@ -129,7 +129,7 @@ LOGGING = {
 }
 ```
 - devcontainer.json
-	- 「Class '{モデル名}' has no 'objects' member pylint」のようなDjango特有の警告を誤検出しないようpylint_djangoを設定
+	- 「Class '{モデル名}' has no 'objects' member pylint」のようなDjango特有の警告を誤検出しないようpylint_djangoを設定　→　ファイルではなくVS Codeのオブジェクトマネージャー？左窓から追加
 ```
 "python.linting.pylintArgs": [
 	"--load-plugins",
