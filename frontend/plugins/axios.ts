@@ -17,7 +17,6 @@ https://github.com/axios/axios#handling-errors
 【執筆メモEnd】
 */
 import axios from 'axios';
-import Router from 'next/router';
 const axios_instance = axios.create();
 
 axios_instance.interceptors.request.use(function (config) {
@@ -30,8 +29,7 @@ axios_instance.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
   if (error.response && error.response.status != 422) {
-    // ※【TODO】Next.js13にしてから正常に動作しない
-    Router.push(String(error.response.status))
+    window.location.href = '/' + error.response.status;
   } else {
     return Promise.reject(error);
   }
