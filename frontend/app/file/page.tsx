@@ -21,6 +21,7 @@ export default function Page() {
   const [file1, setFile1] = useState()
   const [file2, setFile2] = useState()
   const [text, setText] = useState()
+
   const onChangeFile1 = ((e: any) => {
     setFile1(e.target.files[0])
   })
@@ -54,6 +55,19 @@ export default function Page() {
       });
   })
 
+  const doDownload = ((e: any) => {
+    axios.get('/api/file/', {
+      responseType: 'blob',
+    })
+      .then((response) => {
+        console.log(response)
+        const link = document.createElement('a')
+        link.href = URL.createObjectURL(response.data)
+        link.setAttribute("download", 'filename.txt')
+        link.click()
+      })
+  })
+
   return (
     <div>
       <h4>{message}</h4>
@@ -64,6 +78,7 @@ export default function Page() {
       <label>テキスト:</label>
       <input type="text" onChange={onChangeText} />
       <button onClick={doAdd}>Add</button>
+      <button onClick={doDownload}>Download</button>
     </div>
   )
 }
