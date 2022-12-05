@@ -18,6 +18,9 @@ Django REST framework を使用する為です。 https://www.django-rest-framew
 INSTALLED_APPSにapi.*を追加しました。
 migrationの対象にする為です。
 
+INSTALLED_APPSにbatchを追加しました。
+バッチ（カスタムコマンド）を実行する為です。
+
 LANGUAGE_CODEに"ja-jp"を設定しました。
 メッセージ等を日本語化する為です。
 
@@ -70,6 +73,7 @@ INSTALLED_APPS = [
     "common",
     "api.hello_db",
     "api.product",
+    "batch",
 ]
 
 MIDDLEWARE = [
