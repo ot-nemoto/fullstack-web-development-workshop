@@ -11,31 +11,33 @@ IDを押下することで、詳細画面に移動します。
 
 Addボタンで追加します。
 
-https://swr.vercel.app/ja/docs/getting-started
-https://swr.vercel.app/docs/data-fetching
+https://nextjs.org/docs/basic-features/data-fetching/client-side
 【執筆メモEnd】
 */
 'use client'
 
-import axios from 'axios'
-import useSWR from 'swr'
-import { DataGrid } from '@mui/x-data-grid';
-import { useState } from 'react'
 import Box from '@mui/material/Box';
+import { DataGrid } from '@mui/x-data-grid';
+import axios from 'axios';
 import Link from "next/link";
-
-const fetcher = (url: string) => axios.get(url).then(res => res.data)
+import { useEffect, useState } from 'react';
 
 export default function Page() {
-  const { data, error } = useSWR('/api/product/', fetcher)
+  const [data, setData] = useState([])
+  const [refresh, setRefresh] = useState(0)
+  useEffect(() => {
+    axios.get('/api/product')
+      .then((res) => res.data)
+      .then((data) => {
+        setData(data)
+      })
+  }, [refresh])
 
   const [name, setName] = useState()
   const onChangeName = ((e: any) => {
     setName(e.target.value)
   })
 
-  if (error) return <div>failed to load</div>
-  if (!data) return <div>loading...</div>
 
   const columns = [
     {
@@ -57,6 +59,7 @@ export default function Page() {
       .then(function (response) {
         console.log(response.data);
         alert('作成完了')
+        setRefresh(n => n + 1) // useEffectを起動する為にsetRefreshを呼び出し
       })
   })
 

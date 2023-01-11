@@ -17,10 +17,10 @@ export default function Page() {
   useEffect(() => {
     fetch('/api/hello')
       .then((res) => res.json())
-      .then((data) => { setData(data) })
+      .then((data) => {
+        setData(data)
+      })
   }, [])
-
-  if (!data.name) return <div>loading...</div>
 
   return <div>hello {data.name}!</div>
 }

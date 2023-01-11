@@ -6,23 +6,20 @@ http://localhost:3000/product/1 で参照します。
 Updateボタンで更新します。
 Deleteボタンで削除します。
 
-https://swr.vercel.app/ja/docs/getting-started
-https://swr.vercel.app/docs/data-fetching
+https://nextjs.org/docs/basic-features/data-fetching/client-side
 https://beta.nextjs.org/docs/api-reference/use-router
 【執筆メモEnd】
 */
 'use client'
 
 import axios from 'axios'
-import { useState } from 'react'
-import useSWR from 'swr'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-
-const fetcher = (url: string) => axios.get(url).then(res => res.data)
 
 export default function Page({ params }: {
   params: { id: string },
 }) {
+  const [data, setData] = useState({ id: '', name: '' })
   const [name, setName] = useState()
 
   const onChangeName = ((e: any) => {
@@ -55,10 +52,13 @@ export default function Page({ params }: {
   let id = params.id
   console.log(id)
 
-  const { data, error } = useSWR(`/api/product/${id}/`, fetcher)
-
-  if (error) return <div>failed to load</div>
-  if (!data) return <div>loading...</div>
+  useEffect(() => {
+    axios.get(`/api/product/${id}/`)
+      .then((res) => res.data)
+      .then((data) => {
+        setData(data)
+      })
+  }, [])
 
   return (
     <div>

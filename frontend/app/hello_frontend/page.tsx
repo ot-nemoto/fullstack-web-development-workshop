@@ -4,22 +4,24 @@
 
 http://localhost:3000/hello_frontend で表示します。
 
-https://swr.vercel.app/ja/docs/getting-started
-https://swr.vercel.app/docs/data-fetching
+https://nextjs.org/docs/basic-features/data-fetching/client-side
 【執筆メモEnd】
 */
 'use client'
 
 import axios from 'axios'
-import useSWR from 'swr'
-
-const fetcher = (url: string) => axios.get(url).then(res => res.data)
+import { useEffect, useState } from 'react'
 
 export default function Page() {
-  const { data, error } = useSWR('/api/hello', fetcher)
+  const [data, setData] = useState({ name: '' })
 
-  if (error) return <div>failed to load</div>
-  if (!data) return <div>loading...</div>
+  useEffect(() => {
+    axios.get('/api/hello')
+      .then((res) => res.data)
+      .then((data) => {
+        setData(data)
+      })
+  }, [])
 
   return <div>hello {data.name}!</div>
 }
