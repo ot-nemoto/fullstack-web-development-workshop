@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     "common",
     "api.hello_db",
     "api.product",
+    "api.sales",
     "batch",
 ]
 
