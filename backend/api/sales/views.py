@@ -13,7 +13,7 @@ from .serializers import FileSerializer
 from .models import Sales
 import csv
 from django.http.multipartparser import MultiPartParser
-
+import io
 
 class SalesView(APIView):
 
@@ -23,16 +23,13 @@ class SalesView(APIView):
         
         print(serializer.validated_data['file'].size)
 
-        aa = serializer.validated_data['file']
- 
-        print('★')
+        # Read csv file InMemoryUploadedFile
+        file = serializer.validated_data['file'].read().decode('utf-8-sig')
 
-        with serializer.validated_data['file'].open('rt') as f:
-            print(f)
-            
-            reader = csv.reader(f)
-            for row in reader:
-                print(row)
+        io_string = io.StringIO(file)
+        for line in csv.reader(io_string):
+            print(line)
+
 
         return Response(status=201)
 
