@@ -19,8 +19,7 @@ export default function Page() {
 
   const doAdd = ((e: any) => {
     const params = {
-      file: file,
-      hoge:"abc"
+      file: file
     }
     axios.post(`/api/sales/`, params, {
       headers: {

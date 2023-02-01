@@ -28,17 +28,13 @@ class SalesView(APIView):
         with open(filename, 'wb') as f:
             f.write(serializer.validated_data['file'].read())
 
-        sales_file = SalesFile(sales_date='2022-01-01', file_name=filename)
+        sales_file = SalesFile(file_name=filename)
         sales_file.save()
 
         df = pandas.read_csv(filename)
         for _, row in df.iterrows():
-            date = row['date']
-            price = row['price']
-            print(date)
-            print(price)
-
-            sales = Sales(price=price, import_file=sales_file)
+            sales = Sales(
+                sales_date=row['date'], price=row['price'], import_file=sales_file)
             sales.save()
 
         return Response(status=201)

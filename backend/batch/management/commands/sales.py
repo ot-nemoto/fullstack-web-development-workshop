@@ -1,0 +1,44 @@
+"""
+【執筆メモStart】
+バッチ（カスタムコマンド）のサンプルです。
+python manage.py sales --settings config.settings.development
+で実行できます。
+https://docs.djangoproject.com/en/4.1/howto/custom-management-commands/
+【執筆メモEnd】
+"""
+import pandas
+from django.core.management.base import BaseCommand
+from django.db import transaction
+
+from api.sales.models import Sales, SalesFile, Status
+
+
+@transaction.atomic
+def execute(download_history):
+    entry = SalesFile.objects.select_for_update().get(pk=download_history.id)
+    if entry.status != Status.UNPROCESSED:
+        return
+
+    filename = entry.file_name
+
+    df = pandas.read_csv(filename)
+    for _, row in df.iterrows():
+        sales = Sales(sales_date=row['date'],
+                      price=row['price'], import_file=entry)
+        sales.save()
+
+    entry.status = Status.PROCESSED
+    entry.save()
+
+
+class Command(BaseCommand):
+    def handle(self, *args, **options):
+        while True:
+            download_history = SalesFile.objects.filter(
+                status=Status.UNPROCESSED).order_by('id').first()
+
+            if download_history is None:
+                # 実行中に未処理以外になった場合はスキップ
+                break
+            else:
+                execute(download_history)
