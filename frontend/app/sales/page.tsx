@@ -11,15 +11,15 @@ import axios from 'axios'
 import { useState } from 'react'
 
 export default function Page() {
-  const [file, setFile] = useState()
+  const [fileSync, setFileSync] = useState()
 
-  const onChangeFile = ((e: any) => {
-    setFile(e.target.files[0])
+  const onChangeFileSync = ((e: any) => {
+    setFileSync(e.target.files[0])
   })
 
   const doAddSync = ((e: any) => {
     const params = {
-      file: file
+      file: fileSync
     }
     axios.post(`/api/sales/sync`, params, {
       headers: {
@@ -34,9 +34,15 @@ export default function Page() {
       })
   })
 
+  const [fileAsync, setFileAsync] = useState()
+
+  const onChangeFileAsync = ((e: any) => {
+    setFileAsync(e.target.files[0])
+  })
+
   const doAddAsync = ((e: any) => {
     const params = {
-      file: file
+      file: fileAsync
     }
     axios.post(`/api/sales/async`, params, {
       headers: {
@@ -55,12 +61,12 @@ export default function Page() {
     <div>
       <div>
         <label>ファイル同期登録:</label>
-        <input type="file" onChange={onChangeFile} />
+        <input type="file" onChange={onChangeFileSync} />
         <button onClick={doAddSync}>Add</button>
       </div>
       <div>
         <label>ファイル非同期登録:</label>
-        <input type="file" onChange={onChangeFile} />
+        <input type="file" onChange={onChangeFileAsync} />
         <button onClick={doAddAsync}>Add</button>
       </div>
     </div>
