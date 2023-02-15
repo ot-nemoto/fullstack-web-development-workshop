@@ -12,14 +12,14 @@ class Status(models.IntegerChoices):
     """
     状態
     """
-    UNPROCESSED = 1, '未処理'
-    PROCESSED = 2, '処理済'
+    SYNC = 0, '同期'
+    ASYNC_UNPROCESSED = 1, '非同期_未処理'
+    ASYNC_PROCESSED = 2, '非同期_処理済'
 
 
 class SalesFile(models.Model):
     file_name = models.CharField(max_length=100, verbose_name='ファイル名')
-    status = models.IntegerField(
-        default=Status.UNPROCESSED, choices=Status.choices, verbose_name='状態')
+    status = models.IntegerField(choices=Status.choices, verbose_name='状態')
 
     class Meta:
         verbose_name = '売上ファイル'

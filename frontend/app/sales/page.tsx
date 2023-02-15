@@ -17,11 +17,28 @@ export default function Page() {
     setFile(e.target.files[0])
   })
 
-  const doAdd = ((e: any) => {
+  const doAddSync = ((e: any) => {
     const params = {
       file: file
     }
-    axios.post(`/api/sales/`, params, {
+    axios.post(`/api/sales/sync`, params, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+      .then(function (response) {
+        console.log(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  })
+
+  const doAddAsync = ((e: any) => {
+    const params = {
+      file: file
+    }
+    axios.post(`/api/sales/async`, params, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -36,9 +53,16 @@ export default function Page() {
 
   return (
     <div>
-      <label>ファイル:</label>
-      <input type="file" onChange={onChangeFile} />
-      <button onClick={doAdd}>Add</button>
+      <div>
+        <label>ファイル同期登録:</label>
+        <input type="file" onChange={onChangeFile} />
+        <button onClick={doAddSync}>Add</button>
+      </div>
+      <div>
+        <label>ファイル非同期登録:</label>
+        <input type="file" onChange={onChangeFile} />
+        <button onClick={doAddAsync}>Add</button>
+      </div>
     </div>
   )
 }

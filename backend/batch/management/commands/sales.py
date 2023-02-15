@@ -16,7 +16,7 @@ from api.sales.models import Sales, SalesFile, Status
 @transaction.atomic
 def execute(download_history):
     entry = SalesFile.objects.select_for_update().get(pk=download_history.id)
-    if entry.status != Status.UNPROCESSED:
+    if entry.status != Status.ASYNC_UNPROCESSED:
         return
 
     filename = entry.file_name
@@ -27,7 +27,7 @@ def execute(download_history):
                       price=row['price'], import_file=entry)
         sales.save()
 
-    entry.status = Status.PROCESSED
+    entry.status = Status.ASYNC_PROCESSED
     entry.save()
 
 
@@ -35,7 +35,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         while True:
             download_history = SalesFile.objects.filter(
-                status=Status.UNPROCESSED).order_by('id').first()
+                status=Status.ASYNC_UNPROCESSED).order_by('id').first()
 
             if download_history is None:
                 # 実行中に未処理以外になった場合はスキップ

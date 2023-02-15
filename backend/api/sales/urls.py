@@ -8,5 +8,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.SalesView.as_view())
+    path('sync/', views.SalesSyncView.as_view()),
+    path('async/', views.SalesAsyncView.as_view())
 ]
