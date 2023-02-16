@@ -8,10 +8,19 @@ http://localhost:3000/sales で表示します。
 'use client'
 
 import axios from 'axios'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Page() {
+  const [data, setData] = useState([])
   const [fileSync, setFileSync] = useState()
+
+  useEffect(() => {
+    axios.get('/api/sales')
+      .then((res) => res.data)
+      .then((data) => {
+        setData(data)
+      })
+  }, [])
 
   const onChangeFileSync = ((e: any) => {
     setFileSync(e.target.files[0])
@@ -59,6 +68,23 @@ export default function Page() {
 
   return (
     <div>
+      <h2>通常のtable</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>年月</th>
+            <th>合計額</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((data: any) => (
+            <tr key={data.monthly_date}>
+              <td>{data.monthly_date}</td>
+              <td>{data.monthly_price}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <div>
         <label>ファイル同期登録:</label>
         <input type="file" onChange={onChangeFileSync} />

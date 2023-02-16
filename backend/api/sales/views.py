@@ -4,14 +4,19 @@
 https://www.django-rest-framework.org/api-guide/parsers/#fileuploadparser
 https://docs.python.org/ja/3/library/functions.html
 https://pandas.pydata.org/
+https://docs.djangoproject.com/en/4.1/topics/db/aggregation/
+https://docs.djangoproject.com/en/4.1/ref/models/database-functions/
 【執筆メモEnd】
 """
 import pandas
+from django.db.models import Sum
+from django.db.models.functions import TruncMonth
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Sales, SalesFile, Status
-from .serializers import FileSerializer
+from .serializers import FileSerializer, SalesSerializer
 
 
 class SalesSyncView(APIView):
@@ -52,3 +57,9 @@ class SalesAsyncView(APIView):
         sales_file.save()
 
         return Response(status=201)
+
+
+class SalesList(generics.ListAPIView):
+    queryset = Sales.objects.annotate(monthly_date=TruncMonth('sales_date')).values(
+        'monthly_date').annotate(monthly_price=Sum('price')).order_by('monthly_date')
+    serializer_class = SalesSerializer

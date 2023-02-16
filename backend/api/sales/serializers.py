@@ -7,6 +7,13 @@ https://www.django-rest-framework.org/api-guide/serializers/
 """
 from rest_framework import serializers
 
+from .models import Sales
+
 
 class FileSerializer(serializers.Serializer):
     file = serializers.FileField()
+
+
+class SalesSerializer(serializers.Serializer):
+    monthly_date = serializers.DateField(format='%Y-%m')
+    monthly_price = serializers.IntegerField()
