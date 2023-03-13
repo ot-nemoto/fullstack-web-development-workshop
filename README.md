@@ -7,7 +7,7 @@
 - VS Code をダウンロードしてインストールする。
     - https://code.visualstudio.com/
     - https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja で日本語化する
-- https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack をVS Codeにインストールする
+- https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers （Dev Containers） をVS Codeにインストールする
 - 作業ディレクトリを作成して権限を付与する
 	- cd /usr/local/src
 	- sudo mkdir dev
