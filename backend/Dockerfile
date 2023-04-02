@@ -4,5 +4,5 @@ ENV environment=$environment_name
 RUN mkdir /code
 WORKDIR /code
 ADD . /code/
-RUN pip install -r requirements.txt
-ENTRYPOINT gunicorn -e DJANGO_SETTINGS_MODULE=config.settings.${environment} -c config/gunicorn.conf.py config.wsgi
+RUN pip install -r requirements.lock
+ENTRYPOINT python manage.py runserver --settings config.settings.${environment}
