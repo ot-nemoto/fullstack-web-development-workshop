@@ -1,0 +1,365 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  ConnectionArn:
+    Type: String
+    Default: arn:aws:codestar-connections:ap-northeast-1:410912548386:connection/58ba3c8c-b06a-4754-9ebd-5b72ef66ee24
+Mappings:
+  InputStackName:
+    writing-ecs-staging:
+      CrossStackPrefix: writing-staging
+      EcsBackend: writing-ecs-staging-ecs-backend
+      EcsFrontend: writing-ecs-staging-ecs-frontend
+      BranchName: develop
+      DetectChanges: true
+      EnvironmentName: staging
+      ConfigSettings: config.settings.staging
+    writing-ecs-production:
+      CrossStackPrefix: writing-production
+      EcsBackend: writing-ecs-production-ecs-backend
+      EcsFrontend: writing-ecs-production-ecs-frontend
+      BranchName: main
+      DetectChanges: false
+      EnvironmentName: production
+      ConfigSettings: config.settings.production
+Resources:
+  RepositoryBackend:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !FindInMap [InputStackName, !Ref "AWS::StackName", EcsBackend]
+      LifecyclePolicy:
+        LifecyclePolicyText: '{"rules":[{"rulePriority":1,"selection":{"tagStatus":"any","countType":"imageCountMoreThan","countNumber":5},"action":{"type":"expire"}}]}'
+  RepositoryFrontend:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !FindInMap [InputStackName, !Ref "AWS::StackName", EcsFrontend]
+      LifecyclePolicy:
+        LifecyclePolicyText: '{"rules":[{"rulePriority":1,"selection":{"tagStatus":"any","countType":"imageCountMoreThan","countNumber":5},"action":{"type":"expire"}}]}'
+  Pipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      RoleArn: !GetAtt CodePipelineRole.Arn
+      ArtifactStore:
+        Type: S3
+        Location: !Ref S3BucketCodePipeline
+      Stages: 
+        - Name: Source
+          Actions: 
+            - Name: Source
+              ActionTypeId: 
+                Category: Source
+                Owner: AWS
+                Provider: CodeStarSourceConnection
+                Version: 1
+              Configuration:
+                ConnectionArn: !Ref ConnectionArn
+                FullRepositoryId: OT-ITE/writing-full-stack-web-development
+                BranchName: !FindInMap [InputStackName, !Ref "AWS::StackName", BranchName]
+                DetectChanges: !FindInMap [InputStackName, !Ref "AWS::StackName", DetectChanges]
+              OutputArtifacts:
+                - Name: SourceArtifact
+        - Name: Build
+          Actions:
+            - Name: Build
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: 1
+              Configuration:
+                ProjectName: !Ref BuildProject
+              InputArtifacts:
+                - Name: SourceArtifact
+              OutputArtifacts:
+                - Name: BuildArtifact
+        - Name: Deploy
+          Actions:
+            - Name: Deploy
+              ActionTypeId: 
+                Category: Deploy
+                Owner: AWS 
+                Provider: ECS
+                Version: 1
+              Configuration:
+                ClusterName: !Ref AWS::StackName
+                ServiceName: !Ref AWS::StackName
+              InputArtifacts: 
+                - Name: BuildArtifact
+  CodePipelineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${AWS::StackName}-CodePipelineRole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codepipeline.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AmazonECS_FullAccess
+        - arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess
+  S3BucketCodePipeline:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${AWS::StackName}-codepipeline
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+  BuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Ref AWS::StackName
+      ServiceRole: !Ref BuildRole
+      Source:
+        Type: CODEPIPELINE
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
+        PrivilegedMode: true
+        EnvironmentVariables:
+          - Name: ECS_BACKEND
+            Value: !FindInMap [InputStackName, !Ref "AWS::StackName", EcsBackend]
+          - Name: ECS_FRONTEND
+            Value: !FindInMap [InputStackName, !Ref "AWS::StackName", EcsFrontend]
+          - Name: ACCOUNT_ID
+            Value: !Ref AWS::AccountId
+          - Name: ENVIRONMENT_NAME
+            Value: !FindInMap [InputStackName, !Ref "AWS::StackName", EnvironmentName]
+  BuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${AWS::StackName}-BuildRole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+        - arn:aws:iam::aws:policy/EC2InstanceProfileForImageBuilderECRContainerBuilds
+  Cluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Ref AWS::StackName
+  Service:
+    Type: AWS::ECS::Service
+    DependsOn: Listener
+    Properties:
+      ServiceName: !Ref AWS::StackName
+      Cluster: !Ref Cluster
+      TaskDefinition: !Ref TaskDefinition
+      LaunchType: FARGATE
+      DesiredCount: 2
+      LoadBalancers:
+        - TargetGroupArn: !Ref TargetGroup
+          ContainerPort: 3000
+          ContainerName: !FindInMap [InputStackName, !Ref "AWS::StackName", EcsFrontend]
+      NetworkConfiguration:
+         AwsvpcConfiguration:
+           SecurityGroups:
+             - Fn::ImportValue: !Join ["-", [!FindInMap [InputStackName, !Ref "AWS::StackName", CrossStackPrefix], "SecurityGroupWritingECS"]]
+           Subnets:
+             - Fn::ImportValue: !Join ["-", [!FindInMap [InputStackName, !Ref "AWS::StackName", CrossStackPrefix], "PrivateSubnet1"]]
+             - Fn::ImportValue: !Join ["-", [!FindInMap [InputStackName, !Ref "AWS::StackName", CrossStackPrefix], "PrivateSubnet2"]]
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Cpu: 512
+      Memory: 3072
+      NetworkMode: awsvpc
+      ExecutionRoleArn: !Ref ExecutionRole
+      TaskRoleArn: !Ref TaskRole
+      ContainerDefinitions:
+        - Name: !FindInMap [InputStackName, !Ref "AWS::StackName", EcsBackend]
+          Image: !Join ["", [!Ref "AWS::AccountId", ".dkr.ecr.", !Ref "AWS::Region", ".amazonaws.com/", !FindInMap [InputStackName, !Ref "AWS::StackName", EcsBackend], ":latest"]]
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref LogGroupBackend
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: backend
+        - Name: !FindInMap [InputStackName, !Ref "AWS::StackName", EcsFrontend]
+          Image: !Join ["", [!Ref "AWS::AccountId", ".dkr.ecr.", !Ref "AWS::Region", ".amazonaws.com/", !FindInMap [InputStackName, !Ref "AWS::StackName", EcsFrontend], ":latest"]]
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref LogGroupFrontend
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: frontend
+          PortMappings:
+            - ContainerPort: 3000
+  ExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${AWS::StackName}-ExecutionRole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${AWS::StackName}-TaskRole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaRole
+  LogGroupBackend:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /${AWS::StackName}/backend
+  LogGroupFrontend:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /${AWS::StackName}/frontend
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties: 
+      Name: !Ref AWS::StackName
+      SecurityGroups:
+        - Fn::ImportValue: !Join ["-", [!FindInMap [InputStackName, !Ref "AWS::StackName", CrossStackPrefix], "SecurityGroupWritingALB"]]
+      Subnets: 
+        - Fn::ImportValue: !Join ["-", [!FindInMap [InputStackName, !Ref "AWS::StackName", CrossStackPrefix], "PublicSubnet1"]]
+        - Fn::ImportValue: !Join ["-", [!FindInMap [InputStackName, !Ref "AWS::StackName", CrossStackPrefix], "PublicSubnet2"]]
+      LoadBalancerAttributes:
+        - Key: idle_timeout.timeout_seconds
+          Value: 310
+  Listener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties: 
+      LoadBalancerArn: !Ref LoadBalancer
+      Protocol: HTTP
+      Port: 80
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+#     Certificates:
+#       - CertificateArn: arn:aws:acm:ap-northeast-1:757834733966:certificate/37e84cdc-6f9e-48fe-88bd-b9a5def7a9ee
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Ref AWS::StackName
+      Protocol: HTTP
+      Port: 3000
+      TargetType: ip
+      VpcId:
+        Fn::ImportValue: !Join ["-", [!FindInMap [InputStackName, !Ref "AWS::StackName", CrossStackPrefix], "VPC"]]
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: 10
+        - Key: stickiness.enabled
+          Value: true
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref AWS::StackName
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+  LogGroupBatch:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /${AWS::StackName}/batch
+  LambdaECSRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${AWS::StackName}-LambdaECS
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonECS_FullAccess
+  TaskDefinitionImportExternalBibliography:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Cpu: 1024
+      Memory: 8192
+      NetworkMode: awsvpc
+      ExecutionRoleArn: !Ref ExecutionRole
+      TaskRoleArn: !Ref TaskRole
+      ContainerDefinitions:
+        - Name: !FindInMap [InputStackName, !Ref "AWS::StackName", EcsBackend]
+          Image: !Join ["", [!Ref "AWS::AccountId", ".dkr.ecr.", !Ref "AWS::Region", ".amazonaws.com/", !FindInMap [InputStackName, !Ref "AWS::StackName", EcsBackend], ":latest"]]
+          EntryPoint: 
+            - "python"
+            - "-u"
+            - "manage.py"
+            - "import_external_bibliography"
+            - "--settings"
+            - !FindInMap [InputStackName, !Ref "AWS::StackName", ConfigSettings]
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref LogGroupBatch
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: import-external-bibliography
+  LambdaFunctionImportExternalBibliography:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-import-external-bibliography
+      Code:
+        ZipFile: !Sub |
+          const AWS = require('aws-sdk');
+          const ecs = new AWS.ECS();
+          exports.handler = async function(event) {
+            await ecs.runTask({
+              cluster: '${Cluster}',
+              taskDefinition: '${TaskDefinitionImportExternalBibliography}',
+              launchType: 'FARGATE',
+              networkConfiguration: {
+                awsvpcConfiguration: {
+                  securityGroups: [process.env.SECURITYGROUPS],
+                  subnets: [process.env.SUBNET1],
+                },
+              },
+            })
+            .promise();
+          }
+      Handler: index.handler
+      Role: !GetAtt LambdaECSRole.Arn
+      Runtime: nodejs16.x
+      Timeout: 5
+      ReservedConcurrentExecutions: 1
+      Environment:
+        Variables:
+          SECURITYGROUPS:
+            Fn::ImportValue: !Join ["-", [!FindInMap [InputStackName, !Ref "AWS::StackName", CrossStackPrefix], "SecurityGroupWritingECS"]]
+          SUBNET1:
+            Fn::ImportValue: !Join ["-", [!FindInMap [InputStackName, !Ref "AWS::StackName", CrossStackPrefix], "PrivateSubnet1"]]
