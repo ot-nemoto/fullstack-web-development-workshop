@@ -86,7 +86,8 @@ export default function Page() {
       <h2>MUIのDataGrid https://mui.com/x/react-data-grid/</h2>
       <Box sx={{ height: 400, width: '100%' }}>
         <DataGrid
-          getRowId={(row) => row.id}
+//        buildエラー回避・動作未確認
+//        getRowId={(row) => row.id}
           rows={data}
           columns={columns}
           pageSize={5}
