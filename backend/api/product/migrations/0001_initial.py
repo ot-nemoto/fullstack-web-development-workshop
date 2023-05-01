@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 "verbose_name": "商品",
-                "db_table": "product",
+                "db_table": "product_back",
             },
         ),
         migrations.CreateModel(
