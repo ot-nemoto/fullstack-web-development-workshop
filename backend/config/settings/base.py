@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "common",
     "api.hello_db",
+    "api.inventory",
     "api.product",
     "api.sales",
     "batch",

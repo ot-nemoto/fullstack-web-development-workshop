@@ -15,7 +15,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name='商品名')
 
     class Meta:
-        db_table = 'product'
+        db_table = 'product_back'
         verbose_name = '商品'
 
 
