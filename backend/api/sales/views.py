@@ -36,7 +36,7 @@ class SalesSyncView(APIView):
         df = pandas.read_csv(filename)
         for _, row in df.iterrows():
             sales = Sales(
-                sales_date=row['date'], price=row['price'], import_file=sales_file)
+                product_id=row['product'], sales_date=row['date'], quantity=row['quantity'], import_file=sales_file)
             sales.save()
 
         return Response(status=201)
@@ -60,5 +60,6 @@ class SalesAsyncView(APIView):
 
 
 class SalesList(generics.ListAPIView):
-    # queryset = Sales.objects.annotate(monthly_date=TruncMonth('sales_date')).values('monthly_date').annotate(monthly_price=Sum('price')).order_by('monthly_date')
+    queryset = Sales.objects.annotate(monthly_date=TruncMonth('sales_date')).values(
+        'monthly_date').annotate(monthly_price=Sum('quantity')).order_by('monthly_date')
     serializer_class = SalesSerializer

@@ -15,5 +15,5 @@ class FileSerializer(serializers.Serializer):
 
 
 class SalesSerializer(serializers.Serializer):
-    monthly_date = serializers.DateField(format='%Y-%m')
+    monthly_date = serializers.DateTimeField(format='%Y-%m')
     monthly_price = serializers.IntegerField()

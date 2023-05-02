@@ -10,7 +10,7 @@ import pandas
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from api.sales.models import Sales, SalesFile, Status
+from api.inventory.models import Sales, SalesFile, Status
 
 
 @transaction.atomic
@@ -23,8 +23,8 @@ def execute(download_history):
 
     df = pandas.read_csv(filename)
     for _, row in df.iterrows():
-        sales = Sales(sales_date=row['date'],
-                      price=row['price'], import_file=entry)
+        sales = Sales(product_id=row['product'], sales_date=row['date'],
+                      quantity=row['quantity'], import_file=entry)
         sales.save()
 
     entry.status = Status.ASYNC_PROCESSED
