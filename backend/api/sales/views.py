@@ -15,7 +15,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Sales, SalesFile, Status
+from ..inventory.models import Sales, SalesFile, Status
 from .serializers import FileSerializer, SalesSerializer
 
 
@@ -60,6 +60,5 @@ class SalesAsyncView(APIView):
 
 
 class SalesList(generics.ListAPIView):
-    queryset = Sales.objects.annotate(monthly_date=TruncMonth('sales_date')).values(
-        'monthly_date').annotate(monthly_price=Sum('price')).order_by('monthly_date')
+    # queryset = Sales.objects.annotate(monthly_date=TruncMonth('sales_date')).values('monthly_date').annotate(monthly_price=Sum('price')).order_by('monthly_date')
     serializer_class = SalesSerializer

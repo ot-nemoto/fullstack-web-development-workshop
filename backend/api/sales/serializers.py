@@ -7,7 +7,7 @@ https://www.django-rest-framework.org/api-guide/serializers/
 """
 from rest_framework import serializers
 
-from .models import Sales
+from ..inventory.models import Sales
 
 
 class FileSerializer(serializers.Serializer):
