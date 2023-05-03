@@ -81,8 +81,8 @@ export default function Page() {
               <td><input type="number" /></td>
               <td><input type="text" /></td>
               {/* ルーティングのために追加 */}
-              <td><button onClick={handleAddCancel}>キャンセル</button></td>
-              <td><button onClick={handleAdd}>登録する</button></td>
+              <td></td>
+              <td><button onClick={handleAddCancel}>キャンセル</button><button onClick={handleAdd}>登録する</button></td>
             </tr>
           ) : ""}
           {data.map((data: any) => (
