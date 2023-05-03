@@ -7,6 +7,8 @@
 
 import { useState, useEffect } from 'react';
 import productsData from "./sample/dummy_products.json";
+// ルーティングのために追加
+import Link from "next/link";
 
 export default function Page() {
   // 読込データを保持
@@ -27,6 +29,8 @@ export default function Page() {
             <th>商品名</th>
             <th>単価</th>
             <th>説明</th>
+            {/* ルーティングのために追加 */}
+            <th></th>
             <th></th>
           </tr>
         </thead>
@@ -60,6 +64,8 @@ export default function Page() {
               <td>{data.name}</td>
               <td>{data.price}</td>
               <td>{data.description}</td>
+              {/* ルーティングのために追加 */}
+              <td><Link href={`/inventory/${data.id}`}>在庫処理</Link></td>
               <td><button>更新・削除</button></td>
             </tr>
           ))}
