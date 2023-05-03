@@ -102,9 +102,9 @@ export default function Page() {
             editingRow === data.id ? (
               <tr key={data.id}>
                 <td>{data.id}</td>
-                <td><input type="text" value={data.name} /></td>
-                <td><input type="number" value={data.price} /></td>
-                <td><input type="text" value={data.description} /></td>
+                <td><input type="text" defaultValue={data.name} /></td>
+                <td><input type="number" defaultValue={data.price} /></td>
+                <td><input type="text" defaultValue={data.description} /></td>
                 <td></td>
                 <td><button onClick={() => handleEditCancel(data.id)}>キャンセル</button><button onClick={() => handleEdit(data.id)}>更新する</button><button onClick={() => handleDelete(data.id)}>削除する</button></td>
               </tr>
