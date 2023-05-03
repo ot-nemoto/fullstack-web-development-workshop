@@ -2,8 +2,19 @@
 【執筆メモStart】
 【執筆メモEnd】
 */
+'use client'
+
+import { useState, useEffect } from 'react';
+import inventoriesData from "../sample/dummy_inventories.json";
 
 export default function Page() {
+  // 読込データを保持
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    setData(inventoriesData);
+  }, [])
+
   return (
     <div>
       <h2>商品在庫管理</h2>
@@ -33,46 +44,16 @@ export default function Page() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>卸し</td>
-            <td>2023-04-03 18:54:13</td>
-            <td>6900</td>
-            <td>2</td>
-            <td>13800</td>
-            <td>390</td>
-          </tr>
-          <tr>
-            <td>仕入れ</td>
-            <td>2023-04-03 18:54:13</td>
-            <td>6900</td>
-            <td>3</td>
-            <td>20700</td>
-            <td>392</td>
-          </tr>
-          <tr>
-            <td>卸し</td>
-            <td>2023-04-03 18:54:13</td>
-            <td>6900</td>
-            <td>1</td>
-            <td>6900</td>
-            <td>389</td>
-          </tr>
-          <tr>
-            <td>卸し</td>
-            <td>2023-04-03 18:54:13</td>
-            <td>6900</td>
-            <td>10</td>
-            <td>69000</td>
-            <td>390</td>
-          </tr>
-          <tr>
-            <td>仕入れ</td>
-            <td>2023-04-03 18:54:13</td>
-            <td>6900</td>
-            <td>400</td>
-            <td>2760000</td>
-            <td>400</td>
-          </tr>
+          {data.map((data: any) => (
+            <tr key={data.id}>
+              <td>{data.type}</td>
+              <td>{data.date}</td>
+              <td>{data.unit}</td>
+              <td>{data.quantity}</td>
+              <td>{data.price}</td>
+              <td>{data.inventory}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
