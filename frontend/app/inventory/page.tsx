@@ -6,7 +6,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import productsData from "./dummy_products.json";
+import productsData from "./sample/dummy_products.json";
 
 export default function Page() {
   // 読込データを保持
