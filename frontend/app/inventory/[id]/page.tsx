@@ -15,11 +15,30 @@ export default function Page({ params }: {
   const [product, setProduct] = useState({ id: '', name: '' });
   const [data, setData] = useState([]);
 
+  // 登録データを保持
+  const [quantity, setQuantity] = useState(0)
+
   useEffect(() => {
     const selectedProduct = productsData.find(v => v.id === params.id)
     setProduct(selectedProduct);
     setData(inventoriesData);
   }, [])
+
+  // 仕入れ・卸し処理
+  const handlePurchase = () => {
+    const ob = {
+      id: params.id,
+      quantity: quantity
+    }
+    console.dir(ob)
+  };
+  const handleSell = () => {
+    const ob = {
+      id: params.id,
+      quantity: quantity
+    }
+    console.dir(ob)
+  };
 
   return (
     <div>
@@ -31,10 +50,15 @@ export default function Page({ params }: {
       </div>
       <div>
         <label>数量:</label>
-        <input type="number" />
+        <input
+          type="number" 
+          id="quantity"
+          value={quantity}
+          onChange={(event) => setQuantity(event.target.value)}
+        />
       </div>
-      <button>商品を仕入れる</button>
-      <button>商品を卸す</button>
+      <button onClick={() => handlePurchase()}>商品を仕入れる</button>
+      <button onClick={() => handleSell()}>商品を卸す</button>
       <h3>在庫履歴</h3>
       <table>
         <thead>
