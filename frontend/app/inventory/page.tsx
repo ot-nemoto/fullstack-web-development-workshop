@@ -16,6 +16,11 @@ export default function Page() {
     setData(productsData);
   }, [])
 
+  // 登録データを保持
+  const [name, setName] = useState("")
+  const [price, setPrice] = useState(0)
+  const [description, setDescription] = useState("")
+
   // 登録処理
   const [shownNewRow, setShownNewRow] = useState(false);
   const handleShowNewRow = () => {
@@ -27,6 +32,12 @@ export default function Page() {
   };
   const handleAdd = () => {
     // TODO: バックエンドを使用した登録処理を呼ぶ
+    const ob = {
+      name: name,
+      price: price,
+      description: description
+    }
+    console.dir(ob)
     setShownNewRow(false)
   };
 
@@ -40,11 +51,22 @@ export default function Page() {
     setEditingRow(0)
   };
   const handleEdit = (id) => {
+    const ob = {
+      id: id,
+      name: name,
+      price: price,
+      description: description
+    }
+    console.dir(ob)
     setEditingRow(0)
   };
-  const handleDelete = (id) => 
+  const handleDelete = (id) => {
+    const ob = {
+      id: id
+    }
+    console.dir(ob)
     setEditingRow(0)
-  ;
+ };
 
   return (
     <div>
@@ -65,9 +87,24 @@ export default function Page() {
           {shownNewRow ? (
             <tr>
               <td></td>
-              <td><input type="text" /></td>
-              <td><input type="number" /></td>
-              <td><input type="text" /></td>
+              <td><input 
+                type="text" 
+                id="name"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+              /></td>
+              <td><input 
+                type="number" 
+                id="price"
+                value={price}
+                onChange={(event) => setPrice(event.target.value)}
+              /></td>
+              <td><input 
+                type="text" 
+                id="description"
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+              /></td>
               <td></td>
               <td><button onClick={() => handleAddCancel()}>キャンセル</button><button onClick={() => handleAdd()}>登録する</button></td>
             </tr>
@@ -76,9 +113,29 @@ export default function Page() {
             editingRow === data.id ? (
               <tr key={data.id}>
                 <td>{data.id}</td>
-                <td><input type="text" defaultValue={data.name} /></td>
-                <td><input type="number" defaultValue={data.price} /></td>
-                <td><input type="text" defaultValue={data.description} /></td>
+                <td><input 
+                  type="text" 
+                  id="name"
+                  // FIXME: onChangeイベントが実行されない限り、valueに設定された値にdata.nameが入らず空になる
+                  // defaultValueとvalueは同時に指定できない
+                  // defaultValue={data.name} 
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                /></td>
+                <td><input 
+                  type="number" 
+                  id="price"
+                  // defaultValue={data.price} 
+                  value={price}
+                  onChange={(event) => setPrice(event.target.value)}
+                /></td>
+                <td><input 
+                  type="text" 
+                  id="description"
+                  // defaultValue={data.description} 
+                  value={description}
+                  onChange={(event) => setDescription(event.target.value)}
+                /></td>
                 <td></td>
                 <td><button onClick={() => handleEditCancel(data.id)}>キャンセル</button><button onClick={() => handleEdit(data.id)}>更新する</button><button onClick={() => handleDelete(data.id)}>削除する</button></td>
               </tr>
