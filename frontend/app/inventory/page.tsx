@@ -115,6 +115,8 @@ export default function Page() {
                     type="text"
                     id="name"
                     value={name}
+                    required
+                    maxLength="100"
                     onChange={(event) => setName(event.target.value)}
                   />
                 </td>
@@ -123,6 +125,9 @@ export default function Page() {
                     type="number"
                     id="price"
                     value={price}
+                    required
+                    min="1"
+                    max="99999999"
                     onChange={(event) => setPrice(event.target.value)}
                   />
                 </td>
@@ -131,6 +136,8 @@ export default function Page() {
                     type="text"
                     id="description"
                     value={description}
+                    required
+                    maxLength="1000"
                     onChange={(event) => setDescription(event.target.value)}
                   />
                 </td>
@@ -158,6 +165,8 @@ export default function Page() {
                       // FIXME: onChangeイベントが実行されない限り、valueに設定された値にdata.nameが入らず空になる
                       // defaultValueとvalueは同時に指定できない
                       value={name}
+                      required
+                      maxLength="100"
                       onChange={(event) => setName(event.target.value)}
                     />
                   </td>
@@ -166,6 +175,9 @@ export default function Page() {
                       type="number"
                       id="price"
                       value={price}
+                      required
+                      min="1"
+                      max="99999999"
                       onChange={(event) => setPrice(event.target.value)}
                     />
                   </td>
@@ -174,6 +186,8 @@ export default function Page() {
                       type="text"
                       id="description"
                       value={description}
+                      required
+                      maxLength="1000"
                       onChange={(event) => setDescription(event.target.value)}
                     />
                   </td>
