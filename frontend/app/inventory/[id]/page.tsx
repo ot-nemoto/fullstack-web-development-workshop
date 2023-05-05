@@ -2,42 +2,40 @@
 【執筆メモStart】
 【執筆メモEnd】
 */
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import productsData from "../sample/dummy_products.json";
 import inventoriesData from "../sample/dummy_inventories.json";
 
-export default function Page({ params }: {
-  params: { id: string },
-}) {
+export default function Page({ params }: { params: { id: string } }) {
   // 読込データを保持
-  const [product, setProduct] = useState({ id: '', name: '' });
+  const [product, setProduct] = useState({ id: "", name: "" });
   const [data, setData] = useState([]);
 
   // 登録データを保持
-  const [quantity, setQuantity] = useState(0)
+  const [quantity, setQuantity] = useState(0);
 
   useEffect(() => {
-    const selectedProduct = productsData.find(v => v.id === params.id)
+    const selectedProduct = productsData.find((v) => v.id === params.id);
     setProduct(selectedProduct);
     setData(inventoriesData);
-  }, [])
+  }, []);
 
   // 仕入れ・卸し処理
   const handlePurchase = () => {
     const ob = {
       id: params.id,
-      quantity: quantity
-    }
-    console.dir(ob)
+      quantity: quantity,
+    };
+    console.dir(ob);
   };
   const handleSell = () => {
     const ob = {
       id: params.id,
-      quantity: quantity
-    }
-    console.dir(ob)
+      quantity: quantity,
+    };
+    console.dir(ob);
   };
 
   return (
@@ -51,7 +49,7 @@ export default function Page({ params }: {
       <div>
         <label>数量:</label>
         <input
-          type="number" 
+          type="number"
           id="quantity"
           value={quantity}
           onChange={(event) => setQuantity(event.target.value)}
@@ -85,5 +83,5 @@ export default function Page({ params }: {
         </tbody>
       </table>
     </div>
-  )
+  );
 }
