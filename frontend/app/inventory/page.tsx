@@ -20,6 +20,7 @@ export default function Page() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
   // 読込データを保持
@@ -31,20 +32,16 @@ export default function Page() {
 
   // 登録データを保持
   const [id, setId] = useState<number | null>(0);
-  const [name, setName] = useState<string>("");
-  const [price, setPrice] = useState<string>("0");
-  const [description, setDescription] = useState<string>("");
 
   // submit時のactionを分岐させる
   const [action, setAction] = useState<string>("");
 
   const onSubmit = (event: any): void => {
-    console.dir(event);
     const data: FormData = {
       id: id,
-      name: name,
-      price: Number(price),
-      description: description,
+      name: event.name,
+      price: Number(event.price),
+      description: event.description,
     };
 
     // actionによってHTTPメソッドと使用するパラメーターを切り替える
@@ -66,9 +63,11 @@ export default function Page() {
   // 登録処理
   const handleShowNewRow = () => {
     setId(null);
-    setName("");
-    setPrice("0");
-    setDescription("");
+    reset({
+      name: "",
+      price: "0",
+      description: "",
+    });
   };
   const handleAddCancel = () => {
     setId(0);
@@ -81,9 +80,11 @@ export default function Page() {
   const handleEditRow = (id: number | null) => {
     const selectedProduct: FormData = data.find((v) => v.id === id);
     setId(selectedProduct.id);
-    setName(selectedProduct.name);
-    setPrice(selectedProduct.price.toString());
-    setDescription(selectedProduct.description);
+    reset({
+      name: selectedProduct.name,
+      price: selectedProduct.price,
+      description: selectedProduct.description,
+    });
   };
   const handleEditCancel = () => {
     setId(0);
@@ -121,11 +122,9 @@ export default function Page() {
                   <input
                     type="text"
                     id="name"
-                    value={name}
                     // registerで登録したフィールドがformのチェック対象になる
                     // registerで指定しないとonSubmitに渡すdataに入ってこない
                     {...register("name", { required: true, maxLength: 100 })}
-                    onChange={(event) => setName(event.target.value)}
                   />
                   {errors.name && (
                     <div>100文字以内の商品名を入力してください</div>
@@ -135,9 +134,7 @@ export default function Page() {
                   <input
                     type="number"
                     id="price"
-                    value={price}
                     {...register("price", { min: 1, max: 99999999 })}
-                    onChange={(event) => setPrice(event.target.value)}
                   />
                   {errors.price && (
                     <div>1から99999999の数値を入力してください</div>
@@ -147,9 +144,7 @@ export default function Page() {
                   <input
                     type="text"
                     id="description"
-                    value={description}
                     {...register("description")}
-                    onChange={(event) => setDescription(event.target.value)}
                   />
                 </td>
                 <td></td>
@@ -173,9 +168,7 @@ export default function Page() {
                     <input
                       type="text"
                       id="name"
-                      value={name}
                       {...register("name", { required: true, maxLength: 100 })}
-                      onChange={(event) => setName(event.target.value)}
                     />
                     {errors.name && (
                       <div>100文字以内の商品名を入力してください</div>
@@ -185,9 +178,7 @@ export default function Page() {
                     <input
                       type="number"
                       id="price"
-                      value={price}
                       {...register("price", { min: 1, max: 99999999 })}
-                      onChange={(event) => setPrice(event.target.value)}
                     />
                     {errors.price && (
                       <div>1から99999999の数値を入力してください</div>
@@ -197,9 +188,7 @@ export default function Page() {
                     <input
                       type="text"
                       id="description"
-                      value={description}
                       {...register("description")}
-                      onChange={(event) => setDescription(event.target.value)}
                     />
                   </td>
                   <td></td>
