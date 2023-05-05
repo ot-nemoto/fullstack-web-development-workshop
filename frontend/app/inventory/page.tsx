@@ -29,6 +29,9 @@ export default function Page() {
   const [price, setPrice] = useState<string>("0");
   const [description, setDescription] = useState<string>("");
 
+  // エラー
+  const [nameError, setNameError] = useState<string>("");
+
   // submit時のactionを分岐させる
   const [action, setAction] = useState<string>("");
 
@@ -39,6 +42,11 @@ export default function Page() {
       price: Number(price),
       description: description,
     };
+
+    if (!validate(data)) {
+      event.preventDefault();
+      return;
+    }
 
     // actionによってHTTPメソッドと使用するパラメーターを切り替える
     if (action === "add") {
@@ -88,6 +96,14 @@ export default function Page() {
     setId(id);
   };
 
+  const validate: boolean = (data: FormData) => {
+    if (data.name === "あ") {
+      setNameError("利用できない商品名です。");
+      return false;
+    }
+    return true;
+  };
+
   return (
     <div>
       <h2>商品一覧</h2>
@@ -119,6 +135,7 @@ export default function Page() {
                     maxLength="100"
                     onChange={(event) => setName(event.target.value)}
                   />
+                  <div>{nameError}</div>
                 </td>
                 <td>
                   <input
