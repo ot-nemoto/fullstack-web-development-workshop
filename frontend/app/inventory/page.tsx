@@ -4,6 +4,7 @@
 */
 "use client";
 
+import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import productsData from "./sample/dummy_products.json";
 import Link from "next/link";
@@ -16,6 +17,11 @@ type FormData = {
 };
 
 export default function Page() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   // 読込データを保持
   const [data, setData] = useState<Array<FormData>>([]);
 
@@ -29,24 +35,17 @@ export default function Page() {
   const [price, setPrice] = useState<string>("0");
   const [description, setDescription] = useState<string>("");
 
-  // エラー
-  const [nameError, setNameError] = useState<string>("");
-
   // submit時のactionを分岐させる
   const [action, setAction] = useState<string>("");
 
-  const handleSubmit = (event: any): void => {
+  const onSubmit = (event: any): void => {
+    console.dir(event);
     const data: FormData = {
       id: id,
       name: name,
       price: Number(price),
       description: description,
     };
-
-    if (!validate(data)) {
-      event.preventDefault();
-      return;
-    }
 
     // actionによってHTTPメソッドと使用するパラメーターを切り替える
     if (action === "add") {
@@ -93,15 +92,7 @@ export default function Page() {
     setId(0);
   };
   const handleDelete = (id: number) => {
-    setId(id);
-  };
-
-  const validate: boolean = (data: FormData) => {
-    if (data.name === "あ") {
-      setNameError("利用できない商品名です。");
-      return false;
-    }
-    return true;
+    setId(0);
   };
 
   return (
@@ -110,7 +101,7 @@ export default function Page() {
       <button type="button" onClick={handleShowNewRow}>
         商品を追加する
       </button>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <table>
           <thead>
             <tr>
@@ -131,30 +122,33 @@ export default function Page() {
                     type="text"
                     id="name"
                     value={name}
-                    required
-                    maxLength="100"
+                    // registerで登録したフィールドがformのチェック対象になる
+                    // registerで指定しないとonSubmitに渡すdataに入ってこない
+                    {...register("name", { required: true, maxLength: 100 })}
                     onChange={(event) => setName(event.target.value)}
                   />
-                  <div>{nameError}</div>
+                  {errors.name && (
+                    <div>100文字以内の商品名を入力してください</div>
+                  )}
                 </td>
                 <td>
                   <input
                     type="number"
                     id="price"
                     value={price}
-                    required
-                    min="1"
-                    max="99999999"
+                    {...register("price", { min: 1, max: 99999999 })}
                     onChange={(event) => setPrice(event.target.value)}
                   />
+                  {errors.price && (
+                    <div>1から99999999の数値を入力してください</div>
+                  )}
                 </td>
                 <td>
                   <input
                     type="text"
                     id="description"
                     value={description}
-                    required
-                    maxLength="1000"
+                    {...register("description")}
                     onChange={(event) => setDescription(event.target.value)}
                   />
                 </td>
@@ -179,32 +173,32 @@ export default function Page() {
                     <input
                       type="text"
                       id="name"
-                      // FIXME: onChangeイベントが実行されない限り、valueに設定された値にdata.nameが入らず空になる
-                      // defaultValueとvalueは同時に指定できない
                       value={name}
-                      required
-                      maxLength="100"
+                      {...register("name", { required: true, maxLength: 100 })}
                       onChange={(event) => setName(event.target.value)}
                     />
+                    {errors.name && (
+                      <div>100文字以内の商品名を入力してください</div>
+                    )}
                   </td>
                   <td>
                     <input
                       type="number"
                       id="price"
                       value={price}
-                      required
-                      min="1"
-                      max="99999999"
+                      {...register("price", { min: 1, max: 99999999 })}
                       onChange={(event) => setPrice(event.target.value)}
                     />
+                    {errors.price && (
+                      <div>1から99999999の数値を入力してください</div>
+                    )}
                   </td>
                   <td>
                     <input
                       type="text"
                       id="description"
                       value={description}
-                      required
-                      maxLength="1000"
+                      {...register("description")}
                       onChange={(event) => setDescription(event.target.value)}
                     />
                   </td>
