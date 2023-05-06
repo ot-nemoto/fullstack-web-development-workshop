@@ -4,59 +4,88 @@
 */
 "use client";
 
+import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import productsData from "../sample/dummy_products.json";
 import inventoriesData from "../sample/dummy_inventories.json";
 
+type FormData = {
+  id: number;
+  quantity: number;
+};
+
 export default function Page({ params }: { params: { id: string } }) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   // 読込データを保持
   const [product, setProduct] = useState({ id: "", name: "" });
   const [data, setData] = useState([]);
 
-  // 登録データを保持
-  const [quantity, setQuantity] = useState(0);
-
   useEffect(() => {
-    const selectedProduct = productsData.find((v) => v.id === params.id);
+    const selectedProduct = productsData.find(
+      (v) => v.id === Number(params.id)
+    );
     setProduct(selectedProduct);
     setData(inventoriesData);
   }, []);
 
-  // 仕入れ・卸し処理
-  const handlePurchase = () => {
-    const ob = {
-      id: params.id,
-      quantity: quantity,
+  // submit時のactionを分岐させる
+  const [action, setAction] = useState<string>("");
+
+  const onSubmit = (event: any): void => {
+    const data: FormData = {
+      id: Number(params.id),
+      quantity: Number(event.quantity),
     };
-    console.dir(ob);
+
+    // actionによってHTTPメソッドと使用するパラメーターを切り替える
+    if (action === "purchase") {
+      handlePurchase(data);
+    } else if (action === "sell") {
+      if (data.id === null) {
+        return;
+      }
+      handleSell(data);
+    }
   };
-  const handleSell = () => {
-    const ob = {
-      id: params.id,
-      quantity: quantity,
-    };
-    console.dir(ob);
+
+  // 仕入れ・卸し処理
+  const handlePurchase = (data: FormData) => {
+    console.dir(data);
+  };
+  const handleSell = (data: FormData) => {
+    console.dir(data);
   };
 
   return (
     <div>
       <h2>商品在庫管理</h2>
       <h3>在庫処理</h3>
-      <div>
-        <label>商品名:</label>
-        <span>{product.name}</span>
-      </div>
-      <div>
-        <label>数量:</label>
-        <input
-          type="number"
-          id="quantity"
-          value={quantity}
-          onChange={(event) => setQuantity(event.target.value)}
-        />
-      </div>
-      <button onClick={() => handlePurchase()}>商品を仕入れる</button>
-      <button onClick={() => handleSell()}>商品を卸す</button>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <label>商品名:</label>
+          <span>{product.name}</span>
+        </div>
+        <div>
+          <label>数量:</label>
+          <input
+            type="number"
+            id="quantity"
+            {...register("quantity", { required: true, min: 1, max: 99999999 })}
+          />
+          {errors.quantity && <div>1から99999999の数値を入力してください</div>}
+        </div>
+        <button type="submit" onClick={() => setAction("purchase")}>
+          商品を仕入れる
+        </button>
+        <button type="submit" onClick={() => setAction("sell")}>
+          商品を卸す
+        </button>
+      </form>
       <h3>在庫履歴</h3>
       <table>
         <thead>

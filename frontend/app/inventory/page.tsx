@@ -134,7 +134,11 @@ export default function Page() {
                   <input
                     type="number"
                     id="price"
-                    {...register("price", { min: 1, max: 99999999 })}
+                    {...register("price", {
+                      required: true,
+                      min: 1,
+                      max: 99999999,
+                    })}
                   />
                   {errors.price && (
                     <div>1から99999999の数値を入力してください</div>
