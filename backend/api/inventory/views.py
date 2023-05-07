@@ -8,8 +8,8 @@ from rest_framework.exceptions import NotFound
 from rest_framework import generics, status, views, viewsets
 from rest_framework.response import Response
 
-from .models import Product
-from .serializers import ProductSerializer
+from .models import Product, Purchase
+from .serializers import ProductSerializer, PurchaseSerializer
 
 # DjangoにはRestAPIでも複数の取得方法がある
 # 1. APIView: 一番汎用性が高い
@@ -79,3 +79,29 @@ class ProductGenericView(generics.ListAPIView):
 class ProductModelViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+class PurchaseView(views.APIView):
+    def get_object(self, pk):
+        try:
+            return Purchase.objects.get(pk=pk)
+        except Purchase.DoesNotExist:
+            raise NotFound
+
+    # 仕入情報を取得する
+    def get(self, request, id=None, format=None):
+        if id is None :
+            queryset = Purchase.objects.all()
+            serializer = PurchaseSerializer(queryset, many=True)
+        else: 
+            product = self.get_object(id)
+            serializer = PurchaseSerializer(product)
+        return Response(serializer.data, status.HTTP_200_OK)
+
+    # 仕入情報を登録する
+    def post(self, request, format=None):
+        serializer = PurchaseSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status.HTTP_201_CREATED)
+
+    # 仕入れについては、更新・削除処理はない
