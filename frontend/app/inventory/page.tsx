@@ -25,6 +25,8 @@ export default function Page() {
   } = useForm();
   // 読込データを保持
   const [data, setData] = useState<Array<FormData>>([]);
+  // データ更新の反映用
+  const [refresh, setRefresh] = useState(0);
 
   useEffect(() => {
     axios
@@ -33,7 +35,7 @@ export default function Page() {
       .then((data) => {
         setData(data);
       });
-  }, []);
+  }, [refresh]);
 
   // 登録データを保持
   const [id, setId] = useState<number | null>(0);
@@ -81,6 +83,7 @@ export default function Page() {
     axios.post("/api/inventory/products", data).then((response) => {
       console.log(response.data);
       alert("作成完了");
+      setRefresh((n) => n + 1);
     });
     setId(0);
   };
@@ -102,6 +105,7 @@ export default function Page() {
     axios.put(`/api/inventory/products/${data.id}`, data).then((response) => {
       console.log(response.data);
       alert("更新完了");
+      setRefresh((n) => n + 1);
     });
     setId(0);
   };
@@ -109,6 +113,7 @@ export default function Page() {
     axios.delete(`/api/inventory/products/${id}`).then((response) => {
       console.log(response.data);
       alert("削除完了");
+      setRefresh((n) => n + 1);
     });
     setId(0);
   };
