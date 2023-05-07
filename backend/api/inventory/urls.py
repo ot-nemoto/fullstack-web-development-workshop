@@ -8,7 +8,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.ProductsView.as_view()),
-    path('generics', views.ProductGenericView.as_view()),
-    path('model', views.ProductModelViewSet.as_view({'get': 'list'}))
+    path('product', views.ProductsView.as_view()),
+    path('product/generics', views.ProductGenericView.as_view()),
+    path('product/model', views.ProductModelViewSet.as_view({'get': 'list'}))
 ]
