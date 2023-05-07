@@ -15,5 +15,7 @@ urlpatterns = [
     path('purchases', views.PurchaseView.as_view()),
     path('purchases/<int:id>', views.PurchaseView.as_view()),
     path('sales', views.SalesView.as_view()),
-    path('sales/<int:id>', views.SalesView.as_view())
+    path('sales/<int:id>', views.SalesView.as_view()),
+    path('inventories', views.InventoryView.as_view()),
+    path('inventories/<int:id>', views.InventoryView.as_view())
 ]

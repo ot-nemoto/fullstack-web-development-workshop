@@ -4,12 +4,13 @@
 https://www.django-rest-framework.org/tutorial/3-class-based-views/
 【執筆メモEnd】
 """
+from django.db.models import F, Value
 from rest_framework.exceptions import NotFound
 from rest_framework import generics, status, views, viewsets
 from rest_framework.response import Response
 
 from .models import Product, Purchase, Sales
-from .serializers import ProductSerializer, PurchaseSerializer, SalesSerializer
+from .serializers import InventorySerializer, ProductSerializer, PurchaseSerializer, SalesSerializer
 
 # DjangoにはRestAPIでも複数の取得方法がある
 # 1. APIView: 一番汎用性が高い
@@ -131,3 +132,19 @@ class SalesView(views.APIView):
         return Response(serializer.data, status.HTTP_201_CREATED)
 
     # 売上については、更新・削除処理はない
+
+# 仕入れ・売上情報を一元的に扱うView
+# 単一のモデルではなく仕入れ・売上モデルのそれぞれに依存する
+class InventoryView(views.APIView):
+    # 仕入れ・売上情報を取得する
+    def get(self, request, id=None, format=None):
+        if id is None :
+            # 件数が多くなるので商品IDは必ず指定する
+            return Response(serializer.data, status.HTTP_400_BAD_REQUEST)
+        else: 
+            # UNIONするために、それぞれフィールド名を再定義している
+            purchase = Purchase.objects.filter(product_id=id).values("id", "quantity", type=Value('1'), date=F('purchase_date'))
+            sales = Sales.objects.filter(product_id=id).values("id", "quantity", type=Value('2'), date=F('sales_date'))
+            queryset = purchase.union(sales)
+            serializer = InventorySerializer(queryset, many=True)
+        return Response(serializer.data, status.HTTP_200_OK)
