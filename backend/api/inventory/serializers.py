@@ -6,7 +6,7 @@ https://www.django-rest-framework.org/api-guide/serializers/
 """
 from rest_framework import serializers
 
-from .models import Product, Purchase
+from .models import Product, Purchase, Sales
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,4 +16,9 @@ class ProductSerializer(serializers.ModelSerializer):
 class PurchaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Purchase
+        fields = '__all__'
+
+class SalesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sales
         fields = '__all__'
