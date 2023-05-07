@@ -145,6 +145,6 @@ class InventoryView(views.APIView):
             # UNIONするために、それぞれフィールド名を再定義している
             purchase = Purchase.objects.filter(product_id=id).values("id", "quantity", type=Value('1'), date=F('purchase_date'))
             sales = Sales.objects.filter(product_id=id).values("id", "quantity", type=Value('2'), date=F('sales_date'))
-            queryset = purchase.union(sales)
+            queryset = purchase.union(sales).order_by(F("date").desc())
             serializer = InventorySerializer(queryset, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
