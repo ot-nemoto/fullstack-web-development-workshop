@@ -6,8 +6,7 @@
 
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
-import productsData from "../sample/dummy_products.json";
-import inventoriesData from "../sample/dummy_inventories.json";
+import axios from "axios";
 
 type FormData = {
   id: number;
@@ -24,14 +23,16 @@ export default function Page({ params }: { params: { id: string } }) {
   // 読込データを保持
   const [product, setProduct] = useState({ id: "", name: "" });
   const [data, setData] = useState([]);
+  const [refresh, setRefresh] = useState(0);
 
   useEffect(() => {
-    const selectedProduct = productsData.find(
-      (v) => v.id === Number(params.id)
-    );
-    setProduct(selectedProduct);
-    setData(inventoriesData);
-  }, []);
+    axios.get(`/api/inventory/products/${params.id}`).then((response) => {
+      setProduct(response.data);
+    });
+    axios.get(`/api/inventory/inventories/${params.id}`).then((response) => {
+      setData(response.data);
+    });
+  }, [refresh]);
 
   // submit時のactionを分岐させる
   const [action, setAction] = useState<string>("");
@@ -55,10 +56,29 @@ export default function Page({ params }: { params: { id: string } }) {
 
   // 仕入れ・卸し処理
   const handlePurchase = (data: FormData) => {
-    console.dir(data);
+    const purchase = {
+      quantity: data.quantity,
+      purchase_date: new Date(),
+      product: data.id,
+    };
+    axios.post("/api/inventory/purchases", purchase).then((response) => {
+      console.log(response.data);
+      alert("作成完了");
+      setRefresh((n) => n + 1);
+    });
   };
   const handleSell = (data: FormData) => {
-    console.dir(data);
+    const sale = {
+      quantity: data.quantity,
+      sales_date: new Date(),
+      product: data.id,
+      import_file: 1,
+    };
+    axios.post("/api/inventory/sales", sale).then((response) => {
+      console.log(response.data);
+      alert("作成完了");
+      setRefresh((n) => n + 1);
+    });
   };
 
   return (
