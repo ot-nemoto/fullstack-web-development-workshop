@@ -52,24 +52,24 @@ class ProductView(views.APIView):
         serializer = ProductSerializer(instance=product, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.data, status.HTTP_200_OK)
 
     # requestからidを取得
     # ただし、API設計的にリクエストパラメーターからidを取得することはないので参考程度に
-    def put(self, request, format=None):
-        id = request.data.get('id')
-        product = self.get_object(id)
-        serializer = ProductSerializer(instance=product, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status.HTTP_201_CREATED)
+    # def put(self, request, format=None):
+    #     id = request.data.get('id')
+    #     product = self.get_object(id)
+    #     serializer = ProductSerializer(instance=product, data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save()
+    #     return Response(serializer.data, status.HTTP_200_OK)
 
     # 商品を削除する
     # URLからidを取得
     def delete(self, request, id, format=None):
         product = self.get_object(id)
         product.delete()
-        return Response(status = status.HTTP_201_CREATED)
+        return Response(status = status.HTTP_200_OK)
 
 # 2. GenericsAPIView: 次に汎用性が高い
 class ProductGenericView(generics.ListAPIView):

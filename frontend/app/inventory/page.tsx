@@ -6,7 +6,7 @@
 
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
-import productsData from "./sample/dummy_products.json";
+import axios from "axios";
 import Link from "next/link";
 
 type FormData = {
@@ -27,7 +27,12 @@ export default function Page() {
   const [data, setData] = useState<Array<FormData>>([]);
 
   useEffect(() => {
-    setData(productsData);
+    axios
+      .get("/api/inventory/products")
+      .then((res) => res.data)
+      .then((data) => {
+        setData(data);
+      });
   }, []);
 
   // 登録データを保持
@@ -73,6 +78,10 @@ export default function Page() {
     setId(0);
   };
   const handleAdd = (data: FormData) => {
+    axios.post("/api/inventory/products", data).then((response) => {
+      console.log(response.data);
+      alert("作成完了");
+    });
     setId(0);
   };
 
@@ -90,9 +99,17 @@ export default function Page() {
     setId(0);
   };
   const handleEdit = (data: FormData) => {
+    axios.put(`/api/inventory/products/${data.id}`, data).then((response) => {
+      console.log(response.data);
+      alert("更新完了");
+    });
     setId(0);
   };
   const handleDelete = (id: number) => {
+    axios.delete(`/api/inventory/products/${id}`).then((response) => {
+      console.log(response.data);
+      alert("削除完了");
+    });
     setId(0);
   };
 
