@@ -1,7 +1,10 @@
 """
 【執筆メモStart】
+公式チュートリアルに合わせてinstance取得処理を共通化
+https://www.django-rest-framework.org/tutorial/3-class-based-views/
 【執筆メモEnd】
 """
+from rest_framework.exceptions import NotFound
 from rest_framework import generics, status, views, viewsets
 from rest_framework.response import Response
 
@@ -11,6 +14,13 @@ from .serializers import ProductSerializer
 # DjangoにはRestAPIでも複数の取得方法がある
 # 1. APIView: 一番汎用性が高い
 class ProductView(views.APIView):
+    # 商品操作に関する関数で共通で使用する商品取得関数
+    def get_object(self, pk):
+        try:
+            return Product.objects.get(pk=pk)
+        except Product.DoesNotExist:
+            raise NotFound
+
     # 商品を取得する
     def get(self, request, id=None, format=None):
         if id is None :
@@ -19,7 +29,7 @@ class ProductView(views.APIView):
             serializer = ProductSerializer(queryset, many=True)
         else: 
             # 1件の商品を取得する
-            product = Product.objects.get(pk=id)
+            product = self.get_object(id)
             serializer = ProductSerializer(product)
         return Response(serializer.data, status.HTTP_200_OK)
 
@@ -37,7 +47,7 @@ class ProductView(views.APIView):
     # 商品を更新する
     # URLからidを取得
     def put(self, request, id, format=None):
-        product = Product.objects.get(pk=id)
+        product = self.get_object(id)
         serializer = ProductSerializer(instance=product, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -47,7 +57,7 @@ class ProductView(views.APIView):
     # ただし、API設計的にリクエストパラメーターからidを取得することはないので参考程度に
     def put(self, request, format=None):
         id = request.data.get('id')
-        product = Product.objects.get(pk=id)
+        product = self.get_object(id)
         serializer = ProductSerializer(instance=product, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -56,7 +66,7 @@ class ProductView(views.APIView):
     # 商品を削除する
     # URLからidを取得
     def delete(self, request, id, format=None):
-        product = Product.objects.get(pk=id)
+        product = self.get_object(id)
         product.delete()
         return Response(status = status.HTTP_201_CREATED)
 
