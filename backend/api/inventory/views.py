@@ -19,7 +19,7 @@ class ProductView(views.APIView):
             serializer = ProductSerializer(queryset, many=True)
         else: 
             # 1件の商品を取得する
-            product = Product.objects.get(id=id)
+            product = Product.objects.get(pk=id)
             serializer = ProductSerializer(product)
         return Response(serializer.data, status.HTTP_200_OK)
 
@@ -31,6 +31,24 @@ class ProductView(views.APIView):
         # validationを通らなかった場合、例外を投げる
         serializer.is_valid(raise_exception=True)
         # 検証したデータを永続化する
+        serializer.save()
+        return Response(serializer.data, status.HTTP_201_CREATED)
+
+    # 商品を更新する
+    # URLからidを取得
+    def put(self, request, id, format=None):
+        product = Product.objects.get(pk=id)
+        serializer = ProductSerializer(instance=product, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status.HTTP_201_CREATED)
+
+    # requestからidを取得
+    def put(self, request, format=None):
+        id = request.data.get('id')
+        product = Product.objects.get(pk=id)
+        serializer = ProductSerializer(instance=product, data=request.data)
+        serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status.HTTP_201_CREATED)
 
