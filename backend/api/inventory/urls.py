@@ -9,6 +9,7 @@ from . import views
 
 urlpatterns = [
     path('products', views.ProductsView.as_view()),
+    path('products/<int:id>', views.ProductView.as_view()),
     path('products/generics', views.ProductGenericView.as_view()),
     path('products/model', views.ProductModelViewSet.as_view({'get': 'list'}))
 ]

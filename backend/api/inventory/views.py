@@ -16,6 +16,12 @@ class ProductsView(views.APIView):
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
 
+class ProductView(views.APIView):
+    def get(self, request, id, format=None):
+        product = Product.objects.get(id=id)
+        serializer = ProductSerializer(product)
+        return Response(serializer.data, status.HTTP_200_OK)
+
 # 2. GenericsAPIView: 次に汎用性が高い
 class ProductGenericView(generics.ListAPIView):
     queryset = Product.objects.all()
