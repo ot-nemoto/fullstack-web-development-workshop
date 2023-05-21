@@ -4,6 +4,7 @@
 */
 "use client";
 
+import Box from "@mui/material/Box";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -124,7 +125,8 @@ export default function Page() {
       <button type="button" onClick={handleShowNewRow}>
         商品を追加する
       </button>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {/* formタグを生成する */}
+      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <table>
           <thead>
             <tr>
@@ -252,7 +254,7 @@ export default function Page() {
             )}
           </tbody>
         </table>
-      </form>
+      </Box>
     </div>
   );
 }
