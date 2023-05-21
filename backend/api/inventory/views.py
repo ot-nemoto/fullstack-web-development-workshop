@@ -2,9 +2,11 @@
 【執筆メモStart】
 公式チュートリアルに合わせてinstance取得処理を共通化
 https://www.django-rest-framework.org/tutorial/3-class-based-views/
+各種絞込絞込み条件を追加
+https://docs.djangoproject.com/en/4.2/ref/models/querysets/
 【執筆メモEnd】
 """
-from django.db.models import F, Value
+from django.db.models import F, Q, Value
 from rest_framework.exceptions import NotFound
 from rest_framework import generics, status, views, viewsets
 from rest_framework.response import Response
@@ -23,11 +25,44 @@ class ProductView(views.APIView):
             raise NotFound
 
     # 商品を取得する
+    # クエリパラメータ
+    # q: 商品名、説明のあいまい検索
+    # limit: 件数
+    # offset: x番目から
+    # sort: 
     def get(self, request, id=None, format=None):
         if id is None :
             # 全商品を取得する
             queryset = Product.objects.all()
-            serializer = ProductSerializer(queryset, many=True)
+            # 絞込み条件
+            # 取得項目を指定する
+            # fields = request.GET.get('fields')
+            # if fields is not None:
+            #     queryset = queryset.values(fields)
+
+            # 名前をあいまい検索する
+            q = request.GET.get('q')
+            if q is not None:
+                queryset = queryset.filter(Q(name__icontains=q))
+
+            # 指定項目でソートする
+            sort = request.GET.get('sort')
+            if sort is not None:
+                queryset = queryset.order_by(F(sort))
+
+            # 取得件数とオフセットを指定する
+            limit = request.GET.get('limit')
+            if limit is None:
+                limit = 50
+            else:
+                limit = int(limit)
+            offset = request.GET.get('offset')
+            if offset is None:
+                offset = 0
+            else:
+                offset = int(offset)
+
+            serializer = ProductSerializer(queryset[offset:offset + limit], many=True)
         else: 
             # 1件の商品を取得する
             product = self.get_object(id)
