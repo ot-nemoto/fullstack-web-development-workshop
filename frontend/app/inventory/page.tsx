@@ -1,10 +1,13 @@
 /*
 【執筆メモStart】
+各コンポーネントの見た目はMUIのデフォルトを適用しています
+@mui/materialは最新、@material-ui/coreは以前のものなので参考コードを探すときは注意
+https://mui.com/material-ui/getting-started/overview/
 【執筆メモEnd】
 */
 "use client";
 
-import Box from "@mui/material/Box";
+import { Box, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -122,9 +125,9 @@ export default function Page() {
   return (
     <div>
       <h2>商品一覧</h2>
-      <button type="button" onClick={handleShowNewRow}>
+      <Button variant="contained" onClick={() => handleShowNewRow()}>
         商品を追加する
-      </button>
+      </Button>
       {/* formタグを生成する */}
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <table>
@@ -177,12 +180,16 @@ export default function Page() {
                 </td>
                 <td></td>
                 <td>
-                  <button type="button" onClick={() => handleAddCancel()}>
+                  <Button variant="outlined" onClick={() => handleAddCancel()}>
                     キャンセル
-                  </button>
-                  <button type="submit" onClick={() => setAction("add")}>
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    onClick={() => setAction("add")}
+                  >
                     登録する
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ) : (
@@ -221,15 +228,27 @@ export default function Page() {
                   </td>
                   <td></td>
                   <td>
-                    <button type="button" onClick={() => handleEditCancel()}>
+                    <Button
+                      variant="outlined"
+                      onClick={() => handleEditCancel()}
+                    >
                       キャンセル
-                    </button>
-                    <button type="submit" onClick={() => setAction("update")}>
+                    </Button>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      onClick={() => setAction("update")}
+                    >
                       更新する
-                    </button>
-                    <button type="submit" onClick={() => setAction("delete")}>
+                    </Button>
+                    <Button
+                      type="submit"
+                      variant="outlined"
+                      color="warning"
+                      onClick={() => setAction("delete")}
+                    >
                       削除する
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ) : (
@@ -242,12 +261,12 @@ export default function Page() {
                     <Link href={`/inventory/${data.id}`}>在庫処理</Link>
                   </td>
                   <td>
-                    <button
-                      type="button"
+                    <Button
+                      variant="contained"
                       onClick={() => handleEditRow(data.id)}
                     >
                       更新・削除
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               )
