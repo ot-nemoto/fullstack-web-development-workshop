@@ -3,11 +3,20 @@
 各コンポーネントの見た目はMUIのデフォルトを適用しています
 @mui/materialは最新、@material-ui/coreは以前のものなので参考コードを探すときは注意
 https://mui.com/material-ui/getting-started/overview/
+@mui/icons-materialで使用可能なアイコン一覧
+https://mui.com/material-ui/material-icons/
 【執筆メモEnd】
 */
 "use client";
 
-import { Box, Button } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
+import {
+  Add as AddIcon,
+  Cancel as CancelIcon,
+  Check as CheckIcon,
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+} from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -125,7 +134,11 @@ export default function Page() {
   return (
     <div>
       <h2>商品一覧</h2>
-      <Button variant="contained" onClick={() => handleShowNewRow()}>
+      <Button
+        variant="contained"
+        startIcon={<AddIcon />}
+        onClick={() => handleShowNewRow()}
+      >
         商品を追加する
       </Button>
       {/* formタグを生成する */}
@@ -180,12 +193,17 @@ export default function Page() {
                 </td>
                 <td></td>
                 <td>
-                  <Button variant="outlined" onClick={() => handleAddCancel()}>
+                  <Button
+                    variant="outlined"
+                    startIcon={<CancelIcon />}
+                    onClick={() => handleAddCancel()}
+                  >
                     キャンセル
                   </Button>
                   <Button
                     type="submit"
                     variant="contained"
+                    startIcon={<CheckIcon />}
                     onClick={() => setAction("add")}
                   >
                     登録する
@@ -230,6 +248,7 @@ export default function Page() {
                   <td>
                     <Button
                       variant="outlined"
+                      startIcon={<CancelIcon />}
                       onClick={() => handleEditCancel()}
                     >
                       キャンセル
@@ -237,18 +256,19 @@ export default function Page() {
                     <Button
                       type="submit"
                       variant="contained"
+                      startIcon={<CheckIcon />}
                       onClick={() => setAction("update")}
                     >
                       更新する
                     </Button>
-                    <Button
+                    <IconButton
+                      aria-label="削除する"
                       type="submit"
-                      variant="outlined"
                       color="warning"
                       onClick={() => setAction("delete")}
                     >
-                      削除する
-                    </Button>
+                      <DeleteIcon />
+                    </IconButton>
                   </td>
                 </tr>
               ) : (
@@ -261,12 +281,13 @@ export default function Page() {
                     <Link href={`/inventory/${data.id}`}>在庫処理</Link>
                   </td>
                   <td>
-                    <Button
-                      variant="contained"
+                    <IconButton
+                      aria-label="編集する"
+                      color="primary"
                       onClick={() => handleEditRow(data.id)}
                     >
-                      更新・削除
-                    </Button>
+                      <EditIcon />
+                    </IconButton>
                   </td>
                 </tr>
               )
