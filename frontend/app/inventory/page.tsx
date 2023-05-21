@@ -9,7 +9,7 @@ https://mui.com/material-ui/material-icons/
 */
 "use client";
 
-import { Box, Button, IconButton } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import {
   Add as AddIcon,
   Cancel as CancelIcon,
@@ -17,6 +17,7 @@ import {
   Delete as DeleteIcon,
   Edit as EditIcon,
 } from "@mui/icons-material";
+import { DataGrid } from "@mui/x-data-grid";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -30,6 +31,25 @@ type FormData = {
 };
 
 export default function Page() {
+  // テーブル見出し
+  const columns = [
+    {
+      field: "id",
+      headerName: "商品ID",
+    },
+    {
+      field: "name",
+      headerName: "商品名",
+    },
+    {
+      field: "price",
+      headerName: "単価",
+    },
+    {
+      field: "description",
+      headerName: "説明",
+    },
+  ];
   const {
     register,
     handleSubmit,
@@ -132,8 +152,8 @@ export default function Page() {
   };
 
   return (
-    <div>
-      <h2>商品一覧</h2>
+    <Box>
+      <Typography variant="h6">商品一覧</Typography>
       <Button
         variant="contained"
         startIcon={<AddIcon />}
@@ -142,8 +162,24 @@ export default function Page() {
         商品を追加する
       </Button>
       {/* formタグを生成する */}
-      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-        <table>
+      {/* DataGridは親要素の高さに応じて生成されるため、高さが0pxより大きくなるようにスタイルを設定する */}
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        sx={{ height: 400, width: "100%" }}
+      >
+        <DataGrid
+          rows={data}
+          columns={columns}
+          sx={{
+            boxShadow: 2,
+            border: 2,
+            borderColor: "primary.light",
+            "& .MuiDataGrid-cell:hover": {
+              color: "primary.main",
+            },
+          }}
+        />
           <thead>
             <tr>
               <th>商品ID</th>
@@ -295,6 +331,6 @@ export default function Page() {
           </tbody>
         </table>
       </Box>
-    </div>
+    </Box>
   );
 }
