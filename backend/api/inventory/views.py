@@ -36,6 +36,7 @@ class ProductView(views.APIView):
             queryset = Product.objects.all()
             # 絞込み条件
             # 取得項目を指定する
+            # TDOO: 現状、取得フィールドを指定するとシリアライザーとの不一致で例外が発生する
             # fields = request.GET.get('fields')
             # if fields is not None:
             #     queryset = queryset.values(fields)
