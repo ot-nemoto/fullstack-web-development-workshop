@@ -20,6 +20,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
 import {
@@ -176,9 +177,10 @@ export default function Page() {
                 <TableRow>
                   <TableCell></TableCell>
                   <TableCell>
-                    <input
+                    <TextField
                       type="text"
                       id="name"
+                      variant="filled"
                       // registerで登録したフィールドがformのチェック対象になる
                       // registerで指定しないとonSubmitに渡すdataに入ってこない
                       {...register("name", { required: true, maxLength: 100 })}
@@ -188,9 +190,10 @@ export default function Page() {
                     )}
                   </TableCell>
                   <TableCell>
-                    <input
+                    <TextField
                       type="number"
                       id="price"
+                      variant="filled"
                       {...register("price", {
                         required: true,
                         min: 1,
@@ -202,9 +205,10 @@ export default function Page() {
                     )}
                   </TableCell>
                   <TableCell>
-                    <input
+                    <TextField
                       type="text"
                       id="description"
+                      variant="filled"
                       {...register("description")}
                     />
                   </TableCell>
@@ -235,9 +239,10 @@ export default function Page() {
                   <TableRow key={data.id}>
                     <TableCell>{data.id}</TableCell>
                     <TableCell>
-                      <input
+                      <TextField
                         type="text"
                         id="name"
+                        variant="filled"
                         {...register("name", {
                           required: true,
                           maxLength: 100,
@@ -248,9 +253,10 @@ export default function Page() {
                       )}
                     </TableCell>
                     <TableCell>
-                      <input
+                      <TextField
                         type="number"
                         id="price"
+                        variant="filled"
                         {...register("price", { min: 1, max: 99999999 })}
                       />
                       {errors.price && (
@@ -258,9 +264,10 @@ export default function Page() {
                       )}
                     </TableCell>
                     <TableCell>
-                      <input
+                      <TextField
                         type="text"
                         id="description"
+                        variant="filled"
                         {...register("description")}
                       />
                     </TableCell>
