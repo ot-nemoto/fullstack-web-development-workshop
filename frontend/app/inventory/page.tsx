@@ -146,7 +146,7 @@ export default function Page() {
 
   return (
     <Box>
-      <Typography variant="h6">商品一覧</Typography>
+      <Typography variant="h5">商品一覧</Typography>
       <Button
         variant="contained"
         startIcon={<AddIcon />}
@@ -164,7 +164,7 @@ export default function Page() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>商品ID</TableCell>
+                <TableCell sx={{ width: 40 }}>ID</TableCell>
                 <TableCell>商品名</TableCell>
                 <TableCell>単価</TableCell>
                 <TableCell>説明</TableCell>
