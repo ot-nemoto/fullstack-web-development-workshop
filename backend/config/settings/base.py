@@ -27,6 +27,10 @@ LANGUAGE_CODEに"ja-jp"を設定しました。
 LOGGINGを追加しました。
 実行SQLを標準出力に出力する為です。
 https://docs.djangoproject.com/en/4.1/howto/logging/
+
+JWTを使うためにREST_FRAMEWORK / DEFAULT_AUTHENTICATION_CLASSESを追加しました
+DRFのライブラリであるsimplejwtを使用します
+https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html
 【執筆メモEnd】
 """
 
@@ -177,4 +181,12 @@ LOGGING = {
             'handlers': ['console'],
         }
     }
+}
+
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html
+# JWTを使用する
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }
