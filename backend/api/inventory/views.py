@@ -2,14 +2,21 @@
 【執筆メモStart】
 公式チュートリアルに合わせてinstance取得処理を共通化
 https://www.django-rest-framework.org/tutorial/3-class-based-views/
+
 各種絞込絞込み条件を追加
 https://docs.djangoproject.com/en/4.2/ref/models/querysets/
+
+認証・認可の設定を追加
+https://www.django-rest-framework.org/api-guide/authentication/
+https://www.django-rest-framework.org/api-guide/permissions/#isauthenticated
 【執筆メモEnd】
 """
 from django.db.models import F, Q, Value
 from rest_framework.exceptions import NotFound
 from rest_framework import generics, status, views, viewsets
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import Product, Purchase, Sales
 from .serializers import InventorySerializer, ProductSerializer, PurchaseSerializer, SalesSerializer
@@ -17,6 +24,12 @@ from .serializers import InventorySerializer, ProductSerializer, PurchaseSeriali
 # DjangoにはRestAPIでも複数の取得方法がある
 # 1. APIView: 一番汎用性が高い
 class ProductView(views.APIView):
+    # 認証クラスの指定
+    authentication_classes = [JWTAuthentication]
+    # アクセス許可の指定
+    # 認証済みのリクエストのみ許可
+    permission_classes = [IsAuthenticated]
+
     # 商品操作に関する関数で共通で使用する商品取得関数
     def get_object(self, pk):
         try:
@@ -109,15 +122,19 @@ class ProductView(views.APIView):
 
 # 2. GenericsAPIView: 次に汎用性が高い
 class ProductGenericView(generics.ListAPIView):
+    # TODO: authentication_classes, permission_classes を設定する
+
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
 # 3. ModelViewSet: 汎用性は低いが楽
 class ProductModelViewSet(viewsets.ModelViewSet):
+    # TODO: authentication_classes, permission_classes を設定する
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
 class PurchaseView(views.APIView):
+    # TODO: authentication_classes, permission_classes を設定する
     def get_object(self, pk):
         try:
             return Purchase.objects.get(pk=pk)
