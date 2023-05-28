@@ -2,5 +2,7 @@
 # 必要なライブラリを定義しています。
 # 【執筆メモEnd】
 djangorestframework
+djangorestframework-simplejwt
 mysqlclient
 pandas
+timedelta

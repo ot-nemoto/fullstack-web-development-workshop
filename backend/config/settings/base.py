@@ -31,6 +31,10 @@ https://docs.djangoproject.com/en/4.1/howto/logging/
 JWTを使うためにREST_FRAMEWORK / DEFAULT_AUTHENTICATION_CLASSESを追加しました
 DRFのライブラリであるsimplejwtを使用します
 https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html
+
+SIMPLE_JWTを追加しました。
+JWT自体の設定を行います。
+https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
 【執筆メモEnd】
 """
 
@@ -46,6 +50,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from timedelta import datetime
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -190,3 +195,13 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
+# JWTの設定をする
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=30),
+    'ROTATE_REFRESH_TOKENS': True,
+    'UPDATE_LAST_LOGIN': True,
+}
+
