@@ -6,6 +6,12 @@ https://docs.python.org/ja/3/library/functions.html
 https://pandas.pydata.org/
 https://docs.djangoproject.com/en/4.1/topics/db/aggregation/
 https://docs.djangoproject.com/en/4.1/ref/models/database-functions/
+
+■在庫ファイルサンプル
+product,date,quantity
+1,2023-03-01,300
+1,2023-03-15,100
+1,2023-04-03,200
 【執筆メモEnd】
 """
 import pandas

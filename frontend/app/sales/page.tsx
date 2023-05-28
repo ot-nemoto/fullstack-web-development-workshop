@@ -10,6 +10,19 @@ http://localhost:3000/sales で表示します。
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
+import {
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+
+
+
 export default function Page() {
   const [data, setData] = useState([])
   const [fileSync, setFileSync] = useState()
@@ -68,32 +81,35 @@ export default function Page() {
 
   return (
     <div>
-      <h2>通常のtable</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>年月</th>
-            <th>合計額</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((data: any) => (
-            <tr key={data.monthly_date}>
-              <td>{data.monthly_date}</td>
-              <td>{data.monthly_price}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>処理月</TableCell>
+              <TableCell>合計数量</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map((data: any) => (
+              <TableRow key={data.monthly_date}>
+                <TableCell>{data.monthly_date}</TableCell>
+                <TableCell>{data.monthly_price}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <div>
-        <label>ファイル同期登録:</label>
-        <input type="file" onChange={onChangeFileSync} />
-        <button onClick={doAddSync}>Add</button>
+        <Button component="label">同期登録ファイルを選択
+          <input type="file" onChange={onChangeFileSync} style={{ display: "none" }} />
+        </Button>
+        <Button variant="contained" onClick={doAddSync}>登録</Button>
       </div>
       <div>
-        <label>ファイル非同期登録:</label>
-        <input type="file" onChange={onChangeFileAsync} />
-        <button onClick={doAddAsync}>Add</button>
+        <Button component="label">非同期登録ファイルを選択
+          <input type="file" onChange={onChangeFileAsync} style={{ display: "none" }} />
+        </Button>
+        <Button variant="contained" onClick={doAddAsync}>登録</Button>
       </div>
     </div>
   )
