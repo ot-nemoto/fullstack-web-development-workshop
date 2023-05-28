@@ -1,6 +1,9 @@
 """
 【執筆メモStart】
 django-admin startprojectで自動生成されたままの状態です。
+
+manage.py実行時の設定にデフォルトのsetting.pyから分割したbase.pyとdevelopment.pyが指定されるよう修正しました。
+https://docs.djangoproject.com/ja/4.2/topics/settings/
 【執筆メモEnd】
 """
 
@@ -12,7 +15,7 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.development")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
