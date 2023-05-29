@@ -9,10 +9,10 @@ http://localhost:3000/sales で表示します。
 
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-
 import {
   Box,
   Button,
+  Divider,
   Paper,
   Table,
   TableBody,
@@ -27,16 +27,17 @@ import { MuiFileInput } from 'mui-file-input'
 
 
 export default function Page() {
+
   const [data, setData] = useState([])
   const [fileSync, setFileSync] = useState()
-
+  const [refresh, setRefresh] = useState(0)
   useEffect(() => {
     axios.get('/api/sales')
       .then((res) => res.data)
       .then((data) => {
         setData(data)
       })
-  }, [])
+  }, [refresh])
 
   const onChangeFileSync = (newFile: any) => {
     setFileSync(newFile)
@@ -53,6 +54,7 @@ export default function Page() {
     })
       .then(function (response) {
         console.log(response)
+        setRefresh(n => n + 1) // useEffectを起動する為にsetRefreshを呼び出し
       })
       .catch(function (error) {
         console.log(error)
@@ -76,26 +78,30 @@ export default function Page() {
     })
       .then(function (response) {
         console.log(response)
+        setRefresh(n => n + 1) // useEffectを起動する為にsetRefreshを呼び出し
       })
       .catch(function (error) {
         console.log(error)
       })
   })
 
+
   return (
     <Box>
       <Box>
-        <Typography variant="h5">同期でファイル取込</Typography>
+        <Typography variant="subtitle1">同期でファイル取込</Typography>
         <MuiFileInput value={fileSync} onChange={onChangeFileSync} />
         <Button variant="contained" onClick={doAddSync}>登録</Button>
       </Box>
+      <Divider />
       <Box>
-        <Typography variant="h5">非同期でファイル取込</Typography>
+        <Typography variant="subtitle1">非同期でファイル取込</Typography>
         <MuiFileInput value={fileAsync} onChange={onChangeFileAsync} />
         <Button variant="contained" onClick={doAddAsync}>登録</Button>
       </Box>
+      <Divider />
       <Box>
-        <Typography variant="h5">在庫数表示</Typography>
+        <Typography variant="subtitle1">在庫数表示</Typography>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
