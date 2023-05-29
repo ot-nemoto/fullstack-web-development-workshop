@@ -11,6 +11,7 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 import {
+  Box,
   Button,
   Paper,
   Table,
@@ -19,6 +20,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 
 import { MuiFileInput } from 'mui-file-input'
@@ -81,33 +83,38 @@ export default function Page() {
   })
 
   return (
-    <div>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>処理月</TableCell>
-              <TableCell>合計数量</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((data: any) => (
-              <TableRow key={data.monthly_date}>
-                <TableCell>{data.monthly_date}</TableCell>
-                <TableCell>{data.monthly_price}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <div>
+    <Box>
+      <Box>
+        <Typography variant="h5">同期でファイル取込</Typography>
         <MuiFileInput value={fileSync} onChange={onChangeFileSync} />
         <Button variant="contained" onClick={doAddSync}>登録</Button>
-      </div>
-      <div>
+      </Box>
+      <Box>
+        <Typography variant="h5">非同期でファイル取込</Typography>
         <MuiFileInput value={fileAsync} onChange={onChangeFileAsync} />
         <Button variant="contained" onClick={doAddAsync}>登録</Button>
-      </div>
-    </div>
+      </Box>
+      <Box>
+        <Typography variant="h5">在庫数表示</Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>処理月</TableCell>
+                <TableCell>合計数量</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data.map((data: any) => (
+                <TableRow key={data.monthly_date}>
+                  <TableCell>{data.monthly_date}</TableCell>
+                  <TableCell>{data.monthly_price}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    </Box>
   )
 }
