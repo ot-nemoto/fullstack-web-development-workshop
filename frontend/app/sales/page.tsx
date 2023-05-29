@@ -21,6 +21,7 @@ import {
   TableRow,
 } from "@mui/material";
 
+import { MuiFileInput } from 'mui-file-input'
 
 
 export default function Page() {
@@ -35,9 +36,9 @@ export default function Page() {
       })
   }, [])
 
-  const onChangeFileSync = ((e: any) => {
-    setFileSync(e.target.files[0])
-  })
+  const onChangeFileSync = (newFile: any) => {
+    setFileSync(newFile)
+  }
 
   const doAddSync = ((e: any) => {
     const params = {
@@ -58,9 +59,9 @@ export default function Page() {
 
   const [fileAsync, setFileAsync] = useState()
 
-  const onChangeFileAsync = ((e: any) => {
-    setFileAsync(e.target.files[0])
-  })
+  const onChangeFileAsync = (newFile: any) => {
+    setFileAsync(newFile)
+  }
 
   const doAddAsync = ((e: any) => {
     const params = {
@@ -100,15 +101,11 @@ export default function Page() {
         </Table>
       </TableContainer>
       <div>
-        <Button component="label">同期登録ファイルを選択
-          <input type="file" onChange={onChangeFileSync} style={{ display: "none" }} />
-        </Button>
+        <MuiFileInput value={fileSync} onChange={onChangeFileSync} />
         <Button variant="contained" onClick={doAddSync}>登録</Button>
       </div>
       <div>
-        <Button component="label">非同期登録ファイルを選択
-          <input type="file" onChange={onChangeFileAsync} style={{ display: "none" }} />
-        </Button>
+        <MuiFileInput value={fileAsync} onChange={onChangeFileAsync} />
         <Button variant="contained" onClick={doAddAsync}>登録</Button>
       </div>
     </div>
