@@ -8,9 +8,11 @@ https://mui.com/material-ui/react-drawer/
 */
 "use client";
 
+import { deleteCookie, getCookie } from "../../utils/cookie";
 import {
   AppBar,
   Box,
+  Button,
   Divider,
   Toolbar,
   Typography,
@@ -19,6 +21,8 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
+import { Logout as LogoutIcon } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
 
 const drawerWidth = 240;
 
@@ -27,6 +31,21 @@ export default function InventoryLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
+
+  const isLoggedIn = () => {
+    return getCookie("access") !== null && getCookie("refresh") !== null;
+  };
+
+  if (!isLoggedIn()) router.replace("/login"); // ログインしていなければサインインページへ転送
+
+  // ログアウト処理
+  const handleLogout = () => {
+    deleteCookie("access");
+    deleteCookie("refresh");
+    router.replace("/login");
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar
@@ -34,9 +53,16 @@ export default function InventoryLayout({
         sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
       >
         <Toolbar>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             在庫管理システム
           </Typography>
+          <Button
+            variant="contained"
+            startIcon={<LogoutIcon />}
+            onClick={() => handleLogout()}
+          >
+            ログアウト
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer
