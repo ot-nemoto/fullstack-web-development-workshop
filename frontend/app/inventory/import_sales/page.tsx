@@ -2,7 +2,7 @@
 【執筆メモStart】
 売上ファイルの登録、売上の参照が行えます。
 
-http://localhost:3000/sales で表示します。
+http://localhost:3000/inventory/import_sales で表示します。
 【執筆メモEnd】
 */
 'use client'
@@ -32,7 +32,7 @@ export default function Page() {
   const [fileSync, setFileSync] = useState()
   const [refresh, setRefresh] = useState(0)
   useEffect(() => {
-    axios.get('/api/sales')
+    axios.get('/api/inventory/summary')
       .then((res) => res.data)
       .then((data) => {
         setData(data)
@@ -47,7 +47,7 @@ export default function Page() {
     const params = {
       file: fileSync
     }
-    axios.post(`/api/sales/sync`, params, {
+    axios.post(`/api/inventory/sync`, params, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -71,7 +71,7 @@ export default function Page() {
     const params = {
       file: fileAsync
     }
-    axios.post(`/api/sales/async`, params, {
+    axios.post(`/api/inventory/async`, params, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
