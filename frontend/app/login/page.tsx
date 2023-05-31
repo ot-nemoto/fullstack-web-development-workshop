@@ -72,7 +72,8 @@ export default function Page() {
           <Typography component="h1" variant="h5">
             ログイン
           </Typography>
-
+          {/* TODO: ref or inputRef を使うかについて要調査
+          https://react-hook-form.com/docs/useform/register */}
           <Box component="form" onSubmit={handleSubmit(onSubmit)}>
             <TextField
               type="text"
@@ -81,9 +82,9 @@ export default function Page() {
               label="ユーザー名（必須）"
               fullWidth
               margin="normal"
-              {...register("username", { required: true })}
+              {...register("username", { required: "必須入力です。" })}
               error={Boolean(errors.username)}
-              helperText={errors.username && "必須入力です。"}
+              helperText={errors.username?.message?.toString() || ""}
             />
             <TextField
               type="password"
@@ -93,9 +94,15 @@ export default function Page() {
               autoComplete="current-password"
               fullWidth
               margin="normal"
-              {...register("password", { required: true })}
+              {...register("password", {
+                required: "必須入力です。",
+                minLength: {
+                  value: 8,
+                  message: "8文字以上の文字列にしてください。",
+                },
+              })}
               error={Boolean(errors.password)}
-              helperText={errors.password && "必須入力です。"}
+              helperText={errors.password?.message?.toString() || ""}
             />
             <Button
               variant="contained"
