@@ -6,9 +6,13 @@ https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migra
 ログイン画面のレイアウトをよりそれっぽいものに変更
 https://mui.com/material-ui/getting-started/templates/
 https://github.com/mui/material-ui/tree/v5.13.3/docs/data/material/getting-started/templates/sign-in
+
+エラーメッセージが複数のバリデーションチェックの内容を返せるように修正
+https://react-hook-form.com/docs/useformstate/errormessage
 【執筆メモEnd】
 */
 "use client";
+import { getCookie, setCookie } from "../../utils/cookie";
 import {
   createTheme,
   Box,
@@ -22,6 +26,7 @@ import {
 // import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import axios from "axios";
 
 type FormData = {
@@ -35,6 +40,7 @@ export default function Page() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [authError, setAuthError] = useState("");
   const router = useRouter();
 
   // TODO remove, this demo shouldn't need to reset the theme.
@@ -50,11 +56,25 @@ export default function Page() {
   };
 
   const handleLogin = (data: FormData) => {
-    // axios.post("/api/login", data).then((response) => {
-    //   alert("ログインします");
-    //   router.push("/inventory");
-    // });
-    router.push("/inventory");
+    console.dir(data);
+    axios
+      .post("/api/inventory/token", data)
+      .then((response) => {
+        console.dir(response);
+        // バックエンドからの応答からトークンを取得
+        const access = response.data.access;
+        const refresh = response.data.refresh;
+
+        // クッキーにトークンを保存
+        setCookie("access", access, 60);
+        setCookie("refresh", refresh, 60);
+        router.push("/inventory");
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+        setAuthError("ユーザー名またはパスワードに誤りがあります。");
+      });
   };
 
   return (
@@ -75,6 +95,11 @@ export default function Page() {
           {/* TODO: ref or inputRef を使うかについて要調査
           https://react-hook-form.com/docs/useform/register */}
           <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+            {authError && (
+              <Typography variant="body2" color="error">
+                {authError}
+              </Typography>
+            )}{" "}
             <TextField
               type="text"
               id="username"
