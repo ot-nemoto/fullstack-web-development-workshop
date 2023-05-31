@@ -18,6 +18,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Link,
 } from "@mui/material";
 
 const drawerWidth = 240;
@@ -56,6 +57,9 @@ export default function InventoryLayout({
         <List>
           <ListItem>
             <ListItemText primary="商品一覧" />
+          </ListItem>
+          <ListItem>
+            <Link href="/inventory/import_sales">売上一括登録</Link>
           </ListItem>
         </List>
       </Drawer>

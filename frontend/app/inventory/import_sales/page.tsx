@@ -2,7 +2,7 @@
 【執筆メモStart】
 売上ファイルの登録、売上の参照が行えます。
 
-http://localhost:3000/inventory で表示します。
+http://localhost:3000/inventory/import_sales で表示します。
 【執筆メモEnd】
 */
 'use client'
