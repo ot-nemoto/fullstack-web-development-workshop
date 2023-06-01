@@ -14,25 +14,40 @@ https://axios.nuxtjs.org/extend/ を真似してpluginsディレクトリに配�
 https://github.com/axios/axios#interceptors
 https://github.com/axios/axios#handling-errors
 
+リクエストヘッダーにJWTを加えます。
+https://github.com/axios/axios#axioscreateconfig
+
 【執筆メモEnd】
 */
-import axios from 'axios';
-const axios_instance = axios.create();
+import axios from "axios";
+import { getCookie, setCookie } from "../utils/cookie";
 
-axios_instance.interceptors.request.use(function (config) {
-  return config;
-}, function (error) {
-  return Promise.reject(error);
+const axios_instance = axios.create({
+  headers: {
+    Authorization: `Bearer ${getCookie("access")}`,
+  },
 });
 
-axios_instance.interceptors.response.use(function (response) {
-  return response;
-}, function (error) {
-  if (error.response && error.response.status != 422) {
-    window.location.href = '/' + error.response.status;
-  } else {
+axios_instance.interceptors.request.use(
+  function (config) {
+    return config;
+  },
+  function (error) {
     return Promise.reject(error);
   }
-});
+);
+
+axios_instance.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    if (error.response && error.response.status != 422) {
+      window.location.href = "/" + error.response.status;
+    } else {
+      return Promise.reject(error);
+    }
+  }
+);
 
 export default axios_instance;

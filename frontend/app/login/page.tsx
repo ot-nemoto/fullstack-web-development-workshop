@@ -26,7 +26,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import axios from "axios";
+import axios from "../../plugins/axios";
 
 type FormData = {
   username: string;

@@ -7,8 +7,8 @@ http://localhost:3000/inventory/import_sales で表示します。
 */
 'use client'
 
-import axios from 'axios'
 import { useEffect, useState } from 'react'
+import axios from "../../../plugins/axios";
 import {
   Box,
   Button,
