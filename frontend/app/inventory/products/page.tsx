@@ -32,7 +32,7 @@ import {
 } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
-import axios from "../../plugins/axios";
+import axios from "../../../plugins/axios";
 import Link from "next/link";
 
 type FormData = {
@@ -69,7 +69,7 @@ export default function Page() {
   // submit時のactionを分岐させる
   const [action, setAction] = useState<string>("");
 
-  const onSubmit = (event: string): void => {
+  const onSubmit = (event: any): void => {
     const data: FormData = {
       id: id,
       name: event.name,
@@ -305,7 +305,9 @@ export default function Page() {
                     <TableCell>{data.price}</TableCell>
                     <TableCell>{data.description}</TableCell>
                     <TableCell>
-                      <Link href={`/inventory/${data.id}`}>在庫処理</Link>
+                      <Link href={`/inventory/products/${data.id}`}>
+                        在庫処理
+                      </Link>
                     </TableCell>
                     <TableCell>
                       <IconButton

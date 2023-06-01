@@ -67,7 +67,7 @@ export default function Page() {
         // クッキーにトークンを保存
         setCookie("access", access, 60);
         setCookie("refresh", refresh, 60);
-        router.push("/inventory");
+        router.push("/inventory/products");
       })
       .catch(function (error) {
         // handle error
