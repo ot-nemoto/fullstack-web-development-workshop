@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
-import axios from "../../plugins/axios";
+import axios from "../../../plugins/axios";
 
 type FormData = {
   id: number;
