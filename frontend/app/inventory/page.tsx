@@ -69,7 +69,7 @@ export default function Page() {
   // submit時のactionを分岐させる
   const [action, setAction] = useState<string>("");
 
-  const onSubmit = (event: any): void => {
+  const onSubmit = (event: string): void => {
     const data: FormData = {
       id: id,
       name: event.name,

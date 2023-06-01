@@ -38,7 +38,9 @@ export default function InventoryLayout({
     return getCookie("access") !== null && getCookie("refresh") !== null;
   };
 
-  if (!isLoggedIn()) router.replace("/login"); // ログインしていなければサインインページへ転送
+  if (!isLoggedIn()) {
+    router.replace("/login"); // ログインしていなければサインインページへ転送
+  }
 
   // ログアウト処理
   const handleLogout = () => {
