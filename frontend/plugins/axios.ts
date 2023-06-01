@@ -24,12 +24,19 @@ import { getCookie, setCookie } from "../utils/cookie";
 
 const axios_instance = axios.create({
   headers: {
-    Authorization: `Bearer ${getCookie("access")}`,
+    "Content-Type": "application/json",
   },
 });
 
 axios_instance.interceptors.request.use(
   function (config) {
+    const access = getCookie("access");
+    if (access) {
+      config.headers = {
+        ...config.headers,
+        Authorization: "Bearer " + access,
+      };
+    }
     return config;
   },
   function (error) {
@@ -42,7 +49,39 @@ axios_instance.interceptors.response.use(
     return response;
   },
   function (error) {
-    if (error.response && error.response.status != 422) {
+    const originalConfig = error.config;
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      !originalConfig.retry
+    ) {
+      console.dir(getCookie("refresh"));
+      // 認証エラーの場合は、リフレッシュトークンを使ってリトライ
+      originalConfig.retry = true;
+      axios_instance
+        .post("/api/inventory/token/refresh", { refresh: getCookie("refresh") })
+        .then((response) => {
+          // バックエンドからの応答からトークンを取得
+          const access = response.data.access;
+          const refresh = response.data.refresh;
+
+          // クッキーにトークンを保存
+          setCookie("access", access, 60);
+          setCookie("refresh", refresh, 60);
+
+          if (access) {
+            originalConfig.headers = {
+              ...originalConfig.headers,
+              Authorization: "Bearer " + access,
+            };
+          }
+          return axios_instance(originalConfig);
+        })
+        .catch(function (error) {
+          return Promise.reject(error);
+        });
+    } else if (error.response && error.response.status !== 422) {
+      // 認証エラーまたは業務エラー以外の場合は、適切な画面に遷移
       window.location.href = "/" + error.response.status;
     } else {
       return Promise.reject(error);
