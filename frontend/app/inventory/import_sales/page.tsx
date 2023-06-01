@@ -96,19 +96,19 @@ export default function Page() {
         <Alert>登録を完了しました</Alert>
       </Snackbar>
       <Typography variant="h5">売上一括登録</Typography>
-      <Box>
+      <Box m={2}>
         <Typography variant="subtitle1">同期でファイル取込</Typography>
         <MuiFileInput value={fileSync} onChange={onChangeFileSync} />
         <Button variant="contained" onClick={doAddSync}>登録</Button>
       </Box>
       <Divider />
-      <Box>
+      <Box m={2}>
         <Typography variant="subtitle1">非同期でファイル取込</Typography>
         <MuiFileInput value={fileAsync} onChange={onChangeFileAsync} />
         <Button variant="contained" onClick={doAddAsync}>登録</Button>
       </Box>
       <Divider />
-      <Box>
+      <Box m={2}>
         <Typography variant="subtitle1">年月ごとの在庫数集計</Typography>
         <TableContainer component={Paper}>
           <Table>
