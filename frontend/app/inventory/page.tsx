@@ -32,7 +32,7 @@ import {
 } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../plugins/axios";
 import Link from "next/link";
 
 type FormData = {
@@ -69,7 +69,7 @@ export default function Page() {
   // submit時のactionを分岐させる
   const [action, setAction] = useState<string>("");
 
-  const onSubmit = (event: any): void => {
+  const onSubmit = (event: string): void => {
     const data: FormData = {
       id: id,
       name: event.name,
