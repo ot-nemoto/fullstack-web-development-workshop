@@ -11,6 +11,7 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import {
   Alert,
+  AlertColor,
   Box,
   Button,
   Divider,
@@ -32,6 +33,15 @@ export default function Page() {
   const [data, setData] = useState([])
   const [fileSync, setFileSync] = useState()
   const [open, setOpen] = useState(false);
+  const [severity, setSeverity] = useState<AlertColor>('success');
+  const [message, setMessage] = useState('');
+
+  const result = (message: string, severity: AlertColor) => {
+    setOpen(true);
+    setSeverity(severity);
+    setMessage(message);
+  };
+
   useEffect(() => {
     axios.get('/api/inventory/summary')
       .then((res) => res.data)
@@ -55,10 +65,11 @@ export default function Page() {
     })
       .then(function (response) {
         console.log(response)
-        setOpen(true)
+        result("同期ファイルが登録されました", 'success')
       })
       .catch(function (error) {
         console.log(error)
+        result("同期ファイルの登録に失敗しました", 'error')
       })
   })
 
@@ -79,10 +90,11 @@ export default function Page() {
     })
       .then(function (response) {
         console.log(response)
-        setOpen(true)
+        result("非同期ファイルが登録されました", 'success')
       })
       .catch(function (error) {
         console.log(error)
+        result("非同期ファイルの登録に失敗しました", 'error')
       })
   })
 
@@ -93,7 +105,7 @@ export default function Page() {
   return (
     <Box>
       <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
-        <Alert>登録を完了しました</Alert>
+        <Alert severity={severity}>{message}</Alert>
       </Snackbar>
       <Typography variant="h5">売上一括登録</Typography>
       <Box m={2}>
