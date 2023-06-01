@@ -10,10 +10,12 @@ http://localhost:3000/inventory/import_sales で表示します。
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import {
+  Alert,
   Box,
   Button,
   Divider,
   Paper,
+  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -22,7 +24,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-
 import { MuiFileInput } from 'mui-file-input'
 
 
@@ -30,14 +31,14 @@ export default function Page() {
 
   const [data, setData] = useState([])
   const [fileSync, setFileSync] = useState()
-  const [refresh, setRefresh] = useState(0)
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     axios.get('/api/inventory/summary')
       .then((res) => res.data)
       .then((data) => {
         setData(data)
       })
-  }, [refresh])
+  }, [open])
 
   const onChangeFileSync = (newFile: any) => {
     setFileSync(newFile)
@@ -54,7 +55,7 @@ export default function Page() {
     })
       .then(function (response) {
         console.log(response)
-        setRefresh(n => n + 1) // useEffectを起動する為にsetRefreshを呼び出し
+        setOpen(true)
       })
       .catch(function (error) {
         console.log(error)
@@ -78,16 +79,23 @@ export default function Page() {
     })
       .then(function (response) {
         console.log(response)
-        setRefresh(n => n + 1) // useEffectを起動する為にsetRefreshを呼び出し
+        setOpen(true)
       })
       .catch(function (error) {
         console.log(error)
       })
   })
 
+  const handleClose = (event: any, reason: any) => {
+    setOpen(false);
+  };
 
   return (
     <Box>
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert>登録を完了しました</Alert>
+      </Snackbar>
+      <Typography variant="h5">売上一括登録</Typography>
       <Box>
         <Typography variant="subtitle1">同期でファイル取込</Typography>
         <MuiFileInput value={fileSync} onChange={onChangeFileSync} />
@@ -101,7 +109,7 @@ export default function Page() {
       </Box>
       <Divider />
       <Box>
-        <Typography variant="subtitle1">在庫数表示</Typography>
+        <Typography variant="subtitle1">年月ごとの在庫数集計</Typography>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
