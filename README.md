@@ -59,7 +59,7 @@ services:
 		- rmdir frontend/
 	- yarn dev
 ## フロントエンド追加設定
-- next.config.js　　→app/frontendフォルダの直下
+- next.config.js　　→app/frontendフォルダの直下　　→★　/workspaces/frontend　のまちがい？
 	- バックエンドへの疎通設定
 		- https://nextjs.org/docs/api-reference/next.config.js/rewrites
 ```
