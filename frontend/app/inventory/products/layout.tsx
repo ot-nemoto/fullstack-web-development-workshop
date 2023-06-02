@@ -19,6 +19,7 @@ import {
   Drawer,
   List,
   ListItem,
+  ListItemButton,
   ListItemText,
   Link,
 } from "@mui/material";
@@ -83,11 +84,15 @@ export default function InventoryLayout({
         <Toolbar />
         <Divider />
         <List>
-          <ListItem>
-            <ListItemText primary="商品一覧" />
+          <ListItem component="a" href="/inventory/products" disablePadding>
+            <ListItemButton>
+              <ListItemText primary="商品一覧" />
+            </ListItemButton>
           </ListItem>
-          <ListItem>
-            <Link href="/inventory/import_sales">売上一括登録</Link>
+          <ListItem component="a" href="/inventory/import_sales" disablePadding>
+            <ListItemButton>
+              <ListItemText primary="売上一括登録" />
+            </ListItemButton>
           </ListItem>
         </List>
       </Drawer>
