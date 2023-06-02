@@ -8,7 +8,7 @@ https://mui.com/material-ui/react-drawer/
 */
 "use client";
 
-import { deleteCookie, getCookie } from "../../../utils/cookie";
+import { deleteCookie, getCookie } from "../../utils/cookie";
 import {
   AppBar,
   Box,
