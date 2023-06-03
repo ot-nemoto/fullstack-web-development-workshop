@@ -116,7 +116,7 @@ export default function Page() {
 
   // 更新・削除処理
   const handleEditRow = (id: number | null) => {
-    const selectedProduct: FormData = data.find((v) => v.id === id);
+    const selectedProduct: FormData = data.find((v) => v.id === id) as FormData;
     setId(selectedProduct.id);
     reset({
       name: selectedProduct.name,
