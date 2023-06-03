@@ -1,7 +1,7 @@
 """
 【執筆メモStart】
 バッチ（カスタムコマンド）のサンプルです。
-python manage.py sales --settings config.settings.development
+python manage.py import_sales --settings config.settings.development
 で実行できます。
 https://docs.djangoproject.com/en/4.1/howto/custom-management-commands/
 【執筆メモEnd】
