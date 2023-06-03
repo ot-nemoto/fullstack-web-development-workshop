@@ -19,7 +19,7 @@ https://github.com/axios/axios#axioscreateconfig
 
 【執筆メモEnd】
 */
-import axios from "axios";
+import axios, { AxiosRequestHeaders } from "axios";
 import { getCookie, setCookie } from "../utils/cookie";
 
 const axios_instance = axios.create({
@@ -35,7 +35,7 @@ axios_instance.interceptors.request.use(
       config.headers = {
         ...config.headers,
         Authorization: "Bearer " + access,
-      };
+      } as AxiosRequestHeaders;
     }
     return config;
   },
