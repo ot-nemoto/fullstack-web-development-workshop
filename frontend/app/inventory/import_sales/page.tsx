@@ -55,9 +55,15 @@ export default function Page() {
   }
 
   const doAddSync = ((e: any) => {
+    if (!fileSync) {
+      result("ファイルを選択してください", 'error')
+      return
+    }
+
     const params = {
       file: fileSync
     }
+
     axios.post(`/api/inventory/sync`, params, {
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -80,6 +86,11 @@ export default function Page() {
   }
 
   const doAddAsync = ((e: any) => {
+    if (!fileAsync) {
+      result("ファイルを選択してください", 'error')
+      return
+    }
+
     const params = {
       file: fileAsync
     }
