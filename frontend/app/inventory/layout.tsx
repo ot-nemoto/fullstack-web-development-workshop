@@ -4,6 +4,8 @@
 https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts
 サイドバーを実装する
 https://mui.com/material-ui/react-drawer/
+一貫して使用するブレイクポイントを追加する
+https://mui.com/material-ui/customization/breakpoints/#custom-breakpoints
 【執筆メモEnd】
 */
 "use client";
@@ -11,6 +13,7 @@ https://mui.com/material-ui/react-drawer/
 import { useState } from "react";
 import { deleteCookie, getCookie } from "../../utils/cookie";
 import {
+  createTheme,
   AppBar,
   Box,
   Button,
@@ -22,11 +25,34 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  ThemeProvider,
   Toolbar,
   Typography,
 } from "@mui/material";
 import { Logout as LogoutIcon, Menu as MenuIcon } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
+
+declare module "@mui/material/styles" {
+  // 指定を単純にするためにモバイルとPCの２つに限定する
+  interface BreakpointOverrides {
+    xs: false;
+    sm: false;
+    md: false;
+    lg: false;
+    xl: false;
+    mobile: true;
+    desktop: true;
+  }
+}
+
+const defaultTheme = createTheme({
+  breakpoints: {
+    values: {
+      mobile: 0,
+      desktop: 600,
+    },
+  },
+});
 
 export default function InventoryLayout({
   children,
@@ -82,39 +108,46 @@ export default function InventoryLayout({
   );
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <AppBar position="fixed">
-        <Toolbar>
-          <IconButton onClick={() => toggleDrawer(true)}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            在庫管理システム
-          </Typography>
-          <Button
-            variant="contained"
-            startIcon={<LogoutIcon />}
-            onClick={() => handleLogout()}
-          >
-            ログアウト
-          </Button>
-        </Toolbar>
-      </AppBar>
-      <Drawer open={open} onClose={() => toggleDrawer(false)} anchor="left">
-        {list()}
-      </Drawer>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          // TODO: AppBarと被るため下にずらしている。本来は動的に取得すべき
-          marginTop: "64px",
-          background: "white",
-        }}
-      >
-        {children}
+    <ThemeProvider theme={defaultTheme}>
+      <Box sx={{ display: "flex" }}>
+        <AppBar position="fixed">
+          <Toolbar>
+            <IconButton onClick={() => toggleDrawer(true)}>
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ flexGrow: 1 }}
+            >
+              在庫管理システム
+            </Typography>
+            <Button
+              variant="contained"
+              startIcon={<LogoutIcon />}
+              onClick={() => handleLogout()}
+            >
+              ログアウト
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <Drawer open={open} onClose={() => toggleDrawer(false)} anchor="left">
+          {list()}
+        </Drawer>
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            p: 3,
+            // TODO: AppBarと被るため下にずらしている。本来は動的に取得すべき
+            marginTop: "64px",
+            background: "white",
+          }}
+        >
+          {children}
+        </Box>
       </Box>
-    </Box>
+    </ThemeProvider>
   );
 }

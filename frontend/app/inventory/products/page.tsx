@@ -163,9 +163,7 @@ export default function Page() {
         <TableContainer component={Paper}>
           <Table
             sx={{
-              "@media screen and (max-width:600px)": {
-                display: "none",
-              },
+              display: { mobile: "none", desktop: "table" },
             }}
           >
             <TableHead>
@@ -331,9 +329,7 @@ export default function Page() {
           </Table>
           <Table
             sx={{
-              "@media screen and (min-width:601px)": {
-                display: "none",
-              },
+              display: { mobile: "table", desktop: "none" },
             }}
           >
             <TableBody>
