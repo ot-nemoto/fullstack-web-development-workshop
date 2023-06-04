@@ -161,7 +161,13 @@ export default function Page() {
         sx={{ height: 400, width: "100%" }}
       >
         <TableContainer component={Paper}>
-          <Table>
+          <Table
+            sx={{
+              "@media screen and (max-width:600px)": {
+                display: "none",
+              },
+            }}
+          >
             <TableHead>
               <TableRow>
                 <TableCell sx={{ width: 40 }}>ID</TableCell>
@@ -323,9 +329,13 @@ export default function Page() {
               )}
             </TableBody>
           </Table>
-        </TableContainer>
-        <TableContainer component={Paper}>
-          <Table>
+          <Table
+            sx={{
+              "@media screen and (min-width:601px)": {
+                display: "none",
+              },
+            }}
+          >
             <TableBody>
               {id === null ? (
                 <TableRow>
