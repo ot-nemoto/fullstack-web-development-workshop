@@ -135,7 +135,11 @@ export default function Page({ params }: { params: { id: string } }) {
       </Box>
       <Typography variant="h6">在庫履歴</Typography>
       <TableContainer component={Paper}>
-        <Table>
+        <Table
+          sx={{
+            display: { mobile: "none", desktop: "table" },
+          }}
+        >
           <TableHead>
             <TableRow>
               <TableCell>処理種別</TableCell>
@@ -155,6 +159,26 @@ export default function Page({ params }: { params: { id: string } }) {
                 <TableCell>{data.quantity}</TableCell>
                 <TableCell>{data.price}</TableCell>
                 <TableCell>{data.inventory}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <Table
+          sx={{
+            display: { mobile: "table", desktop: "none" },
+          }}
+        >
+          <TableBody>
+            {data.map((data: any) => (
+              <TableRow key={data.id}>
+                <TableCell>
+                  <Typography>処理種別：{data.type}</Typography>
+                  <Typography>処理日時：{data.date}</Typography>
+                  <Typography>単価：{data.unit}</Typography>
+                  <Typography>数量：{data.quantity}</Typography>
+                  <Typography>価格：{data.price}</Typography>
+                  <Typography>在庫数：{data.inventory}</Typography>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
