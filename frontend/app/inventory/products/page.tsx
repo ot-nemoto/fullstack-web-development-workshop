@@ -324,6 +324,174 @@ export default function Page() {
             </TableBody>
           </Table>
         </TableContainer>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableBody>
+              {id === null ? (
+                <TableRow>
+                  <TableCell>
+                    <Typography>ID：</Typography>
+                    <Typography>
+                      商品名：
+                      <TextField
+                        type="text"
+                        id="name"
+                        variant="filled"
+                        {...register("name", {
+                          required: true,
+                          maxLength: 100,
+                        })}
+                      />
+                      {errors.name && (
+                        <div>100文字以内の商品名を入力してください</div>
+                      )}
+                    </Typography>
+                    <Typography>
+                      価格：
+                      <TextField
+                        type="number"
+                        id="price"
+                        variant="filled"
+                        {...register("price", {
+                          required: true,
+                          min: 1,
+                          max: 99999999,
+                        })}
+                      />
+                      {errors.price && (
+                        <div>1から99999999の数値を入力してください</div>
+                      )}
+                    </Typography>
+                    <Typography>
+                      説明：
+                      <TextField
+                        type="text"
+                        id="description"
+                        variant="filled"
+                        {...register("description")}
+                      />
+                    </Typography>
+                    <Typography>
+                      <Button
+                        variant="outlined"
+                        startIcon={<CancelIcon />}
+                        onClick={() => handleAddCancel()}
+                      >
+                        キャンセル
+                      </Button>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        startIcon={<CheckIcon />}
+                        onClick={() => setAction("add")}
+                      >
+                        登録する
+                      </Button>
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                ""
+              )}
+              {data.map((data: any) =>
+                id === data.id ? (
+                  <TableRow key={data.id}>
+                    <TableCell>
+                      <Typography>ID：{data.id}</Typography>
+                      <Typography>
+                        商品名：
+                        <TextField
+                          type="text"
+                          id="name"
+                          variant="filled"
+                          {...register("name", {
+                            required: true,
+                            maxLength: 100,
+                          })}
+                        />
+                        {errors.name && (
+                          <div>100文字以内の商品名を入力してください</div>
+                        )}
+                      </Typography>
+                      <Typography>
+                        価格：
+                        <TextField
+                          type="number"
+                          id="price"
+                          variant="filled"
+                          {...register("price", {
+                            required: true,
+                            min: 1,
+                            max: 99999999,
+                          })}
+                        />
+                        {errors.price && (
+                          <div>1から99999999の数値を入力してください</div>
+                        )}
+                      </Typography>
+                      <Typography>
+                        説明：
+                        <TextField
+                          type="text"
+                          id="description"
+                          variant="filled"
+                          {...register("description")}
+                        />
+                      </Typography>
+                      <Typography>
+                        <Button
+                          aria-label="キャンセル"
+                          variant="outlined"
+                          startIcon={<CancelIcon />}
+                          onClick={() => handleEditCancel()}
+                        >
+                          キャンセル
+                        </Button>
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          startIcon={<CheckIcon />}
+                          onClick={() => setAction("update")}
+                        >
+                          更新する
+                        </Button>
+                        <IconButton
+                          aria-label="削除する"
+                          type="submit"
+                          color="warning"
+                          onClick={() => setAction("delete")}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  <TableRow key={data.id}>
+                    <TableCell>
+                      <Typography>ID：{data.id}</Typography>
+                      <Typography>商品名：{data.name}</Typography>
+                      <Typography>価格：{data.price}</Typography>
+                      <Typography>説明：{data.description}</Typography>
+                      <Typography>
+                        <Link href={`/inventory/products/${data.id}`}>
+                          在庫処理
+                        </Link>
+                        <IconButton
+                          aria-label="編集する"
+                          color="primary"
+                          onClick={() => handleEditRow(data.id)}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                )
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Box>
     </Box>
   );
