@@ -5,10 +5,10 @@
 http://localhost:3000/inventory/import_sales で表示します。
 【執筆メモEnd】
 */
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import axios from "../../../plugins/axios";
+import { useEffect, useState } from 'react';
+import axios from '../../../plugins/axios';
 import {
   Alert,
   AlertColor,
@@ -24,31 +24,23 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
 import { MuiFileInput } from 'mui-file-input'
 
 
 export default function Page() {
 
-  const [data, setData] = useState([])
-  const [fileSync, setFileSync] = useState()
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState<AlertColor>('success');
   const [message, setMessage] = useState('');
 
-  const result = (message: string, severity: AlertColor) => {
+  const result = (severity: AlertColor, message: string) => {
     setOpen(true);
     setSeverity(severity);
     setMessage(message);
   };
 
-  useEffect(() => {
-    axios.get('/api/inventory/summary')
-      .then((res) => res.data)
-      .then((data) => {
-        setData(data)
-      })
-  }, [open])
+  const [fileSync, setFileSync] = useState()
 
   const onChangeFileSync = (newFile: any) => {
     setFileSync(newFile)
@@ -56,7 +48,7 @@ export default function Page() {
 
   const doAddSync = ((e: any) => {
     if (!fileSync) {
-      result("ファイルを選択してください", 'error')
+      result('error', 'ファイルを選択してください')
       return
     }
 
@@ -71,11 +63,11 @@ export default function Page() {
     })
       .then(function (response) {
         console.log(response)
-        result("同期ファイルが登録されました", 'success')
+        result('success', '同期ファイルが登録されました')
       })
       .catch(function (error) {
         console.log(error)
-        result("同期ファイルの登録に失敗しました", 'error')
+        result('error', '同期ファイルの登録に失敗しました')
       })
   })
 
@@ -87,7 +79,7 @@ export default function Page() {
 
   const doAddAsync = ((e: any) => {
     if (!fileAsync) {
-      result("ファイルを選択してください", 'error')
+      result('error', 'ファイルを選択してください')
       return
     }
 
@@ -101,13 +93,24 @@ export default function Page() {
     })
       .then(function (response) {
         console.log(response)
-        result("非同期ファイルが登録されました", 'success')
+        result('success', '非同期ファイルが登録されました')
       })
       .catch(function (error) {
         console.log(error)
-        result("非同期ファイルの登録に失敗しました", 'error')
+        result('error', '非同期ファイルの登録に失敗しました')
       })
   })
+
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    axios.get('/api/inventory/summary')
+      .then((res) => res.data)
+      .then((data) => {
+        setData(data)
+      })
+  }, [open])
+
 
   const handleClose = (event: any, reason: any) => {
     setOpen(false);
