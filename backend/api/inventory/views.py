@@ -19,7 +19,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework import generics, status, views, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from .authentication import CustomJWTAuthentication
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 
 from .models import Product, Purchase, Sales, SalesFile, Status
@@ -79,7 +79,7 @@ class LogoutView(views.APIView):
 # 1. APIView: 一番汎用性が高い
 class ProductView(views.APIView):
     # 認証クラスの指定
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
     # アクセス許可の指定
     # 認証済みのリクエストのみ許可
     permission_classes = [IsAuthenticated]
