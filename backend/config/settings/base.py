@@ -205,3 +205,5 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': True,
 }
 
+# クッキーの有効期限に使用する
+COOKIE_TIME = 60 * 60 * 12
