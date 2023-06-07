@@ -19,7 +19,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework import generics, status, views, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .authentication import CustomJWTAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 
 from .models import Product, Purchase, Sales, SalesFile, Status
@@ -31,6 +31,12 @@ class LoginView(views.APIView):
     Args:
         APIView (class): rest_framework.viewsのAPIViewを受け取る
     """
+    # 認証クラスの指定
+    # リクエストヘッダーにtokenを差し込むといったカスタム動作をしないので素の認証クラスを使用する
+    authentication_classes = [JWTAuthentication]
+    # アクセス許可の指定
+    permission_classes = []
+
     def post(self, request):
         serializer = TokenObtainPairSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -78,11 +84,11 @@ class LogoutView(views.APIView):
 # DjangoにはRestAPIでも複数の取得方法がある
 # 1. APIView: 一番汎用性が高い
 class ProductView(views.APIView):
-    # 認証クラスの指定
-    authentication_classes = [CustomJWTAuthentication]
-    # アクセス許可の指定
-    # 認証済みのリクエストのみ許可
-    permission_classes = [IsAuthenticated]
+    # # 認証クラスの指定
+    # authentication_classes = [CustomJWTAuthentication]
+    # # アクセス許可の指定
+    # # 認証済みのリクエストのみ許可
+    # permission_classes = [IsAuthenticated]
 
     # 商品操作に関する関数で共通で使用する商品取得関数
     def get_object(self, pk):
