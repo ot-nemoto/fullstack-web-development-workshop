@@ -135,12 +135,12 @@ export default function Page() {
       </Box>
       <Divider />
       <Box m={2}>
-        <Typography variant="subtitle1">年月ごとの在庫数集計</Typography>
+        <Typography variant="subtitle1">年月ごとの売上数集計</Typography>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>処理月</TableCell>
+                <TableCell>売上月</TableCell>
                 <TableCell>合計数量</TableCell>
               </TableRow>
             </TableHead>
