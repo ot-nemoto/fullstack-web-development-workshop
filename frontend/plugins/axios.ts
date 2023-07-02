@@ -30,13 +30,6 @@ const axios_instance = axios.create({
 
 axios_instance.interceptors.request.use(
   function (config) {
-    const access = getCookie("access");
-    if (access) {
-      config.headers = {
-        ...config.headers,
-        Authorization: "Bearer " + access,
-      } as AxiosRequestHeaders;
-    }
     return config;
   },
   function (error) {
@@ -71,8 +64,6 @@ axios_instance.interceptors.response.use(
       axios_instance
         .post("/api/inventory/retry", { refresh: refreshToken })
         .then((response) => {
-
-
           return axios_instance(originalConfig);
         })
         .catch(function (error) {
