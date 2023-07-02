@@ -18,7 +18,7 @@ class PurchaseSerializer(serializers.ModelSerializer):
         model = Purchase
         fields = '__all__'
 
-class SalesSerializer(serializers.ModelSerializer):
+class SaleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sales
         fields = '__all__'
