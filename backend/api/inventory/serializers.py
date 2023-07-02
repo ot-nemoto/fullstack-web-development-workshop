@@ -27,6 +27,7 @@ class SaleSerializer(serializers.ModelSerializer):
 # Modelに依存しないため、個別にフィールドを定義している
 class InventorySerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    unit = serializers.IntegerField()
     quantity = serializers.IntegerField()
     type = serializers.IntegerField()
     date = serializers.DateTimeField()
