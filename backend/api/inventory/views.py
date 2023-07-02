@@ -11,10 +11,11 @@ https://www.django-rest-framework.org/api-guide/authentication/
 https://www.django-rest-framework.org/api-guide/permissions/#isauthenticated
 【執筆メモEnd】
 """
+from api.exception import BusinessException
 import pandas
 from django.conf import settings
 from django.db.models import F, Q, Value, Sum
-from django.db.models.functions import TruncMonth
+from django.db.models.functions import TruncMonth, Coalesce
 from rest_framework.exceptions import NotFound
 from rest_framework import generics, status, views, viewsets
 from rest_framework.permissions import IsAuthenticated
@@ -23,7 +24,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 
 from .models import Product, Purchase, Sales, SalesFile, Status
-from .serializers import InventorySerializer, ProductSerializer, PurchaseSerializer, SalesSerializer, FileSerializer
+from .serializers import InventorySerializer, ProductSerializer, PurchaseSerializer, SaleSerializer, SalesSerializer, FileSerializer
 
 class LoginView(views.APIView):
     """ユーザーのログイン処理
@@ -231,16 +232,29 @@ class SalesView(views.APIView):
     def get(self, request, id=None, format=None):
         if id is None :
             queryset = Sales.objects.all()
-            serializer = SalesSerializer(queryset, many=True)
+            serializer = SaleSerializer(queryset, many=True)
         else: 
             product = self.get_object(id)
-            serializer = SalesSerializer(product)
+            serializer = SaleSerializer(product)
         return Response(serializer.data, status.HTTP_200_OK)
 
     # 売上情報を登録する
     def post(self, request, format=None):
-        serializer = SalesSerializer(data=request.data)
+        sales_file = SalesFile(file_name="None", status=Status.SYNC)
+        sales_file.save()
+        data = request.data.copy()
+        data['sales_date'] = '2022-01-01'
+        data['import_file'] = sales_file.pk
+        serializer = SaleSerializer(data=data)
         serializer.is_valid(raise_exception=True)
+        # バリデーション: 在庫が売る分の数量を超えないかチェック
+        purchase = Purchase.objects.filter(product_id=data['product']).aggregate(quantity_sum=Coalesce(Sum('quantity'), 0))  # 在庫テーブルのレコードを取得
+        sales = Sales.objects.filter(product_id=data['product']).aggregate(quantity_sum=Coalesce(Sum('quantity'), 0))  # 卸しテーブルのレコードを取得
+
+        # 在庫が売る分の数量を超えている場合はエラーレスポンスを返す
+        if purchase['quantity_sum'] < (sales['quantity_sum'] + int(data['quantity'])):
+            raise BusinessException('在庫数量を超過することはできません')
+
         serializer.save()
         return Response(serializer.data, status.HTTP_201_CREATED)
 
