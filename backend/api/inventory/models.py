@@ -24,7 +24,7 @@ class Category(models.Model):
     parent_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'category '
+        db_table = 'category'
         verbose_name = 'カテゴリー'
 
 class Product(models.Model):

@@ -1,0 +1,12 @@
+- model: inventory.category
+  fields:
+    name: メンズ
+    parent_category: null
+- model: inventory.category
+  fields:
+    name: レディース
+    parent_category: null
+- model: inventory.category
+  fields:
+    name: キッズ
+    parent_category: null
