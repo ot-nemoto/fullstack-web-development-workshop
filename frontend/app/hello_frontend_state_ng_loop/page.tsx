@@ -20,10 +20,10 @@ import { useState } from 'react'
 export default function Page() {
   const [data, setData] = useState({ name: '初期値' })
 
-  // yarn buildでエラーになるのでコメントアウトStart
-  // const change = { name: '変更' }
-  // setData(change)
-  // yarn buildでエラーになるのでコメントアウトEnd
+  // TODO yarn buildでエラーになる場合コメントアウトStart
+  const change = { name: '変更' }
+  setData(change)
+  // TODO yarn buildでエラーになる場合コメントアウトEnd
 
   return <div>hello {data.name}!</div>
 }
