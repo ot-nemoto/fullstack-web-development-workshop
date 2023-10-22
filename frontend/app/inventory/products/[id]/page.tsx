@@ -25,7 +25,15 @@ type FormData = {
   id: number;
   quantity: number;
 };
-
+type InventoryData = {
+  id: number;
+  type: number;
+  date: Date;
+  unit: number;
+  quantity: number;
+  price: number;
+  inventory: number;
+};
 export default function Page({ params }: { params: { id: string } }) {
   const {
     register,
@@ -35,7 +43,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   // 読込データを保持
   const [product, setProduct] = useState({ id: "", name: "" });
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<InventoryData[]>([]);
   const [refresh, setRefresh] = useState(0);
 
   useEffect(() => {
@@ -43,7 +51,24 @@ export default function Page({ params }: { params: { id: string } }) {
       setProduct(response.data);
     });
     axios.get(`/api/inventory/inventories/${params.id}`).then((response) => {
-      setData(response.data);
+      const inventoryData: InventoryData[] = [];
+      let inventory = 0;
+
+      response.data.forEach((e) => {
+        // 売るときは在庫数から引く
+        inventory += e.type === 1 ? e.quantity : e.quantity * -1;
+        const newElement = {
+          id: e.id,
+          type: e.type,
+          date: e.date,
+          unit: e.unit,
+          quantity: e.quantity,
+          price: e.unit * e.quantity,
+          inventory: inventory,
+        };
+        inventoryData.unshift(newElement);
+      });
+      setData(inventoryData);
     });
   }, [refresh]);
 
@@ -85,7 +110,6 @@ export default function Page({ params }: { params: { id: string } }) {
       quantity: data.quantity,
       sales_date: new Date(),
       product: data.id,
-      import_file: 1,
     };
     axios.post("/api/inventory/sales", sale).then((response) => {
       console.log(response.data);

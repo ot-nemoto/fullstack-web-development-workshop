@@ -18,7 +18,7 @@ class PurchaseSerializer(serializers.ModelSerializer):
         model = Purchase
         fields = '__all__'
 
-class SalesSerializer(serializers.ModelSerializer):
+class SaleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sales
         fields = '__all__'
@@ -27,6 +27,7 @@ class SalesSerializer(serializers.ModelSerializer):
 # Modelに依存しないため、個別にフィールドを定義している
 class InventorySerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    unit = serializers.IntegerField()
     quantity = serializers.IntegerField()
     type = serializers.IntegerField()
     date = serializers.DateTimeField()

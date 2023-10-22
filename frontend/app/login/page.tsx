@@ -57,16 +57,9 @@ export default function Page() {
   const handleLogin = (data: FormData) => {
     console.dir(data);
     axios
-      .post("/api/inventory/token", data)
+      .post("/api/inventory/login", data)
       .then((response) => {
         console.dir(response);
-        // バックエンドからの応答からトークンを取得
-        const access = response.data.access;
-        const refresh = response.data.refresh;
-
-        // クッキーにトークンを保存
-        setCookie("access", access, 60);
-        setCookie("refresh", refresh, 60);
         router.push("/inventory/products");
       })
       .catch(function (error) {

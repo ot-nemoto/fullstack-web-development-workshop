@@ -11,26 +11,85 @@ https://www.django-rest-framework.org/api-guide/authentication/
 https://www.django-rest-framework.org/api-guide/permissions/#isauthenticated
 【執筆メモEnd】
 """
+from api.exception import BusinessException
 import pandas
+from django.conf import settings
 from django.db.models import F, Q, Value, Sum
-from django.db.models.functions import TruncMonth
+from django.db.models.functions import TruncMonth, Coalesce
 from rest_framework.exceptions import NotFound
 from rest_framework import generics, status, views, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 
 from .models import Product, Purchase, Sales, SalesFile, Status
-from .serializers import InventorySerializer, ProductSerializer, PurchaseSerializer, SalesSerializer, FileSerializer
+from .serializers import InventorySerializer, ProductSerializer, PurchaseSerializer, SaleSerializer, SalesSerializer, FileSerializer
+
+class LoginView(views.APIView):
+    """ユーザーのログイン処理
+
+    Args:
+        APIView (class): rest_framework.viewsのAPIViewを受け取る
+    """
+    # 認証クラスの指定
+    # リクエストヘッダーにtokenを差し込むといったカスタム動作をしないので素の認証クラスを使用する
+    authentication_classes = [JWTAuthentication]
+    # アクセス許可の指定
+    permission_classes = []
+
+    def post(self, request):
+        serializer = TokenObtainPairSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        access = serializer.validated_data.get("access", None)
+        refresh = serializer.validated_data.get("refresh", None)
+        if access:
+            response = Response(status=status.HTTP_200_OK)
+            max_age = settings.COOKIE_TIME
+            response.set_cookie('access', access, httponly=True, max_age=max_age)
+            response.set_cookie('refresh', refresh, httponly=True, max_age=max_age)
+            return response
+        return Response({'errMsg': 'ユーザーの認証に失敗しました'}, status=status.HTTP_401_UNAUTHORIZED)
+
+class RetryView(views.APIView):
+    """ユーザーの再ログイン処理
+
+    Args:
+        APIView (class): rest_framework.viewsのAPIViewを受け取る
+    """
+    def post(self, request):
+        serializer = TokenRefreshSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        access = serializer.validated_data.get("access", None)
+        refresh = serializer.validated_data.get("refresh", None)
+        if access:
+            response = Response(status=status.HTTP_200_OK)
+            max_age = settings.COOKIE_TIME
+            response.set_cookie('access', access, httponly=True, max_age=max_age)
+            response.set_cookie('refresh', refresh, httponly=True, max_age=max_age)
+            return response
+        return Response({'errMsg': 'ユーザーの認証に失敗しました'}, status=status.HTTP_401_UNAUTHORIZED)
+
+class LogoutView(views.APIView):
+    """ユーザーのログアウト処理
+
+    Args:
+        APIView (class): rest_framework.viewsのAPIViewを受け取る
+    """
+    def post(self, request, *args):
+        response = Response(status=status.HTTP_200_OK)
+        response.delete_cookie('access')
+        response.delete_cookie('refresh')
+        return response
 
 # DjangoにはRestAPIでも複数の取得方法がある
 # 1. APIView: 一番汎用性が高い
 class ProductView(views.APIView):
-    # 認証クラスの指定
-    authentication_classes = [JWTAuthentication]
-    # アクセス許可の指定
-    # 認証済みのリクエストのみ許可
-    permission_classes = [IsAuthenticated]
+    # # 認証クラスの指定
+    # authentication_classes = [CustomJWTAuthentication]
+    # # アクセス許可の指定
+    # # 認証済みのリクエストのみ許可
+    # permission_classes = [IsAuthenticated]
 
     # 商品操作に関する関数で共通で使用する商品取得関数
     def get_object(self, pk):
@@ -173,16 +232,29 @@ class SalesView(views.APIView):
     def get(self, request, id=None, format=None):
         if id is None :
             queryset = Sales.objects.all()
-            serializer = SalesSerializer(queryset, many=True)
+            serializer = SaleSerializer(queryset, many=True)
         else: 
             product = self.get_object(id)
-            serializer = SalesSerializer(product)
+            serializer = SaleSerializer(product)
         return Response(serializer.data, status.HTTP_200_OK)
 
     # 売上情報を登録する
     def post(self, request, format=None):
-        serializer = SalesSerializer(data=request.data)
+        sales_file = SalesFile(file_name="None", status=Status.SYNC)
+        sales_file.save()
+        data = request.data.copy()
+        data['sales_date'] = '2022-01-01'
+        data['import_file'] = sales_file.pk
+        serializer = SaleSerializer(data=data)
         serializer.is_valid(raise_exception=True)
+        # バリデーション: 在庫が売る分の数量を超えないかチェック
+        purchase = Purchase.objects.filter(product_id=data['product']).aggregate(quantity_sum=Coalesce(Sum('quantity'), 0))  # 在庫テーブルのレコードを取得
+        sales = Sales.objects.filter(product_id=data['product']).aggregate(quantity_sum=Coalesce(Sum('quantity'), 0))  # 卸しテーブルのレコードを取得
+
+        # 在庫が売る分の数量を超えている場合はエラーレスポンスを返す
+        if purchase['quantity_sum'] < (sales['quantity_sum'] + int(data['quantity'])):
+            raise BusinessException('在庫数量を超過することはできません')
+
         serializer.save()
         return Response(serializer.data, status.HTTP_201_CREATED)
 
@@ -198,9 +270,9 @@ class InventoryView(views.APIView):
             return Response(serializer.data, status.HTTP_400_BAD_REQUEST)
         else: 
             # UNIONするために、それぞれフィールド名を再定義している
-            purchase = Purchase.objects.filter(product_id=id).values("id", "quantity", type=Value('1'), date=F('purchase_date'))
-            sales = Sales.objects.filter(product_id=id).values("id", "quantity", type=Value('2'), date=F('sales_date'))
-            queryset = purchase.union(sales).order_by(F("date").desc())
+            purchase = Purchase.objects.filter(product_id=id).prefetch_related('product').values("id", "quantity", type=Value('1'), date=F('purchase_date'), unit=F('product__price'))
+            sales = Sales.objects.filter(product_id=id).prefetch_related('product').values("id", "quantity", type=Value('2'), date=F('sales_date'), unit=F('product__price'))
+            queryset = purchase.union(sales).order_by(F("date"))
             serializer = InventorySerializer(queryset, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
 

@@ -30,13 +30,6 @@ const axios_instance = axios.create({
 
 axios_instance.interceptors.request.use(
   function (config) {
-    const access = getCookie("access");
-    if (access) {
-      config.headers = {
-        ...config.headers,
-        Authorization: "Bearer " + access,
-      } as AxiosRequestHeaders;
-    }
     return config;
   },
   function (error) {
@@ -55,26 +48,22 @@ axios_instance.interceptors.response.use(
       error.response.status === 401 &&
       !originalConfig.retry
     ) {
-      console.dir(getCookie("refresh"));
+      const refreshToken = getCookie("refresh");
       // 認証エラーの場合は、リフレッシュトークンを使ってリトライ
       originalConfig.retry = true;
+      // 以下の場合はリトライしない
+      // リフレッシュトークンが取得できない場合
+      if (refreshToken === null || refreshToken === undefined) {
+        window.location.href = "/login";
+      }
+      // ログイン処理の場合
+      if (originalConfig.url === "/api/inventory/login") {
+        return Promise.reject(error);
+      }
+
       axios_instance
-        .post("/api/inventory/token/refresh", { refresh: getCookie("refresh") })
+        .post("/api/inventory/retry", { refresh: refreshToken })
         .then((response) => {
-          // バックエンドからの応答からトークンを取得
-          const access = response.data.access;
-          const refresh = response.data.refresh;
-
-          // クッキーにトークンを保存
-          setCookie("access", access, 60);
-          setCookie("refresh", refresh, 60);
-
-          if (access) {
-            originalConfig.headers = {
-              ...originalConfig.headers,
-              Authorization: "Bearer " + access,
-            };
-          }
           return axios_instance(originalConfig);
         })
         .catch(function (error) {
@@ -82,7 +71,7 @@ axios_instance.interceptors.response.use(
         });
     } else if (error.response && error.response.status !== 422) {
       // 認証エラーまたは業務エラー以外の場合は、適切な画面に遷移
-      window.location.href = "/" + error.response.status;
+      window.location.href = "/login";
     } else {
       return Promise.reject(error);
     }

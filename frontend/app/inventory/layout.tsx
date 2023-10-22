@@ -31,6 +31,7 @@ import {
 } from "@mui/material";
 import { Logout as LogoutIcon, Menu as MenuIcon } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
+import axios from "../../plugins/axios";
 
 declare module "@mui/material/styles" {
   // 指定を単純にするためにモバイルとPCの２つに限定する
@@ -70,19 +71,13 @@ export default function InventoryLayout({
   /** 各種画面への遷移を管理する */
   const router = useRouter();
 
-  const isLoggedIn = () => {
-    return getCookie("access") !== null && getCookie("refresh") !== null;
-  };
 
-  if (!isLoggedIn()) {
-    router.replace("/login"); // ログインしていなければサインインページへ転送
-  }
 
   // ログアウト処理
   const handleLogout = () => {
-    deleteCookie("access");
-    deleteCookie("refresh");
-    router.replace("/login");
+    axios.post("/api/inventory/logout").then((response) => {
+      router.replace("/login");
+    });
   };
 
   /** 開閉対象となるサイドバー本体 */
