@@ -30,18 +30,13 @@ axios_instance.interceptors.response.use(
       const refreshToken = getCookie("refresh");
       // 認証エラーの場合は、リフレッシュトークンを使ってリトライ
       originalConfig.retry = true;
-      // 以下の場合はリトライしない
-      // リフレッシュトークンが取得できない場合
-      if (refreshToken === null || refreshToken === undefined) {
-        window.location.href = "/login";
-      }
       // ログイン処理の場合
       if (originalConfig.url === "/api/inventory/login") {
         return Promise.reject(error);
       }
 
       axios_instance
-        .post("/api/inventory/retry", { refresh: refreshToken })
+        .post("/api/inventory/retry", { refresh: "" })
         .then((response) => {
           return axios_instance(originalConfig);
         })
@@ -50,7 +45,7 @@ axios_instance.interceptors.response.use(
         });
     } else if (error.response && error.response.status !== 422) {
       // 認証エラーまたは業務エラー以外の場合は、適切な画面に遷移
-      window.location.href = "/login";
+        window.location.href = "/login";
     } else {
       return Promise.reject(error);
     }

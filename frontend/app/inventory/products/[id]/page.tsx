@@ -197,7 +197,9 @@ export default function Page({ params }: { params: { id: string } }) {
               <TableRow key={data.id}>
                 <TableCell>
                   <Typography>処理種別：{data.type}</Typography>
-                  <Typography>処理日時：{data.date}</Typography>
+                  <Typography>
+                    処理日時：{new Date(data.date).toLocaleDateString()}
+                  </Typography>
                   <Typography>単価：{data.unit}</Typography>
                   <Typography>数量：{data.quantity}</Typography>
                   <Typography>価格：{data.price}</Typography>

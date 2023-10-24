@@ -116,6 +116,7 @@ class RetryView(APIView):
     permission_classes = []
 
     def post(self, request):
+        request.data['refresh'] = request.META.get('HTTP_REFRESH_TOKEN')
         serializer = TokenRefreshSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         access = serializer.validated_data.get("access", None)

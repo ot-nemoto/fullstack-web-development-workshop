@@ -1,10 +1,13 @@
 'use client'
 
-import axios from 'axios';
+import axios from "../../../../plugins/axios";
 import {
+    Alert,
+    AlertColor,
     Box,
     Button,
     Paper,
+    Snackbar,
     Table,
     TableBody,
     TableCell,
@@ -16,8 +19,6 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from 'react';
-import productsData from "../sample/dummy_products.json";
-import inventoriesData from "../sample/dummy_inventories.json";
 
 type ProductData = {
     id: number;
@@ -33,7 +34,7 @@ type FormData = {
 
 type InventoryData = {
     id: number;
-    type: string;
+    type: number;
     date: string;
     unit: number;
     quantity: number;
@@ -54,9 +55,20 @@ export default function PagePage({ params }: {
     // 読込データを保持
     const [product, setProduct] = useState<ProductData>({ id: 0, name: "", price: 0,  description: ""});
     const [data, setData] = useState<Array<InventoryData>>([]);
-    const [refresh, setRefresh] = useState(0);
+    const [open, setOpen] = useState(false);
+    const [severity, setSeverity] = useState<AlertColor>('success');
+    const [message, setMessage] = useState('');
+    const result = (severity: AlertColor, message: string) => {
+        setOpen(true);
+        setSeverity(severity);
+        setMessage(message);
+    };
     // submit時のactionを分岐させる
     const [action, setAction] = useState<string>("");
+
+    const handleClose = (event: any, reason: any) => {
+        setOpen(false);
+    };
 
     useEffect(() => {
         axios.get(`/api/inventory/products/${params.id}`)
@@ -84,7 +96,7 @@ export default function PagePage({ params }: {
                 });
                 setData(inventoryData);
         });
-    }, [refresh])
+    }, [open])
 
     const onSubmit = (event: any): void => {
         const data: FormData = {
@@ -105,15 +117,32 @@ export default function PagePage({ params }: {
 
     // 仕入れ・卸し処理
     const handlePurchase = (data: FormData) => {
-        alert("作成完了");
+        const purchase = {
+            quantity: data.quantity,
+            purchase_date: new Date(),
+            product: data.id,
+        };
+        axios.post("/api/inventory/purchases", purchase).then((response) => {
+            result('success', '商品を仕入れました')
+        });
     };
 
     const handleSell = (data: FormData) => {
-        alert("作成完了");
+        const sale = {
+            quantity: data.quantity,
+            sales_date: new Date(),
+            product: data.id,
+        };
+        axios.post("/api/inventory/sales", sale).then((response) => {
+            result('success', '商品を卸しました')
+        });
     };
 
     return (
         <>
+            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+                <Alert severity={severity}>{message}</Alert>
+            </Snackbar>
             <Typography variant="h5">商品在庫管理</Typography>
             <Typography variant="h6">在庫処理</Typography>
             <Box component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -179,8 +208,8 @@ export default function PagePage({ params }: {
                     <TableBody>
                         {data.map((data: InventoryData) => (
                             <TableRow key={data.id}>
-                                <TableCell>{data.type}</TableCell>
-                                <TableCell>{data.date}</TableCell>
+                                <TableCell>{data.type === 1 ? "仕入れ" : "卸し"}</TableCell>
+                                <TableCell>{new Date(data.date).toLocaleDateString()}</TableCell>
                                 <TableCell>{data.unit}</TableCell>
                                 <TableCell>{data.quantity}</TableCell>
                                 <TableCell>{data.price}</TableCell>
