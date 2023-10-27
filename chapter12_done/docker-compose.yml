@@ -1,0 +1,39 @@
+version: "3.8"
+services:
+  frontend:
+    build:
+      context: frontend
+    tty: true
+    volumes:
+      - ./frontend:/frontend
+    ports:
+      - 3000:3000
+    environment:
+      - WATCHPACK_POLLING=true #ホットリロード（ソースコードを即時にアプリケーションに反映）
+    extra_hosts:
+      - host.docker.internal:host-gateway
+  backend:
+    build:
+      context: backend
+      args:
+        - environment_name=development #環境変数を指定
+    tty: true
+    volumes:
+      - ./backend:/backend
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    extra_hosts:
+      - host.docker.internal:host-gateway
+  db:
+    image: mysql:8
+    command:
+      --collation-server=utf8mb4_0900_bin
+      --transaction-isolation=READ-COMMITTED
+    restart: always #host起動時に自動起動
+    environment:
+      MYSQL_ROOT_PASSWORD: password #初期パスワード
+      TZ: Asia/Tokyo タイムゾーンを東京に
+    ports:
+      - 53306:3306
