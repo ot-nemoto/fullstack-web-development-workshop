@@ -71,8 +71,8 @@ export default function Page() {
                             <td><input type="text" /></td>
                             {/* ルーティングのために追加 */}
                             <td></td>
-                            <td><button onClick={handleAddCancel}>キャンセル</button>
-                                <button onClick={handleAdd}>登録する</button></td>
+                            <td><button onClick={(event) => handleAddCancel(event)}>キャンセル</button>
+                                <button onClick={(event) => handleAdd(event)}>登録する</button></td>
                         </tr>
                     ) : ""}
                     {data.map((data: any) => (
@@ -83,9 +83,9 @@ export default function Page() {
                                 <td><input type="number" defaultValue={data.price} /></td>
                                 <td><input type="text" defaultValue={data.description} /></td>
                                 <td></td>
-                                <td><button onClick={handleEditCancel(data.id)}>キャンセル
-                                </button><button onClick={handleEdit(data.id)}>更新する</button>
-                                    <button onClick={handleDelete(data.id)}>削除する</button></td>
+                                <td><button onClick={() => handleEditCancel(data.id)}>キャンセル
+                                </button><button onClick={() => handleEdit(data.id)}>更新する</button>
+                                    <button onClick={() => handleDelete(data.id)}>削除する</button></td>
                             </tr>
                         ) : (
                             <tr key={data.id}>
@@ -94,7 +94,8 @@ export default function Page() {
                                 <td>{data.price}</td>
                                 <td>{data.description}</td>
                                 <td><Link href={`/inventory/products/${data.id}`}>在庫処理</Link></td>
-                                <td><button onClick={handleEditRow(data.id)}>更新・削除</button></td>
+                                <td><button onClick={() => handleEditRow(data.id)}>更新・削除
+                                </button></td>
                             </tr>
                         )
                     ))}

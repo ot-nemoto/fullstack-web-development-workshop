@@ -4,8 +4,6 @@ export default function Page() {
         alert("アラート");
     };
     return (
-        <div>
-            <button onClick={showDialog()}>Click</button>
-        </div>
+        <div/>
     );
 }
