@@ -8,12 +8,34 @@ type ProductData = {
     price: number;
     description: string;
 };
+
+type InputData = {
+    id: string;
+    name: string;
+    price: string;
+    description: string;
+};
+
 export default function Page() {
     // 読込データを保持
     const [data, setData] = useState<Array<ProductData>>([]);
     useEffect(() => {
         setData(productsData);
     }, [])
+
+    // 登録データを保持
+    const [input, setInput] = useState<InputData>({
+        id: "",
+        name: "",
+        price: "",
+        description: "",
+    });
+
+    // 入力値の値を更新
+    const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, name } = event.target;
+        setInput({ ...input, [name]: value });
+    };
 
     // 新規登録処理、新規登録行の表示状態を保持
     const [shownNewRow, setShownNewRow] = useState(false);
@@ -36,6 +58,13 @@ export default function Page() {
     const handleEditRow: any = (id: number) => {
         setShownNewRow(false)
         setEditingRow(id)
+        const selectedProduct: FormData = data.find((v) => v.id === id) as ProductData;
+        setInput({
+            id: id.toString(),
+            name: selectedProduct.name,
+            price: selectedProduct.price.toString(),
+            description: selectedProduct.description,
+        });
     };
     const handleEditCancel: any = (id: number) => {
         setEditingRow(0)
