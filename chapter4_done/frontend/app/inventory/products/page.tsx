@@ -14,10 +14,43 @@ export default function Page() {
     useEffect(() => {
         setData(productsData);
     }, [])
+
+    // 新規登録処理、新規登録行の表示状態を保持
+    const [shownNewRow, setShownNewRow] = useState(false);
+    const handleShowNewRow = (event: React.MouseEvent<HTMLElement>) => {
+        event.preventDefault();
+        setShownNewRow(true)
+    };
+    const handleAddCancel = (event: React.MouseEvent<HTMLElement>) => {
+        event.preventDefault();
+        setShownNewRow(false)
+    };
+    const handleAdd = (event: React.MouseEvent<HTMLElement>) => {
+        event.preventDefault();
+        // バックエンドを使用した登録処理を呼ぶ
+        setShownNewRow(false)
+    };
+
+    // 更新・削除処理、更新・削除行の表示状態を保持
+    const [editingRow, setEditingRow] = useState(0);
+    const handleEditRow = (id: number) => {
+        setShownNewRow(false)
+        setEditingRow(id)
+    };
+    const handleEditCancel = (id: number) => {
+        setEditingRow(0)
+    };
+    const handleEdit = (id: number) => {
+        setEditingRow(0)
+    };
+    const handleDelete = (id: number) =>
+        setEditingRow(0)
+        ;
+
     return (
         <>
             <h2>商品一覧</h2>
-            <button>商品を追加する</button>
+            <button onClick={handleShowNewRow}>商品を追加する</button>
             <table>
                 <thead>
                     <tr>
@@ -30,16 +63,18 @@ export default function Page() {
                     </tr>
                 </thead>
                 <tbody>
-                    {/* useStateでの置換えの際に削除
-<tr>
-<td>1</td>
-<td>コットン100％バックリボンティアードワンピース（黒）</td>
-（中略）
-<td>定番のデニムパンツに、フェミニンなベルトをプラスしたスタイリッシュな
-アイテム。カジュアルにもきれいめにも合わせやすい。</td>
-<td><button>更新・削除</button></td>
-</tr>
-*/}
+                    {shownNewRow ? (
+                        <tr>
+                            <td></td>
+                            <td><input type="text" /></td>
+                            <td><input type="number" /></td>
+                            <td><input type="text" /></td>
+                            {/* ルーティングのために追加 */}
+                            <td></td>
+                            <td><button onClick={handleAddCancel}>キャンセル</button>
+                                <button onClick={handleAdd}>登録する</button></td>
+                        </tr>
+                    ) : ""}
                     {data.map((data: any) => (
                         <tr key={data.id}>
                             <td>{data.id}</td>
