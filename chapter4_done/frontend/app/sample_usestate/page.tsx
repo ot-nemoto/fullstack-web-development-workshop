@@ -1,6 +1,6 @@
 "use client";
 export default function Page() {
-    const showDialog = () => {
+    const showDialog:any = () => {
         alert("アラート");
     };
     return (

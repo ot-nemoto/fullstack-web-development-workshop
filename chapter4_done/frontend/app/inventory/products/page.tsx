@@ -33,17 +33,17 @@ export default function Page() {
 
     // 更新・削除処理、更新・削除行の表示状態を保持
     const [editingRow, setEditingRow] = useState(0);
-    const handleEditRow = (id: number) => {
+    const handleEditRow: any = (id: number) => {
         setShownNewRow(false)
         setEditingRow(id)
     };
-    const handleEditCancel = (id: number) => {
+    const handleEditCancel: any = (id: number) => {
         setEditingRow(0)
     };
-    const handleEdit = (id: number) => {
+    const handleEdit: any = (id: number) => {
         setEditingRow(0)
     };
-    const handleDelete = (id: number) =>
+    const handleDelete: any = (id: number) =>
         setEditingRow(0)
         ;
 
