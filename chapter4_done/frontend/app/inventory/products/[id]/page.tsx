@@ -1,13 +1,22 @@
 'use client'
-import { useState, useEffect } from 'react';
+
+import { useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
 import productsData from "../sample/dummy_products.json";
 import inventoriesData from "../sample/dummy_inventories.json";
+
 type ProductData = {
     id: number;
     name: string;
     price: number;
     description: string;
 };
+
+type FormData = {
+    id: number;
+    quantity: number;
+};
+
 type InventoryData = {
     id: number;
     type: string;
@@ -17,17 +26,29 @@ type InventoryData = {
     price: number;
     inventory: number;
 };
-export default function Page({ params }: {
-    params: { id: number },
-}) {
+
+export default function PagePage({ params }: { params: { id: number } }) {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
+
     // 読込データを保持
     const [product, setProduct] = useState<ProductData>({
-        id: 0, name: "",
-        price: 0, description: ""
+        id: 0,
+        name: "",
+        price: 0,
+        description: "",
     });
     const [data, setData] = useState<Array<InventoryData>>([]);
+    // submit時のactionを分岐させる
+    const [action, setAction] = useState<string>("");
+
     useEffect(() => {
-        const selectedProduct: ProductData = productsData.find(v => v.id == params.id) ?? {
+        const selectedProduct: ProductData = productsData.find(
+            (v) => v.id == params.id
+        ) ?? {
             id: 0,
             name: "",
             price: 0,
@@ -35,23 +56,58 @@ export default function Page({ params }: {
         };
         setProduct(selectedProduct);
         setData(inventoriesData);
-    }, [])
+    }, []);
+
+    const onSubmit = (event: any): void => {
+        const data: FormData = {
+            id: Number(params.id),
+            quantity: Number(event.quantity),
+        };
+
+        // actionによってHTTPメソッドと使用するパラメーターを切り替える
+        if (action === "purchase") {
+            handlePurchase(data);
+        } else if (action === "sell") {
+            if (data.id === null) {
+                return;
+            }
+            handleSell(data);
+        }
+    };
+
+    // 仕入れ・卸し処理
+    const handlePurchase = (data: FormData) => {
+        alert("作成完了");
+    };
+
+    const handleSell = (data: FormData) => {
+        alert("作成完了");
+    };
 
     return (
         <>
             <h2>商品在庫管理</h2>
             <h3>在庫処理</h3>
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label>商品名:</label>
                     <span>{product.name}</span>
                 </div>
                 <div>
                     <label>数量:</label>
-                    <input type="text" />
+                    <input
+                        type="number"
+                        id="quantity"
+                        {...register("quantity", { required: true, min: 1, max: 99999999 })}
+                    />
+                    {errors.quantity && <div>1から99999999の数値を入力してください</div>}
                 </div>
-                <button>商品を仕入れる</button>
-                <button>商品を卸す</button>
+                <button type="submit" onClick={() => setAction("purchase")}>
+                    商品を仕入れる
+                </button>
+                <button type="submit" onClick={() => setAction("sell")}>
+                    商品を卸す
+                </button>
             </form>
             <h3>在庫履歴</h3>
             <table>
@@ -79,5 +135,5 @@ export default function Page({ params }: {
                 </tbody>
             </table>
         </>
-    )
+    );
 }
