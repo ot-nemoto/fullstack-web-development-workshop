@@ -110,14 +110,29 @@ export default function InventoryLayout({
                     component="main"
                     sx={{
                         flexGrow: 1,
-                        p: 3,
+                        // AppBar と被るため下にずらしている
                         marginTop: "64px",
+                        width: "100%",
                         background: "white",
                     }}
                 >
                     {children}
                 </Box>
+                <Box
+                    component='footer'
+                    sx={{
+                        width: '100%',
+                        position: 'fixed',
+                        textAlign: 'center',
+                        bottom: 0,
+                        background: "#1976d2",
+                    }}
+                >
+                    <Typography variant="caption" color="white">
+                        ©2023 full stack web development
+                    </Typography>
+                </Box>
             </Box>
-        </ThemeProvider>
+        </ThemeProvider >
     );
 }
