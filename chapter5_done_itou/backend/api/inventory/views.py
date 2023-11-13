@@ -6,9 +6,18 @@ from rest_framework.response import Response
 from .models import Product, Purchase, Sales
 from .serializers import InventorySerializer, ProductSerializer
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 
 class ProductView(APIView):
+    # 認証クラスの指定
+    authentication_classes = [JWTAuthentication]
+    # アクセス許可の指定
+    # 認証済みのリクエストのみ許可
+    permission_classes = [IsAuthenticated]
+    
     # 商品操作に関する関数で共通で使用する商品取得関数
     def get_object(self, pk):
         try:
