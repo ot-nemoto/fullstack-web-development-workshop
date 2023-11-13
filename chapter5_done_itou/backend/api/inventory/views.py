@@ -130,7 +130,7 @@ class LoginView(APIView):
             return response
         return Response({'errMsg': 'ユーザーの認証に失敗しました'}, status=status.HTTP_401_UNAUTHORIZED)
 
-class RetryView(views.APIView):
+class RetryView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = []
     def post(self, request):
@@ -144,7 +144,7 @@ class RetryView(views.APIView):
             max_age = settings.COOKIE_TIME
         response.set_cookie('access', access, httponly=True, max_age=max_age)
 
-class LogoutView(views.APIView):
+class LogoutView(APIView):
     authentication_classes = []
     permission_classes = []
     def post(self, request, *args):
