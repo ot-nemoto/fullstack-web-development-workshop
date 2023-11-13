@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Product
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, PurchaseSerializer, SaleSerializer
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 
@@ -28,5 +28,28 @@ class ProductView(APIView):
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 class ProductModelViewSet(ModelViewSet):
+    """
+    商品操作に関する関数（ModelViewSet）
+    """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+class PurchaseView(APIView):
+    def post(self, request, format=None):
+        """
+        仕入情報を登録する
+        """
+        serializer = PurchaseSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status.HTTP_201_CREATED)
+
+class SalesView(APIView):
+    def post(self, request, format=None):
+        """
+        売上情報を登録する
+        """
+        serializer = SaleSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status.HTTP_201_CREATED)
