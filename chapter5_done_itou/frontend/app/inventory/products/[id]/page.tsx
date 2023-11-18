@@ -1,6 +1,5 @@
 'use client'
 
-import axios from 'axios';
 import {
     Alert,
     AlertColor,
@@ -55,7 +54,7 @@ export default function PagePage({ params }: {
     } = useForm();
 
     // 読込データを保持
-    const [product, setProduct] = useState<ProductData>({ id: 0, name: "", price: 0, description: "" });
+    const [product, setProduct] = useState<ProductData>({ id: 0, name: "", price: 0,  description: ""});
     const [data, setData] = useState<Array<InventoryData>>([]);
     // submit時のactionを分岐させる
     const [action, setAction] = useState<string>("");
@@ -63,42 +62,24 @@ export default function PagePage({ params }: {
     const [severity, setSeverity] = useState<AlertColor>('success');
     const [message, setMessage] = useState('');
     const result = (severity: AlertColor, message: string) => {
-        setOpen(true);
-        setSeverity(severity);
-        setMessage(message);
+    setOpen(true);
+    setSeverity(severity);
+    setMessage(message);
     };
-
+    
     const handleClose = (event: any, reason: any) => {
-        setOpen(false);
-    };
+    setOpen(false);
+};
     useEffect(() => {
-        axios.get(`/api/inventory/products/${params.id}`)
-            .then((response) => {
-                setProduct(response.data);
-            });
-        axios.get(`/api/inventory/inventories/${params.id}`)
-            .then((response) => {
-                const inventoryData: InventoryData[] = [];
-                let key: number = 1;
-                let inventory: number = 0;
-
-                response.data.forEach((e: InventoryData) => {
-                    // 売るときは在庫数から引く
-                    inventory += e.type === 1 ? e.quantity : e.quantity * -1;
-                    const newElement = {
-                        id: key++,
-                        type: e.type,
-                        date: e.date,
-                        unit: e.unit,
-                        quantity: e.quantity,
-                        price: e.unit * e.quantity,
-                        inventory: inventory,
-                    };
-                    inventoryData.unshift(newElement);
-                });
-                setData(inventoryData);
-            });
-    }, [open])
+        const selectedProduct: ProductData = productsData.find(v => v.id == params.id) ?? {
+            id: 0,
+            name: "",
+            price: 0,
+            description: "",
+          };
+        setProduct(selectedProduct);
+        setData(inventoriesData);
+    }, [])
 
     const onSubmit = (event: any): void => {
         const data: FormData = {
@@ -113,7 +94,7 @@ export default function PagePage({ params }: {
             if (data.id === null) {
                 return;
             }
-            handleSell(data);
+        handleSell(data);
         }
     };
 
