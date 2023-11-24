@@ -1,14 +1,16 @@
+from api.inventory.exception import BusinessException
 from django.conf import settings
-from django.db.models import F, Value
-from rest_framework import status
+from django.db.models import F, Value, Sum
+from django.db.models.functions import Coalesce
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from .models import Product, Purchase, Sales
+from .serializers import InventorySerializer, ProductSerializer
+from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
-from .models import Product, Purchase, Sales
-from .serializers import InventorySerializer, ProductSerializer
 
 class ProductView(APIView):
 
@@ -70,6 +72,33 @@ class ProductModelViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+class PurchaseView(APIView):
+    def post(self, request, format=None):
+        """
+        仕入情報を登録する
+        """
+        serializer = PurchaseSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status.HTTP_201_CREATED)
+
+class SalesView(APIView):
+    def post(self, request, format=None):
+        """
+        売上情報を登録する
+        """
+        serializer = SaleSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        # 在庫が売る分の数量を超えないかチェック
+        purchase = Purchase.objects.filter(product_id=request.data['product']).aggregate(quantity_sum=Coalesce(Sum('quantity'), 0)) # 在庫テーブルのレコードを取得
+        sales = Sales.objects.filter(product_id=request.data['product']).aggregate(quantity_sum=Coalesce(Sum('quantity'), 0)) # 卸しテーブルのレコードを取得
+
+        # 在庫が売る分の数量を超えている場合はエラーレスポンスを返す
+        if purchase['quantity_sum'] < (sales['quantity_sum'] + int(request.data['quantity'])):
+            raise BusinessException('在庫数量を超過することはできません')
+
+        serializer.save()
+        return Response(serializer.data, status.HTTP_201_CREATED)
 class InventoryView(APIView):
     # 仕入れ・売上情報を取得する
     def get(self, request, id=None, format=None):
@@ -78,11 +107,8 @@ class InventoryView(APIView):
             return Response(serializer.data, status.HTTP_400_BAD_REQUEST)
         else:
             # UNIONするために、それぞれフィールド名を再定義している
-            purchase = Purchase.objects.filter(product_id=id).prefetch_related('product').values(
-                "id", "quantity", type=Value('1'), date=F('purchase_date'),unit=F('product__price'))
-            sales = Sales.objects.filter(product_id=id).prefetch_related('product').values(
-                "id", "quantity", type=Value('2'), date=F('sales_date'),
-            unit=F('product__price'))
+            purchase = Purchase.objects.filter(product_id=id).prefetch_related('product').values("id", "quantity", type=Value('1'), date=F('purchase_date'),unit=F('product__price'))
+            sales = Sales.objects.filter(product_id=id).prefetch_related('product').values("id", "quantity", type=Value('2'), date=F('sales_date'),unit=F('product__price'))
             queryset = purchase.union(sales).order_by(F("date"))
             serializer = InventorySerializer(queryset, many=True)
             return Response(serializer.data, status.HTTP_200_OK)
