@@ -6,7 +6,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Product, Purchase, Sales
-from .serializers import InventorySerializer, ProductSerializer
+from .serializers import InventorySerializer, ProductSerializer, PurchaseSerializer, SaleSerializer
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication

@@ -78,13 +78,14 @@ export default function PagePage({ params }: {
         axios.get(`/api/inventory/inventories/${params.id}`)
             .then((response) => {
                 const inventoryData: InventoryData[] = [];
-                let inventory = 0;
+                let key: number = 1;
+                let inventory: number = 0;
 
-                response.data.forEach((e) => {
+                response.data.forEach((e: InventoryData) => {
                     // 売るときは在庫数から引く
                     inventory += e.type === 1 ? e.quantity : e.quantity * -1;
                     const newElement = {
-                        id: e.id,
+                        id: key++,
                         type: e.type,
                         date: e.date,
                         unit: e.unit,
