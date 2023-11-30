@@ -1,6 +1,7 @@
 version: "3.8"
 services:
   frontend:
+    container_name: frontend #コンテナ名を指定
     build:
       context: frontend
     tty: true
@@ -13,10 +14,11 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
   backend:
+    container_name: backend #コンテナ名を指定
     build:
       context: backend
       args:
-        - environment_name=development #環境変数を指定
+        - environment_name=production #環境変数を指定。本番用のbackend/config/settings/production.pyを参照する
     tty: true
     volumes:
       - ./backend:/backend
@@ -27,6 +29,7 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
   db:
+    container_name: db #コンテナ名を指定
     image: mysql:8
     command:
       --collation-server=utf8mb4_0900_bin
