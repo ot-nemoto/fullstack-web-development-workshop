@@ -12,4 +12,4 @@ ADD . /code/
 RUN pip install -r requirements.lock
 
 # Djangoを起動
-ENTRYPOINT python manage.py runserver --settings config.settings.${environment}
+ENTRYPOINT python manage.py runserver 0.0.0.0:8000 --settings config.settings.${environment}
