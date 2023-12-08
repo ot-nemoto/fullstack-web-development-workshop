@@ -18,7 +18,7 @@ import {
     Toolbar,
     Typography,
 } from "@mui/material";
-
+import { Logout as LogoutIcon, Menu as MenuIcon } from "@mui/icons-material";
 declare module "@mui/material/styles" {
     // 指定を単純にするためにモバイルとPCの2つに限定する
     interface BreakpointOverrides {
@@ -40,9 +40,6 @@ const defaultTheme = createTheme({
         },
     },
 });
-
-import { Logout as LogoutIcon, Menu as MenuIcon } from "@mui/icons-material";
-
 export default function InventoryLayout({
     children,
 }: {
@@ -119,6 +116,7 @@ export default function InventoryLayout({
                         p: 3,
                         // AppBarと被るため下にずらしている
                         marginTop: "64px",
+                        width: "100%",
                         background: "white",
                     }}
                 >
@@ -130,7 +128,6 @@ export default function InventoryLayout({
                         width: '100%',
                         position: 'fixed',
                         textAlign: 'center',
-                        left: 0,
                         bottom: 0,
                         background: "#1976d2",
                     }}

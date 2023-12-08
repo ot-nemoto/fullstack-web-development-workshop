@@ -1,11 +1,12 @@
 'use client'
 
-"use client";
-
 import {
+    Alert,
+    AlertColor,
     Box,
     Button,
     Paper,
+    Snackbar,
     Table,
     TableBody,
     TableCell,
@@ -57,7 +58,18 @@ export default function PagePage({ params }: {
     const [data, setData] = useState<Array<InventoryData>>([]);
     // submit時のactionを分岐させる
     const [action, setAction] = useState<string>("");
-
+    const [open, setOpen] = useState(false);
+    const [severity, setSeverity] = useState<AlertColor>('success');
+    const [message, setMessage] = useState('');
+    const result = (severity: AlertColor, message: string) => {
+        setOpen(true);
+        setSeverity(severity);
+        setMessage(message);
+    };
+    
+    const handleClose = (event: any, reason: any) => {
+        setOpen(false);
+    };
     useEffect(() => {
         const selectedProduct: ProductData = productsData.find(v => v.id == params.id) ?? {
             id: 0,
@@ -67,7 +79,7 @@ export default function PagePage({ params }: {
           };
         setProduct(selectedProduct);
         setData(inventoriesData);
-    }, [])
+    }, [open])
 
     const onSubmit = (event: any): void => {
         const data: FormData = {
@@ -88,15 +100,18 @@ export default function PagePage({ params }: {
 
     // 仕入れ・卸し処理
     const handlePurchase = (data: FormData) => {
-        alert("作成完了");
+        result('success', '商品を仕入れました')
     };
 
     const handleSell = (data: FormData) => {
-        alert("作成完了");
+        result('success', '商品を卸しました')
     };
 
     return (
         <>
+            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+                <Alert severity={severity}>{message}</Alert>
+            </Snackbar>
             <Typography variant="h5">商品在庫管理</Typography>
             <Typography variant="h6">在庫処理</Typography>
             <Box component="form" onSubmit={handleSubmit(onSubmit)}>
