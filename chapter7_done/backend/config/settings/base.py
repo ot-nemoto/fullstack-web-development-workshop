@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "api.hello_db",
     "api.inventory",
+    "batch",
 ]
 
 MIDDLEWARE = [
