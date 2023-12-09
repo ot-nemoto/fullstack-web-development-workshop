@@ -1,10 +1,14 @@
 'use client'
 
+import axios from "../../../plugins/axios";
 import {
+    Alert,
+    AlertColor,
     Box,
     Button,
     IconButton,
     Paper,
+    Snackbar,
     Table,
     TableBody,
     TableCell,
@@ -24,7 +28,6 @@ import {
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import productsData from "./sample/dummy_products.json";
 
 type ProductData = {
     id: number | null;
@@ -43,10 +46,26 @@ export default function Page() {
 
     // 読込データを保持
     const [data, setData] = useState<Array<ProductData>>([]);
+    const [open, setOpen] = useState(false);
+    const [severity, setSeverity] = useState<AlertColor>('success');
+    const [message, setMessage] = useState('');
+    const result = (severity: AlertColor, message: string) => {
+        setOpen(true);
+        setSeverity(severity);
+        setMessage(message);
+    };
+
+    const handleClose = (event: any, reason: any) => {
+        setOpen(false);
+    };
 
     useEffect(() => {
-        setData(productsData);
-    }, [])
+        axios.get('/api/inventory/products')
+            .then((res) => res.data)
+            .then((data) => {
+                setData(data)
+        })
+    }, [open])
 
     // 登録データを保持
     const [id, setId] = useState<number | null>(0);
@@ -86,8 +105,12 @@ export default function Page() {
     };
     const handleAddCancel = () => {
         setId(0);
-        };
-        const handleAdd = (data: ProductData) => {
+    };
+
+    const handleAdd = (data: ProductData) => {
+        axios.post("/api/inventory/products", data).then((response) => {
+            result('success', '商品が登録されました')
+        });
         setId(0);
     };
 
@@ -105,14 +128,23 @@ export default function Page() {
         setId(0);
     };
     const handleEdit = (data: ProductData) => {
+        axios.put(`/api/inventory/products/${data.id}`, data).then((response) => {
+            result('success', '商品が更新されました')
+        });
         setId(0);
     };
     const handleDelete = (id: number) => {
+        axios.delete(`/api/inventory/products/${id}`).then((response) => {
+            result('success', '商品が削除されました')
+        });
         setId(0);
     };
 
     return (
         <>
+            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+                <Alert severity={severity}>{message}</Alert>
+            </Snackbar>
             <Typography variant="h5">商品一覧</Typography>
             <Button
                 variant="contained"

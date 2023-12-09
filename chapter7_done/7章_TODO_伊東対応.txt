@@ -1,2 +1,0 @@
-chapter6_doneの前にchapter7_doneを先行して対応したので差分が発生している
-chapter6_doneの差分を取り込む必要がある

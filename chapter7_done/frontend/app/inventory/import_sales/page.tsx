@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import axios from '../../../plugins/axios';
 import {
@@ -61,7 +60,6 @@ export default function Page() {
     };
 
     const [data, setData] = useState([])
-
     useEffect(() => {
         axios.get('/api/inventory/summary')
             .then((res) => res.data)
@@ -85,20 +83,19 @@ export default function Page() {
         const params = {
             file: fileAsync
         }
-
         axios.post(`/api/inventory/async`, params, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         })
-        .then(function (response) {
-            console.log(response)
-            result('success', '非同期ファイルが登録されました')
-        })
-        .catch(function (error) {
-            console.log(error)
-            result('error', '非同期ファイルの登録に失敗しました')
-        })
+            .then(function (response) {
+                console.log(response)
+                result('success', '非同期ファイルが登録されました')
+            })
+            .catch(function (error) {
+                console.log(error)
+                result('error', '非同期ファイルの登録に失敗しました')
+            })
     })
 
     return (
@@ -111,11 +108,6 @@ export default function Page() {
                 <Typography variant="subtitle1">同期でファイル取込</Typography>
                 <MuiFileInput value={fileSync} onChange={onChangeFileSync} />
                 <Button variant="contained" onClick={doAddSync}>登録</Button>
-            </Box>
-            <Box m={2}>
-                <Typography variant="subtitle1">非同期でファイル取込</Typography>
-                <MuiFileInput value={fileAsync} onChange={onChangeFileAsync} />
-                <Button variant="contained" onClick={doAddAsync}>登録</Button>
             </Box>
             <Box m={2}>
                 <Typography variant="subtitle1">年月ごとの売上数集計</Typography>
@@ -137,6 +129,11 @@ export default function Page() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+            </Box>
+            <Box m={2}>
+                <Typography variant="subtitle1">非同期でファイル取込</Typography>
+                <MuiFileInput value={fileAsync} onChange={onChangeFileAsync} />
+                <Button variant="contained" onClick={doAddAsync}>登録</Button>
             </Box>
         </Box>
     )
