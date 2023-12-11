@@ -1,0 +1,74 @@
+本書の中でよく使用するコマンドや手順をまとめています。
+
+
+■Ubuntu（WSL2）でVS Codeを起動する（frontend）【第3章以降】
+cd {frontendのディレクトリ}
+code .
+
+
+■Ubuntu（WSL2）でVS Codeを起動する（backend）【第3章以降】
+cd {backendのディレクトリ}
+code .
+
+
+■VSCode（frontend）のターミナルでfrontendを起動する【第3章以降】
+yarn
+yarn dev
+
+
+■VSCode（backend）のターミナルでbackendを起動する【第3章以降】
+python manage.py runserver --settings config.settings.development
+
+
+■データベースを作成する【第2章以降】
+【第2章で紹介した方法】MySQL Workbenchの「スキーマの作成」にて、「app」というデータベース名を作成する
+【第7章で紹介した方法】SQLで「CREATE DATABASE app;」を実行する
+
+
+■データベースを削除する【第7章以降】
+【第7章で紹介した方法】SQLで「DROP DATABASE app;」を実行する
+
+
+■VSCode（backend）のターミナルでマイグレーションファイルを作成する【第4章以降】
+python manage.py makemigrations --settings config.settings.development
+
+
+■VSCode（backend）のターミナルでマイグレーションを実行する【第4章以降】
+python manage.py migrate --settings config.settings.development
+
+
+■VSCode（backend）のターミナルでログインユーザ（スーパーユーザ）を作成する【第6章以降】
+python manage.py createsuperuser --username=t-yamada --email=t-yamada@example.com --settings config.settings.development
+Password: password
+Password (again): password
+Bypass password validation and create user anyway? [y/N]: y
+
+
+■ログインする【第6章以降】
+http://localhost:3000/login
+ユーザ名：t-yamada
+パスワード：password
+
+
+■商品を追加する【第5章以降】
+ログインする
+商品一覧画面を開く
+「商品を追加する」ボタンを押下する
+商品名、単価、説明を入力する
+「登録する」ボタンを押下する
+
+
+■売上一括登録（同期）を行う【第7章以降】
+ログインする
+売上一括登録画面を開く
+「同期でファイル取込」でsales_data.csvを指定して「登録」ボタンを押下する
+
+※sales_data.csvに含まれる商品について、事前に「商品を追加する」を実施しておく必要がある
+
+■売上一括登録（非同期）を行う【第7章以降】
+ログインする
+売上一括登録画面を開く
+「非同期でファイル取込」でsales_data.csvを指定して「登録」ボタンを押下する
+VSCode（backend）のターミナルで「python manage.py import_sales --settings config.settings.development」を実行し、非同期ファイルをバッチ処理する
+
+※sales_data.csvに含まれる商品について、事前に「商品を追加する」を実施しておく必要がある
