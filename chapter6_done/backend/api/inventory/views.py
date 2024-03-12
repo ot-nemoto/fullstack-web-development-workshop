@@ -11,6 +11,7 @@ from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
+from api.inventory.authentication import RefreshJWTAuthentication
 
 class ProductView(APIView):
 
@@ -138,7 +139,7 @@ class LoginView(APIView):
         return Response({'errMsg': 'ユーザーの認証に失敗しました'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class RetryView(APIView):
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [RefreshJWTAuthentication]
     permission_classes = []
 
     def post(self, request):

@@ -33,7 +33,7 @@ axios_instance.interceptors.response.use(
     if (originalConfig.url === "/api/inventory/login") {
       return Promise.reject(error);
     }
-    axios_instance
+    return axios_instance
       .post("/api/inventory/retry", { refresh: "" })
       .then((response) => {
         return axios_instance(originalConfig);
