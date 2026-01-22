@@ -1,5 +1,0 @@
-djangorestframework
-mysqlclient
-djangorestframework-simplejwt
-timedelta
-pandas
