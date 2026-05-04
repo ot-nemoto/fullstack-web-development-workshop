@@ -283,6 +283,7 @@ export interface Book {
 export interface Loan {
     id: number
     book: number
+    book_detail: Book  // LoanSerializer が BookSerializer をネストして返す詳細情報
     user: number
     loan_date: string
     due_date: string
