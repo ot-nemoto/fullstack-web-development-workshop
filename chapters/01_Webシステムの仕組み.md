@@ -170,7 +170,7 @@ graph TB
 
 開発中はすべてローカル（自分のPC）で動きます。ブラウザから `localhost:3000` にアクセスするとNext.jsの画面が表示され、そこからDjangoの `localhost:8000` に対してAPIリクエストが飛び、DjangoがMySQLからデータを読み書きします。
 
-バックエンドとフロントエンドはそれぞれ独立したDevContainerとして動作します。Docker Composeでまとめて管理し、VSCodeウィンドウを2つ開いて開発します（Chapter 2で構築します）。
+DevContainerという仕組みによって、この開発環境をチーム全員が同じ状態で再現できます。バックエンドとフロントエンドはそれぞれ独立したDevContainerとして動作し、VSCodeウィンドウを2つ開いて開発します（Chapter 2で構築します）。
 
 ### 使用技術スタック
 
