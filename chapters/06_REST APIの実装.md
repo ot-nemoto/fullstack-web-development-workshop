@@ -129,11 +129,15 @@ class BookSerializer(serializers.ModelSerializer):
 
 
 class LoanSerializer(serializers.ModelSerializer):
+    book_detail = BookSerializer(source='book', read_only=True)
+    # source='book' で book フィールドの内容を BookSerializer で展開する。read_only=True で書き込み不可
+
     class Meta:
         model = Loan
         fields = [
             'id',
             'book',
+            'book_detail',
             'user',
             'loan_date',
             'due_date',
