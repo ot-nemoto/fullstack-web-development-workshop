@@ -87,6 +87,64 @@ def create_book(request):
 
 ---
 
+## Issue規約
+
+### タイトル
+
+```
+[Ch.X] 問題の内容を簡潔に
+[Ch.X/Ch.Y] 複数章にまたがる問題
+```
+
+### ラベル
+
+| ラベル | 用途 |
+|--------|------|
+| `bug` | コードが動かない・説明が矛盾している |
+| `documentation` | 誤字・説明不足・執筆ルール違反 |
+
+### マイルストーン
+
+レビュー単位でマイルストーンを作成し、該当する全Issueに設定する。
+命名規則：`Review #N`（例：`Review #1`）
+
+---
+
+## PR規約
+
+### ブランチ命名
+
+```
+fix/{マイルストーン}-{内容}
+```
+
+例：`fix/review1-typos-imports`
+
+### PRタイトル
+
+変更内容を英語で簡潔に記述する。
+
+例：`Fix typo and missing import in Ch.9`
+
+### PR本文テンプレート
+
+```markdown
+## Summary
+
+- 変更内容を箇条書きで記述する
+
+## Closes
+
+- closes #X
+- closes #Y
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+```
+
+`## Closes` セクションは必須。マージ時にIssueが自動クローズされる。
+
+---
+
 ## 技術スタック
 
 | 項目 | 内容 |
