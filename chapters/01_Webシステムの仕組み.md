@@ -153,9 +153,13 @@ graph LR
 graph TB
     Browser["🌐 ブラウザ\nlocalhost:3000にアクセス"]
 
-    subgraph DC["DevContainer（開発環境）"]
-        FE["Next.js\nフロントエンド\nlocalhost:3000"]
-        BE["Django\nバックエンド\nlocalhost:8000"]
+    subgraph DC["Docker Compose（開発環境）"]
+        subgraph FE_DC["DevContainer: frontend"]
+            FE["Next.js\nフロントエンド\nlocalhost:3000"]
+        end
+        subgraph BE_DC["DevContainer: backend"]
+            BE["Django\nバックエンド\nlocalhost:8000"]
+        end
         DB[("MySQL\nデータベース\nlocalhost:3306")]
     end
 
@@ -166,7 +170,7 @@ graph TB
 
 開発中はすべてローカル（自分のPC）で動きます。ブラウザから `localhost:3000` にアクセスするとNext.jsの画面が表示され、そこからDjangoの `localhost:8000` に対してAPIリクエストが飛び、DjangoがMySQLからデータを読み書きします。
 
-DevContainerという仕組みによって、この開発環境をチーム全員が同じ状態で再現できます（Chapter 2で構築します）。
+DevContainerという仕組みによって、この開発環境をチーム全員が同じ状態で再現できます。バックエンドとフロントエンドはそれぞれ独立したDevContainerとして動作し、VSCodeウィンドウを2つ開いて開発します（Chapter 2で構築します）。
 
 ### 使用技術スタック
 
