@@ -119,6 +119,18 @@ DATABASES = {
 }
 ```
 
+続けて、`docker-compose.yml` の `backend` サービスに DB 接続用の環境変数を追加します。
+
+```yaml
+services:
+  backend:
+    environment:
+      - DB_HOST=db
+      - DB_NAME=library_db
+      - DB_USER=library_user
+      - DB_PASSWORD=library_password
+```
+
 ローカルでは `docker-compose.yml` の環境変数がそのまま使われ、CI ではワークフロー内で設定した環境変数が使われます。
 
 ### 🛠️ Djangoテスト用ワークフローを作成する
@@ -240,6 +252,7 @@ jobs:
 git add .github/workflows/django.yml
 git add .github/workflows/nextjs.yml
 git add backend/config/settings.py
+git add docker-compose.yml
 git commit -m "Add GitHub Actions workflows"
 git push origin feature/add-tests
 ```
