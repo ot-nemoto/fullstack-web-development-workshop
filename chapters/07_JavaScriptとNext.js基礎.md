@@ -195,6 +195,26 @@ export default function Counter() {
 
 > **Server ComponentとClient Component**：Next.jsのコンポーネントはデフォルトで**Server Component**（サーバー側で実行）です。`useState` などのブラウザの機能を使う場合は、ファイル先頭に `'use client'` を宣言して**Client Component**として使います。
 
+### 🛠️ Counter を page.tsx に追加して動作確認する
+
+`Counter` をブラウザで確認するため、`frontend/src/app/page.tsx` に一時的に追加します。
+
+```tsx
+import Counter from '@/components/Counter'
+
+export default function Home() {
+    return (
+        <main>
+            <Counter />
+        </main>
+    )
+}
+```
+
+`http://localhost:3000/` を開き、**+1** ボタンをクリックするたびにカウントが増えることを確認してください。
+
+確認できたら `Counter` の import と `<Counter />` を削除しておきます。この `Counter.tsx` 自体は次節以降で参照しないため、削除しても構いません。
+
 ## 7-4 コンポーネント構成の設計
 
 ### 画面をコンポーネントに分割する考え方
@@ -309,7 +329,7 @@ export const mockBooks: Book[] = [
 
 ### 🛠️ 一覧表示コンポーネントを実装する
 
-`frontend/src/components/BookCard.tsx` を作成します。
+7-3 で作成した `frontend/src/components/BookCard.tsx` を以下のように書き換えます。
 
 ```tsx
 import { Book } from '@/types'

@@ -221,7 +221,7 @@ class Loan(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
 
     def __str__(self):
-        return f"{self.user.username} - {self.book.title}"
+        return f"{self.user.username} - {self.book.title}"  # f"" はf文字列：{} の中に変数を埋め込める
 ```
 
 ### 🛠️ ForeignKeyでリレーションを定義する
