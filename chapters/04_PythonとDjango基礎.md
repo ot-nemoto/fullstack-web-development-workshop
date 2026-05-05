@@ -36,7 +36,7 @@ backend/
 
 ### 主要ファイルの役割
 
-**`manage.py`** はDjangoの操作をコマンドで実行するためのファイルです。Chapter 3で使った `python manage.py runserver` や、後の章で使う `python manage.py migrate` などはすべてこのファイルを通して実行します。
+**`manage.py`** はDjangoの「何でも屋ツール」です。サーバーの起動・データベースの操作・テストの実行など、開発中に使うコマンドはすべてこのファイルを通して実行します。Chapter 3で使った `python manage.py runserver` や、後の章で使う `python manage.py migrate` などがその例です。
 
 **`config/settings.py`** はシステム全体の設定ファイルです。データベースの接続先、インストールされているアプリ一覧、デバッグモードのオン/オフなどを定義します。次の節で詳しく読みます。
 
