@@ -109,10 +109,10 @@ import os    # os モジュールは Python 標準ライブラリ。環境変数
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME', 'library_db'),
+        'NAME': os.environ.get('DB_NAME', 'library'),
         # os.environ.get('変数名', デフォルト値) は環境変数がなければデフォルト値を使う
-        'USER': os.environ.get('DB_USER', 'library_user'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'library_password'),
+        'USER': os.environ.get('DB_USER', 'root'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'password'),
         'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
         'PORT': os.environ.get('DB_PORT', '3306'),
     }
@@ -126,9 +126,9 @@ services:
   backend:
     environment:
       - DB_HOST=db
-      - DB_NAME=library_db
-      - DB_USER=library_user
-      - DB_PASSWORD=library_password
+      - DB_NAME=library
+      - DB_USER=root
+      - DB_PASSWORD=password
 ```
 
 ローカルでは `docker-compose.yml` の環境変数がそのまま使われ、CI ではワークフロー内で設定した環境変数が使われます。
@@ -142,9 +142,9 @@ name: Django Tests
 
 on:
   push:
-    branches: [develop, main]
+    branches: [master]
   pull_request:
-    branches: [develop, main]
+    branches: [master]
 
 jobs:
   test:
@@ -154,10 +154,8 @@ jobs:
       db:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: rootpassword
-          MYSQL_DATABASE: library_db
-          MYSQL_USER: library_user
-          MYSQL_PASSWORD: library_password
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: library
         ports:
           - 3306:3306
         options: >-
@@ -167,9 +165,9 @@ jobs:
           --health-retries=5
 
     env:
-      DB_NAME: library_db
-      DB_USER: library_user
-      DB_PASSWORD: library_password
+      DB_NAME: library
+      DB_USER: root
+      DB_PASSWORD: password
       DB_HOST: 127.0.0.1
       DB_PORT: 3306
 
@@ -206,9 +204,9 @@ name: Next.js Build and Test
 
 on:
   push:
-    branches: [develop, main]
+    branches: [master]
   pull_request:
-    branches: [develop, main]
+    branches: [master]
 
 jobs:
   build:
