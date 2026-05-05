@@ -43,23 +43,39 @@ jobs:                # 何を実行するか
       - run: echo "hello"           # シェルコマンドを実行
 ```
 
-## 13-2 featureブランチとプルリクエスト
+## 13-2 ブランチ戦略とプルリクエスト
 
-### featureブランチとは
+### mainブランチとdevelopブランチ
 
-本書では `master` ブランチを安定版として、新機能の追加には `feature/xxx` ブランチを使います。
+本書では2つのブランチを使います。
+
+| ブランチ | 役割 |
+|----------|------|
+| `master` | 動作確認済みの安定版。本番相当 |
+| `develop` | 開発中のコードを統合するブランチ |
+
+新機能を追加するときは `develop` から `feature/xxx` ブランチを切り、完成したら `develop` にマージします。CI はこのマージのタイミングでテストを実行します。
 
 ```
-master ─────────────────────────→ 安定版
+master ──────────────────────────────→ 安定版
+                  ↑ merge（動作確認後）
+develop ──────────────────────────→ 統合ブランチ
          ↑ merge
 feature/add-tests ──→ コミット → PR作成 → CI実行 → マージ
 ```
 
-新機能を追加するときは `master` から `feature/xxx` ブランチを切り、完成したら `master` にマージします。CI はこの PR のタイミングでテストを実行します。
+### 🛠️ developブランチを作成する
+
+`develop` ブランチを作成してチェックアウトします。
+
+```bash
+git checkout -b develop
+git push origin develop
+```
 
 ### 🛠️ featureブランチを作成する
 
-新しいブランチを作成してチェックアウトします。
+`develop` ブランチから `feature/add-tests` ブランチを作成します。
 
 ```bash
 git checkout -b feature/add-tests
@@ -80,7 +96,7 @@ git push origin feature/add-tests
 
 GitHub のリポジトリページを開き、**Compare & pull request** ボタンをクリックします。
 
-- **base**: `master`
+- **base**: `develop`
 - **compare**: `feature/add-tests`
 - タイトル：`テストを追加する`
 
@@ -137,9 +153,9 @@ name: Django Tests
 
 on:
   push:
-    branches: [master]
+    branches: [develop]
   pull_request:
-    branches: [master]
+    branches: [develop]
 
 jobs:
   test:
@@ -199,9 +215,9 @@ name: Next.js Build and Test
 
 on:
   push:
-    branches: [master]
+    branches: [develop]
   pull_request:
-    branches: [master]
+    branches: [develop]
 
 jobs:
   build:
