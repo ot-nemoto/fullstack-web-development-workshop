@@ -251,80 +251,6 @@ jobs:
           NEXT_PUBLIC_API_URL: http://localhost:8000
 ```
 
-### 🛠️ スケジュールトリガーでバッチを定期実行する
-
-`on: push` や `on: pull_request` はコードの変更を契機に動くトリガーですが、`on: schedule` を使うと**定時実行**ができます。指定形式は **cron 式**（5つの数字でいつ実行するかを表す）です。
-
-```
-┌─ 分（0–59）
-│  ┌─ 時（0–23）
-│  │  ┌─ 日（1–31）
-│  │  │  ┌─ 月（1–12）
-│  │  │  │  ┌─ 曜日（0–7、0と7は日曜）
-│  │  │  │  │
-0  2  *  *  *   → 毎日午前2時に実行
-```
-
-`.github/workflows/batch.yml` を新規作成します。
-
-```yaml
-name: Batch Jobs
-
-on:
-  schedule:
-    - cron: '0 2 * * *'  # 毎日 UTC 2:00（日本時間 11:00）に実行する
-
-jobs:
-  update-overdue-loans:
-    runs-on: ubuntu-latest
-
-    services:
-      db:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: library
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
-    env:
-      DB_NAME: library
-      DB_USER: root
-      DB_PASSWORD: password
-      DB_HOST: 127.0.0.1
-      DB_PORT: 3306
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install dependencies
-        run: |
-          cd backend
-          pip install -r requirements.txt
-
-      - name: Run migrations
-        run: |
-          cd backend
-          python manage.py migrate
-
-      - name: Update overdue loans
-        run: |
-          cd backend
-          python manage.py update_overdue_loans  # Chapter 12 で作成したバッチコマンドを実行する
-```
-
-> **GitHub Actions のスケジュール実行の注意点**：`on: schedule` は UTC（協定世界時）で動きます。日本時間（JST）は UTC+9 のため、深夜0時（JST）に実行したい場合は `cron: '0 15 * * *'`（前日UTC 15:00）と指定します。また、パブリックリポジトリのスケジュールトリガーはリポジトリへのアクティビティがない期間が続くと自動で無効化されることがあります。
-
 ## 14-4 CIの動作を確認する
 
 ### 🛠️ ワークフローをプッシュしてCIを動かす
@@ -393,7 +319,6 @@ git push origin feature/add-tests
 - サービスコンテナを使って CI 環境でも MySQL を動かした
 - `os.environ.get()` で環境変数を読み取ることで、ローカルと CI の設定を切り替えた
 - PR に CI を連携させることで、壊れたコードをメインブランチに混ぜにくくなる
-- `on: schedule` と cron 式でバッチを定期実行する仕組みを構築した
 
 ---
 
