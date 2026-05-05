@@ -380,9 +380,47 @@ export default function BooksPage() {
 }
 ```
 
+### 🛠️ Tailwind CSS をインストールする
+
+Tailwind CSS はクラス名を HTML に直接書くスタイリング方法です。まずインストールと設定を行います。
+
+フロントエンドウィンドウのターミナルで以下を実行します。
+
+```bash
+npm install -D tailwindcss @tailwindcss/postcss postcss
+```
+
+`frontend/postcss.config.mjs` を新規作成します。
+
+```js
+const config = {
+    plugins: {
+        '@tailwindcss/postcss': {},
+    },
+}
+
+export default config
+```
+
+`frontend/src/app/globals.css` の先頭に1行追加します。
+
+```css
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: sans-serif;
+}
+```
+
 ### 🛠️ Tailwind CSSでスタイリングする
 
-上記のコードではすでに Tailwind CSS のクラスを使っています。Tailwind CSS はクラス名を HTML に直接書くスタイリング方法です。
+上記のコードではすでに Tailwind CSS のクラスを使っています。主なクラスの意味は次のとおりです。
 
 | クラス | 意味 |
 |--------|------|
