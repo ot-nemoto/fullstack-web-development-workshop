@@ -223,7 +223,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd frontend
-          npm ci
+          npm install
 
       - name: Run tests
         run: |
@@ -237,8 +237,6 @@ jobs:
         env:
           NEXT_PUBLIC_API_URL: http://localhost:8000
 ```
-
-`npm ci` は `npm install` と同じ動作ですが、CI 環境向けに最適化されています。`package-lock.json` の内容を厳密に再現するため、CI では `npm install` ではなく `npm ci` を使うのが慣例です。
 
 ## 13-4 CIの動作を確認する
 
