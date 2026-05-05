@@ -51,20 +51,31 @@ jobs:                # 何を実行するか
 
 | ブランチ | 役割 |
 |----------|------|
-| `main` | 動作確認済みの安定版。本番相当 |
+| `master` | 動作確認済みの安定版。本番相当 |
 | `develop` | 開発中のコードを統合するブランチ |
 
 新機能を追加するときは `develop` から `feature/xxx` ブランチを切り、完成したら `develop` にマージします。CI はこのマージのタイミングでテストを実行します。
 
-### 🛠️ featureブランチを作成する
-
-現在 `develop` ブランチにいることを確認します。
-
-```bash
-git branch
+```
+master ──────────────────────────────→ 安定版
+                  ↑ merge（動作確認後）
+develop ──────────────────────────→ 統合ブランチ
+         ↑ merge
+feature/add-tests ──→ コミット → PR作成 → CI実行 → マージ
 ```
 
-新しいブランチを作成してチェックアウトします。
+### 🛠️ developブランチを作成する
+
+`develop` ブランチを作成してチェックアウトします。
+
+```bash
+git checkout -b develop
+git push origin develop
+```
+
+### 🛠️ featureブランチを作成する
+
+`develop` ブランチから `feature/add-tests` ブランチを作成します。
 
 ```bash
 git checkout -b feature/add-tests
@@ -142,9 +153,9 @@ name: Django Tests
 
 on:
   push:
-    branches: [master]
+    branches: [develop]
   pull_request:
-    branches: [master]
+    branches: [develop]
 
 jobs:
   test:
@@ -204,9 +215,9 @@ name: Next.js Build and Test
 
 on:
   push:
-    branches: [master]
+    branches: [develop]
   pull_request:
-    branches: [master]
+    branches: [develop]
 
 jobs:
   build:
