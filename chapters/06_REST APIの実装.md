@@ -90,14 +90,18 @@ INSTALLED_APPS = [
 
 ### Serializerの役割
 
-**Serializer**はモデルのインスタンスとJSONの相互変換を担当します。
+**Serializer**はPythonのモデルとJSONの間の**翻訳機**です。
+
+PythonのオブジェクトをそのままブラウザへHTTPで送ることはできません。ブラウザが扱えるJSON（テキスト形式）に変換する必要があります。逆に、ブラウザから送られてきたJSONをPythonのモデルに変換するのもSerializerの仕事です。
 
 ```
 モデル（Python） ──Serializer──→ JSON（APIレスポンス）
 JSON（APIリクエスト） ──Serializer──→ モデル（Python）
 ```
 
-また、リクエストデータの**バリデーション**（入力値の検証）もSerializerが担当します。「ISBNが13文字以内か」「必須フィールドが空でないか」といったチェックがここで行われます。
+Serializerを使わずにViewで直接JSONを組み立てることも技術的には可能ですが、バリデーション（入力チェック）やエラーレスポンスを自分で書く必要があり、コードが複雑になります。Serializerを使うことで変換・バリデーション・エラーレスポンスをまとめて扱えます。
+
+リクエストデータの**バリデーション**（入力値の検証）もSerializerが担当します。「ISBNが13文字以内か」「必須フィールドが空でないか」といったチェックがここで行われます。
 
 ### 🛠️ ModelSerializerを実装する
 
@@ -225,6 +229,18 @@ urlpatterns = [
     path('api/', include(router.urls)),  # /api/ 以下にrouterで生成したURLを接続する
 ]
 ```
+
+`router.register()` を3行書くだけで、以下の全URLが自動生成されます。
+
+| URL | メソッド | 操作 |
+|-----|---------|------|
+| `/api/books/` | GET | 本の一覧取得 |
+| `/api/books/` | POST | 本の新規登録 |
+| `/api/books/{id}/` | GET | 特定の本の取得 |
+| `/api/books/{id}/` | PUT / PATCH | 特定の本の更新 |
+| `/api/books/{id}/` | DELETE | 特定の本の削除 |
+
+`/api/categories/` と `/api/loans/` も同じ5操作が生成されます。合計15エンドポイントが、Router への3行の登録だけで用意されました。
 
 ファイルを保存してDjangoを起動した状態で `http://localhost:8000/api/` にアクセスすると、DRFが提供するAPIブラウザ画面が表示されます。
 

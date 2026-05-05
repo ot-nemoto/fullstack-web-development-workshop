@@ -194,6 +194,16 @@ export default function Counter() {
 `setCount` を呼ぶと `count` が更新され、コンポーネントが再レンダリング（再描画）されます。
 
 > **Server ComponentとClient Component**：Next.jsのコンポーネントはデフォルトで**Server Component**（サーバー側で実行）です。`useState` などのブラウザの機能を使う場合は、ファイル先頭に `'use client'` を宣言して**Client Component**として使います。
+>
+> どちらを選ぶか迷ったときの判断基準：
+>
+> | 使いたいもの | 選択 |
+> |------------|------|
+> | `useState` / `useEffect` を使う | Client Component |
+> | ボタンのクリックやフォームのイベントを扱う | Client Component |
+> | APIデータを取得して表示するだけ | Server Component（デフォルト） |
+>
+> 迷ったら `'use client'` を宣言しても動きます。Server Componentのみの制約（サーバー側でのみ使えるAPIを使う等）がなくなるだけで、基本的な動作に支障はありません。
 
 ### 🛠️ Counter を page.tsx に追加して動作確認する
 
