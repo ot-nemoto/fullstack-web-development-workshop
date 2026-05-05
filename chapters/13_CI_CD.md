@@ -43,26 +43,21 @@ jobs:                # 何を実行するか
       - run: echo "hello"           # シェルコマンドを実行
 ```
 
-## 13-2 ブランチ戦略とプルリクエスト
+## 13-2 featureブランチとプルリクエスト
 
-### mainブランチとdevelopブランチ
+### featureブランチとは
 
-本書では2つのブランチを使います。
+本書では `master` ブランチを安定版として、新機能の追加には `feature/xxx` ブランチを使います。
 
-| ブランチ | 役割 |
-|----------|------|
-| `main` | 動作確認済みの安定版。本番相当 |
-| `develop` | 開発中のコードを統合するブランチ |
+```
+master ─────────────────────────→ 安定版
+         ↑ merge
+feature/add-tests ──→ コミット → PR作成 → CI実行 → マージ
+```
 
-新機能を追加するときは `develop` から `feature/xxx` ブランチを切り、完成したら `develop` にマージします。CI はこのマージのタイミングでテストを実行します。
+新機能を追加するときは `master` から `feature/xxx` ブランチを切り、完成したら `master` にマージします。CI はこの PR のタイミングでテストを実行します。
 
 ### 🛠️ featureブランチを作成する
-
-現在 `develop` ブランチにいることを確認します。
-
-```bash
-git branch
-```
 
 新しいブランチを作成してチェックアウトします。
 
@@ -85,7 +80,7 @@ git push origin feature/add-tests
 
 GitHub のリポジトリページを開き、**Compare & pull request** ボタンをクリックします。
 
-- **base**: `develop`
+- **base**: `master`
 - **compare**: `feature/add-tests`
 - タイトル：`テストを追加する`
 
