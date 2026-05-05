@@ -130,7 +130,8 @@
 
 > Chapter 4〜6：`backend/`のみ触る  
 > Chapter 7：`frontend/`のみ触る  
-> Chapter 8以降：両方触る（Chapter 12のみ `backend/` のみ触る）
+> Chapter 8〜11・13以降：両方触る  
+> Chapter 12：`backend/` のみ触る
 
 ---
 
