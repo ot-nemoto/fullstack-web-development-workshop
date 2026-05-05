@@ -203,9 +203,10 @@ Chapter 3で全層をhello worldレベルで繋いだ後、Chapter 4〜7で各�
 | Chapter 9 | 本の管理機能（CRUD）をフロントエンドで実装 |
 | Chapter 10 | 認証（ログイン・ログアウト） |
 | Chapter 11 | 貸出・返却機能の実装 |
-| Chapter 12 | テスト |
-| Chapter 13 | CI/CD |
-| Chapter 14 | 本番環境の概念 |
+| Chapter 12 | バッチ処理 |
+| Chapter 13 | テスト |
+| Chapter 14 | CI/CD |
+| Chapter 15 | 本番環境の概念 |
 
 ## まとめ
 

@@ -112,7 +112,7 @@ DATABASES = {
 SECRET_KEY = 'django-insecure-xxxx...'
 ```
 
-`SECRET_KEY` はセッションやトークンの生成に使われる秘密の文字列です。本番環境では外部に漏れないよう厳重に管理します（Chapter 14で扱います）。
+`SECRET_KEY` はセッションやトークンの生成に使われる秘密の文字列です。本番環境では外部に漏れないよう厳重に管理します（Chapter 15で扱います）。
 
 ```python
 DEBUG = True

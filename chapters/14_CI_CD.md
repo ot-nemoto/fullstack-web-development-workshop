@@ -1,4 +1,4 @@
-# Chapter 13：CI/CD with GitHub Actions
+# Chapter 14：CI/CD with GitHub Actions
 
 この章では、テストをプッシュのたびに自動で実行する仕組みを構築します。「コードを変えたらテストが自動で走る」状態を作ることで、チーム開発でも品質を保ちやすくなります。
 
