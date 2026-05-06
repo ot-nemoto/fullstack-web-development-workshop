@@ -2,6 +2,8 @@
 
 この章では、Chapter 5で定義したモデルをもとに、フロントエンドから呼び出せるREST APIを実装します。Django REST Framework（DRF）を使うと、Serializerによるデータ変換とViewSetによるCRUD処理を少ないコードで実現できます。
 
+> **この章が難しいと感じたら**：Serializer・ViewSet・Router は抽象的な概念で、初めて見ると理解しにくい章です。概念が理解しきれなくても、コードをコピーして先に進んで構いません。Chapter 8〜9 で実際にAPIを使いながら読み返すと理解しやすくなります。
+
 ## 6-1 RESTの概念
 
 ### RESTとは何か
