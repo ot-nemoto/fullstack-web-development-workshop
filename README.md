@@ -98,7 +98,6 @@
 - VSCode・ターミナル・Gitの基本操作を習得した
 - Dockerによって環境を統一する意味を理解した
 - DevContainerを起動し、GitHubに自分のリポジトリを作成してpushした
-- 🛠️ 変更をコミットしてpushする
 
 ---
 
