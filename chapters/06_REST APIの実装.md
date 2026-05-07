@@ -150,7 +150,8 @@ class LoanSerializer(serializers.ModelSerializer):
             'return_date',
             'status',
         ]
-        read_only_fields = ['loan_date', 'user']  # 自動セットするフィールドは読み取り専用にする
+        read_only_fields = ['loan_date', 'user']
+        # user はリクエストから受け取らず、Chapter 11 でログイン中のユーザーを自動セットする
 ```
 
 ### 🛠️ バリデーションを書く
@@ -246,70 +247,57 @@ urlpatterns = [
 
 ファイルを保存してDjangoを起動した状態で `http://localhost:8000/api/` にアクセスすると、DRFが提供するAPIブラウザ画面が表示されます。
 
-## 6-6 PostmanによるAPIの確認
+## 6-6 curlによるAPIの確認
 
-APIが正しく動いているか確認するために、**Postman**というツールを使います。ブラウザはGETリクエストしか簡単に送れませんが、PostmanはPOST・PUT・DELETEも含めてリクエストを自由に作成できます。
+APIが正しく動いているか確認します。ブラウザはGETリクエストしか送れないため、POST・PUT・DELETEの確認にはコマンドラインツールの **curl** を使います。
 
-### 🛠️ Postmanをインストールする
+> **補足**：**Postman**（https://www.postman.com/）はGUIで操作できるAPIテストツールです。視覚的に操作しやすく、チームでリクエストを共有する機能もあります。本書では開発コンテナ内で完結させるため、追加インストール不要の `curl` を使います。
 
-1. `https://www.postman.com/downloads/` にアクセスする
-2. OS に合わせたインストーラーをダウンロードする
-3. インストールして起動する
-4. アカウント登録を求められた場合は、スキップ（Skip and go to the app）を選択する
+`curl` はコマンドラインでHTTPリクエストを送るツールです。Linuxに標準で入っており、DevContainer内でそのまま使えます。
 
 ### 🛠️ 各エンドポイントにリクエストを送る
 
 **カテゴリを作成する（POST）**
 
-1. **New Request** をクリックする
-2. メソッドを `POST` に変更する
-3. URLに `http://localhost:8000/api/categories/` を入力する
-4. **Body** タブ → **raw** → **JSON** を選択する
-5. 以下のJSONを入力する
-
-```json
-{
-    "name": "プログラミング"
-}
+```bash
+curl -X POST http://localhost:8000/api/categories/ \
+  -H "Content-Type: application/json" \
+  -d '{"name": "プログラミング"}'
+# -X POST  : HTTPメソッドを指定する（省略するとGET）
+# -H       : リクエストヘッダーを指定する。JSONを送ることをサーバーに伝える
+# -d       : リクエストボディ（送信するデータ）を指定する
+# \        : コマンドが長い場合に改行して続きを書くための記号
 ```
 
-6. **Send** をクリックする
-
 ```json
-{
-    "id": 1,
-    "name": "プログラミング"
-}
+{"id":1,"name":"プログラミング"}
 ```
 
-HTTP 201 と上記レスポンスが返れば成功です。
+HTTP 201 のレスポンスが返れば成功です。
+
+> **補足**：curlの出力はJSONが1行で表示されます。読みにくいと感じたら、コマンドの末尾に ` | python -m json.tool` を加えると整形して表示できます。
 
 **本を登録する（POST）**
 
-```json
-{
-    "title": "実践フルスタックWeb開発ワークショップ",
-    "author": "山田太郎",
-    "publisher": "技術出版社",
-    "isbn": "9784000000010",
-    "category": 1,
-    "available_count": 3
-}
+```bash
+curl -X POST http://localhost:8000/api/books/ \
+  -H "Content-Type: application/json" \
+  -d '{"title": "実践フルスタックWeb開発ワークショップ", "author": "山田太郎", "publisher": "技術出版社", "isbn": "9784000000010", "category": 1, "available_count": 3}'
 ```
 
 **本の一覧を取得する（GET）**
 
-1. メソッドを `GET` に変更する
-2. URLを `http://localhost:8000/api/books/` にする
-3. **Send** をクリックする
+```bash
+curl http://localhost:8000/api/books/
+```
 
 登録した本がリストで返ってきます。
 
 ### APIを単体で確認してからフロントと繋ぐ習慣
 
-「フロントエンドで表示がおかしい」というとき、原因がAPIにあるのかフロントにあるのかを切り分けるのが重要です。Postmanを使えばAPIを単体で確認できるため、「APIは正しいのにフロントで表示がおかしい」なのか「そもそもAPIが間違ったデータを返している」なのかをすぐに判別できます。
+「フロントエンドで表示がおかしい」というとき、原因がAPIにあるのかフロントにあるのかを切り分けるのが重要です。curlを使えばAPIを単体で確認できるため、「APIは正しいのにフロントで表示がおかしい」なのか「そもそもAPIが間違ったデータを返している」なのかをすぐに判別できます。
 
-実装中はPostmanで動作確認してからフロントに繋ぐ習慣をつけておきましょう。
+実装中はcurlで動作確認してからフロントに繋ぐ習慣をつけておきましょう。
 
 ## まとめ
 
@@ -317,7 +305,7 @@ HTTP 201 と上記レスポンスが返れば成功です。
 - 図書館システムのAPIエンドポイントを設計した
 - DRFのModelSerializerでモデルとJSONの変換・バリデーションを実装した
 - ModelViewSetとRouterを使ってCRUD APIを実装した
-- PostmanでAPIを単体確認する習慣を身につけた
+- curlでAPIを単体確認する習慣を身につけた
 
 ### 🛠️ 変更をコミットしてpushする
 
