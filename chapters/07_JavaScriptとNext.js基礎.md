@@ -209,7 +209,9 @@ export default function Counter() {
 
 ### 🛠️ Counter を page.tsx に追加して動作確認する
 
-`Counter` をブラウザで確認するため、`frontend/src/app/page.tsx` に一時的に追加します。
+`Counter` をブラウザで確認するため、`frontend/src/app/page.tsx` を以下のように書き換えます。
+
+> **補足**：Chapter 3 で書いた Django API への fetch 処理は、この章では使いません。Chapter 8 で改めて API 接続を実装します。
 
 ```tsx
 import Counter from '@/components/Counter'
@@ -225,7 +227,19 @@ export default function Home() {
 
 `http://localhost:3000/` を開き、**+1** ボタンをクリックするたびにカウントが増えることを確認してください。
 
-確認できたら `Counter` の import と `<Counter />` を削除しておきます。この `Counter.tsx` 自体は次節以降で参照しないため、削除しても構いません。
+確認できたら、`page.tsx` を以下の状態に戻します。
+
+```tsx
+export default function Home() {
+    return (
+        <main>
+            <h1>図書館システム</h1>
+        </main>
+    )
+}
+```
+
+この `Counter.tsx` 自体は次節以降で参照しないため、削除しても構いません。
 
 ## 7-4 コンポーネント構成の設計
 
