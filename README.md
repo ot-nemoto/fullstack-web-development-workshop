@@ -75,9 +75,9 @@
 **2-3 Gitの概念とオーソドックスな使い方**
 - バージョン管理とは何か・なぜ必要か
 - Gitの基本概念（リポジトリ・コミット・ブランチ）
-- 🛠️ 基本的なワークフローを実行する（clone / add / commit / push / pull）
+- 🛠️ 基本的なワークフローを実行する（add / commit / push / pull）
 - ブランチの概念（main / feature ブランチ）
-- 🛠️ GitHubとリモートリポジトリを連携する
+- リモートリポジトリとGitHub
 
 **2-4 Dockerの概念**
 - 「自分のPCで動かない」問題
@@ -86,15 +86,18 @@
 
 **2-5 DevContainerの起動と確認**
 - DevContainerとは何か
-- 🛠️ プロジェクトをcloneする
+- 🛠️ Dev Containers拡張機能をインストールする
+- 🛠️ プロジェクトのファイルをダウンロードする
 - 🛠️ DevContainerを起動する
 - プロジェクト構造の確認
-- docker-compose.ymlの読み方（frontend / backend / db）
+- docker-compose.ymlの読み方（app / db）
+- 🛠️ Gitリポジトリを初期化する
+- 🛠️ GitHubに接続して自分のリポジトリを作る
 
 **まとめ**
 - VSCode・ターミナル・Gitの基本操作を習得した
 - Dockerによって環境を統一する意味を理解した
-- DevContainerを起動し、開発を始める準備が整った
+- DevContainerを起動し、GitHubに自分のリポジトリを作成してpushした
 
 ---
 
@@ -114,6 +117,7 @@
 - 🛠️ ブラウザでアクセスして確認する
 
 **3-4 DjangoからNext.jsへのデータ表示**
+- 🛠️ `library` アプリを作成する
 - 🛠️ DjangoにAPIエンドポイントを作る
 - 🛠️ Next.jsから呼び出して画面に表示する
 - 全層が繋がった状態の確認
