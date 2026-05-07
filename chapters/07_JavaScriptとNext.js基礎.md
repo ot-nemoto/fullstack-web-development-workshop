@@ -6,6 +6,20 @@ Chapter 7 では `frontend/` だけを触ります。バックエンドには一
 
 > **この章が難しいと感じたら**：TypeScript の型と React の概念が同時に登場する、情報量の多い章です。概念が理解しきれなくても、コードをコピーして先に進んで構いません。Chapter 8 以降で画面を作りながら読み返すと理解しやすくなります。
 
+### 🛠️ page.tsx を書き換える
+
+Chapter 6 で `/api/hello/` エンドポイントが削除されたため、Chapter 3 で書いた `page.tsx` のままでは `http://localhost:3000/` にアクセスするとエラーになります。`frontend/src/app/page.tsx` を以下のように書き換えます。
+
+```tsx
+export default function Home() {
+    return (
+        <main>
+            <h1>図書館システム</h1>
+        </main>
+    )
+}
+```
+
 ## 7-1 TypeScriptの必要性と基本
 
 ### JavaScriptの問題点
@@ -165,6 +179,8 @@ export default function BookCard({ title, author, availableCount }: BookCardProp
 ```tsx
 <BookCard title="実践フルスタックWeb開発" author="山田太郎" availableCount={3} />
 ```
+
+> **補足**：この `BookCard` は props の使い方を確認するための簡易版です。7-5 で実際のアプリ向けに書き直します。
 
 ### useStateで状態を管理する
 
