@@ -182,47 +182,6 @@ export default function BookCard({ title, author, availableCount }: BookCardProp
 
 > **補足**：この `BookCard` は props の使い方を確認するための簡易版です。7-5 で実際のアプリ向けに書き直します。
 
-### useStateで状態を管理する
-
-**useState**はコンポーネント内で変化するデータ（状態）を管理するための仕組みです。カウンターを例に構造を見てみましょう。
-
-```tsx
-'use client'  // useStateはClient Componentでしか使えないため宣言が必要
-
-import { useState } from 'react'  // reactからuseStateを読み込む
-
-export default function Counter() {
-    const [count, setCount] = useState(0)
-    // useState(初期値) は [現在の値, 値を更新する関数] を返す
-
-    return (
-        <div>
-            <p>カウント：{count}</p>
-            <button onClick={() => setCount(count + 1)}>
-                {/* onClick はクリック時に実行する関数を指定する */}
-                +1
-            </button>
-        </div>
-    )
-}
-```
-
-`setCount` を呼ぶと `count` が更新され、コンポーネントが再レンダリング（再描画）されます。
-
-> **Server ComponentとClient Component**：Next.jsのコンポーネントはデフォルトで**Server Component**（サーバー側で実行）です。`useState` などのブラウザの機能を使う場合は、ファイル先頭に `'use client'` を宣言して**Client Component**として使います。
->
-> どちらを選ぶか迷ったときの判断基準：
->
-> | 使いたいもの | 選択 |
-> |------------|------|
-> | `useState` / `useEffect` を使う | Client Component |
-> | ボタンのクリックやフォームのイベントを扱う | Client Component |
-> | APIデータを取得して表示するだけ | Server Component（デフォルト） |
->
-> 迷ったら `'use client'` を宣言しても動きます。Server Componentのみの制約（サーバー側でのみ使えるAPIを使う等）がなくなるだけで、基本的な動作に支障はありません。
-
-useStateを使った実際の機能は、7-5の本の一覧画面で実装します。
-
 ## 7-4 コンポーネント構成の設計
 
 ### 画面をコンポーネントに分割する考え方
@@ -366,38 +325,18 @@ export default function BookCard({ book }: BookCardProps) {
 }
 ```
 
-`frontend/src/app/books/page.tsx` を作成します。useState を使って「貸出可能のみ表示」フィルターを実装します。
+`frontend/src/app/books/page.tsx` を作成します。
 
 ```tsx
-'use client'
-
-import { useState } from 'react'
 import { mockBooks } from '@/data/mockBooks'
 import BookCard from '@/components/BookCard'
 
 export default function BooksPage() {
-    const [showAvailableOnly, setShowAvailableOnly] = useState(false)
-    // useState(false) は初期値 false の状態を作る
-
-    const filteredBooks = showAvailableOnly
-        ? mockBooks.filter((book) => book.available_count > 0)
-        // .filter() は配列から条件に合う要素だけを取り出して新しい配列を返す
-        : mockBooks
-
     return (
         <main className="container mx-auto p-8">
             <h1 className="text-2xl font-bold mb-6">本の一覧</h1>
-            <label className="flex items-center gap-2 mb-4">
-                <input
-                    type="checkbox"
-                    checked={showAvailableOnly}
-                    onChange={(e) => setShowAvailableOnly(e.target.checked)}
-                    // onChange はチェック状態が変わったときに実行する
-                />
-                貸出可能のみ表示
-            </label>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredBooks.map((book) => (
+                {mockBooks.map((book) => (
                     // .map() は配列の各要素に対して処理を実行して新しい配列を返す
                     <BookCard key={book.id} book={book} />
                     // key はReactがリスト要素を識別するために必要な一意の値
@@ -407,8 +346,6 @@ export default function BooksPage() {
     )
 }
 ```
-
-チェックボックスをオンにすると `showAvailableOnly` が `true` に更新され、コンポーネントが再レンダリングされて貸出可能な本だけに絞り込まれます。
 
 ### 🛠️ Tailwind CSS をインストールする
 
@@ -470,8 +407,8 @@ body {
 
 - TypeScriptの型によってコードの安全性が高まることを理解した
 - Next.jsのApp Routerとファイルベースルーティングの仕組みを理解した
-- propsでデータを渡す方法と、useStateで状態を管理する方法を習得した
-- モックデータと useState を使って絞り込みフィルター付きの本の一覧画面を実装した
+- propsでデータを渡す方法を習得した
+- モックデータを使って本の一覧画面を実装した
 
 ### 🛠️ 変更をコミットしてpushする
 
