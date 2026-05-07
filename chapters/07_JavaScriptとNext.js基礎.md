@@ -166,11 +166,9 @@ export default function BookCard({ title, author, availableCount }: BookCardProp
 <BookCard title="実践フルスタックWeb開発" author="山田太郎" availableCount={3} />
 ```
 
-### 🛠️ useStateで状態を管理する
+### useStateで状態を管理する
 
-**useState**はコンポーネント内で変化するデータ（状態）を管理するための仕組みです。
-
-`frontend/src/components/Counter.tsx` を新規作成して動作を確認します。
+**useState**はコンポーネント内で変化するデータ（状態）を管理するための仕組みです。カウンターを例に構造を見てみましょう。
 
 ```tsx
 'use client'  // useStateはClient Componentでしか使えないため宣言が必要
@@ -207,39 +205,7 @@ export default function Counter() {
 >
 > 迷ったら `'use client'` を宣言しても動きます。Server Componentのみの制約（サーバー側でのみ使えるAPIを使う等）がなくなるだけで、基本的な動作に支障はありません。
 
-### 🛠️ Counter を page.tsx に追加して動作確認する
-
-`Counter` をブラウザで確認するため、`frontend/src/app/page.tsx` を以下のように書き換えます。
-
-> **補足**：Chapter 3 で書いた Django API への fetch 処理は、この章では使いません。Chapter 8 で改めて API 接続を実装します。
-
-```tsx
-import Counter from '@/components/Counter'
-
-export default function Home() {
-    return (
-        <main>
-            <Counter />
-        </main>
-    )
-}
-```
-
-`http://localhost:3000/` を開き、**+1** ボタンをクリックするたびにカウントが増えることを確認してください。
-
-確認できたら、`page.tsx` を以下の状態に戻します。
-
-```tsx
-export default function Home() {
-    return (
-        <main>
-            <h1>図書館システム</h1>
-        </main>
-    )
-}
-```
-
-この `Counter.tsx` 自体は次節以降で参照しないため、削除しても構いません。
+useStateを使った実際の機能は、7-5の本の一覧画面で実装します。
 
 ## 7-4 コンポーネント構成の設計
 
@@ -384,18 +350,38 @@ export default function BookCard({ book }: BookCardProps) {
 }
 ```
 
-`frontend/src/app/books/page.tsx` を作成します。
+`frontend/src/app/books/page.tsx` を作成します。useState を使って「貸出可能のみ表示」フィルターを実装します。
 
 ```tsx
+'use client'
+
+import { useState } from 'react'
 import { mockBooks } from '@/data/mockBooks'
 import BookCard from '@/components/BookCard'
 
 export default function BooksPage() {
+    const [showAvailableOnly, setShowAvailableOnly] = useState(false)
+    // useState(false) は初期値 false の状態を作る
+
+    const filteredBooks = showAvailableOnly
+        ? mockBooks.filter((book) => book.available_count > 0)
+        // .filter() は配列から条件に合う要素だけを取り出して新しい配列を返す
+        : mockBooks
+
     return (
         <main className="container mx-auto p-8">
             <h1 className="text-2xl font-bold mb-6">本の一覧</h1>
+            <label className="flex items-center gap-2 mb-4">
+                <input
+                    type="checkbox"
+                    checked={showAvailableOnly}
+                    onChange={(e) => setShowAvailableOnly(e.target.checked)}
+                    // onChange はチェック状態が変わったときに実行する
+                />
+                貸出可能のみ表示
+            </label>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {mockBooks.map((book) => (
+                {filteredBooks.map((book) => (
                     // .map() は配列の各要素に対して処理を実行して新しい配列を返す
                     <BookCard key={book.id} book={book} />
                     // key はReactがリスト要素を識別するために必要な一意の値
@@ -405,6 +391,8 @@ export default function BooksPage() {
     )
 }
 ```
+
+チェックボックスをオンにすると `showAvailableOnly` が `true` に更新され、コンポーネントが再レンダリングされて貸出可能な本だけに絞り込まれます。
 
 ### 🛠️ Tailwind CSS をインストールする
 
@@ -467,7 +455,7 @@ body {
 - TypeScriptの型によってコードの安全性が高まることを理解した
 - Next.jsのApp Routerとファイルベースルーティングの仕組みを理解した
 - propsでデータを渡す方法と、useStateで状態を管理する方法を習得した
-- モックデータを使って本の一覧画面を実装した
+- モックデータと useState を使って絞り込みフィルター付きの本の一覧画面を実装した
 
 ### 🛠️ 変更をコミットしてpushする
 
