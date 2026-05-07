@@ -139,6 +139,14 @@ TIME_ZONE = 'Asia/Tokyo'
 - `urls.py → views.py → models.py` という処理の流れを理解した
 - `settings.py` の `INSTALLED_APPS`・`DATABASES`・`DEBUG` 等の主要な設定項目を読めるようになった
 
+### 🛠️ 変更をコミットしてpushする
+
+```bash
+git add .
+git commit -m "Chapter 4: PythonとDjango基礎"
+git push
+```
+
 ---
 
 次の章では、MySQLのテーブル設計を行い、Djangoモデルとして実装します。

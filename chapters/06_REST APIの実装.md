@@ -319,6 +319,14 @@ HTTP 201 と上記レスポンスが返れば成功です。
 - ModelViewSetとRouterを使ってCRUD APIを実装した
 - PostmanでAPIを単体確認する習慣を身につけた
 
+### 🛠️ 変更をコミットしてpushする
+
+```bash
+git add .
+git commit -m "Chapter 6: REST APIの実装"
+git push
+```
+
 ---
 
 次の章からはフロントエンドの実装に移ります。Chapter 7 では TypeScript と Next.js の基礎を学びます。

@@ -455,6 +455,14 @@ body {
 - propsでデータを渡す方法と、useStateで状態を管理する方法を習得した
 - モックデータを使って本の一覧画面を実装した
 
+### 🛠️ 変更をコミットしてpushする
+
+```bash
+git add .
+git commit -m "Chapter 7: JavaScriptとNext.js基礎"
+git push
+```
+
 ---
 
 次の章では、モックデータをAPIデータに切り替えるための接続設定を行います。
