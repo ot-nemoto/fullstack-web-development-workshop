@@ -132,19 +132,7 @@ DATABASES = {
 }
 ```
 
-続けて、`docker-compose.yml` の `backend` サービスに DB 接続用の環境変数を追加します。
-
-```yaml
-services:
-  backend:
-    environment:
-      - DB_HOST=db
-      - DB_NAME=library
-      - DB_USER=root
-      - DB_PASSWORD=password
-```
-
-ローカルでは `docker-compose.yml` の環境変数がそのまま使われ、CI ではワークフロー内で設定した環境変数が使われます。
+> **補足**：ローカル環境の DB 接続情報（`DB_HOST=db` 等）は、Ch.2 で確認した `.devcontainer/docker-compose.yml` の `app` サービスに既に設定されています。追加の変更は不要です。ローカルでは `.devcontainer/docker-compose.yml` の環境変数が使われ、CI ではワークフロー内で設定した環境変数が使われます。
 
 ### 🛠️ Djangoテスト用ワークフローを作成する
 
@@ -261,7 +249,6 @@ jobs:
 git add .github/workflows/django.yml
 git add .github/workflows/nextjs.yml
 git add backend/config/settings.py
-git add docker-compose.yml
 git commit -m "Add GitHub Actions workflows"
 git push origin feature/add-tests
 ```
@@ -275,42 +262,16 @@ GitHub のリポジトリページを開き、**Actions** タブをクリック�
 
 PR ページに戻ると、チェックが通ったことが表示されます。
 
-### 🛠️ テストを意図的に失敗させてCIの動作を確認する
+### CIが失敗したときの表示
 
-CI が本当に機能しているか確認するために、テストを意図的に壊します。
+もしテストが失敗するコードをプッシュした場合、GitHub の Actions タブには ❌ が表示されます。PR ページにも赤いバツ印が出て、マージ前に問題があることが一目でわかります。
 
-`backend/library/tests.py` の `test_get_book_list` を一時的に変更します。
-
-```python
-def test_get_book_list(self):
-    response = self.client.get('/api/books/')
-    self.assertEqual(response.status_code, status.HTTP_200_OK)
-    self.assertEqual(len(response.data), 999)  # 意図的に間違えた値
+```
+❌ Django Tests       — 失敗
+✅ Next.js Build and Test — 実行完了（成功）
 ```
 
-コミットしてプッシュします。
-
-```bash
-git add backend/library/tests.py
-git commit -m "Intentionally break test"
-git push origin feature/add-tests
-```
-
-GitHub の Actions タブを確認すると、Django Tests が ❌ になります。PR ページでも赤いバツ印が表示され、「テストが失敗している」と明示されます。
-
-確認できたら、元に戻してコミットします。
-
-```python
-self.assertEqual(len(response.data), 1)  # 正しい値に戻す
-```
-
-```bash
-git add backend/library/tests.py
-git commit -m "Fix broken test"
-git push origin feature/add-tests
-```
-
-再度 CI が緑になることを確認します。
+テストを通過させない限りマージを防ぐ運用にすることで、壊れたコードがメインブランチに混入するリスクを大幅に減らせます。
 
 ## まとめ
 
