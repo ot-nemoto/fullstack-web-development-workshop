@@ -1,4 +1,4 @@
-# Chapter 7：JavaScriptとNext.js基礎
+﻿# Chapter 7：JavaScriptとNext.js基礎
 
 Chapter 7 では `frontend/` だけを触ります。バックエンドには一切触れません。
 
@@ -409,6 +409,8 @@ body {
 - Next.jsのApp Routerとファイルベースルーティングの仕組みを理解した
 - propsでデータを渡す方法を習得した
 - モックデータを使って本の一覧画面を実装した
+
+> **参考コード**：この章完了時点のコードは [v2.2 - JavaScriptとNext.js基礎](https://github.com/ot-nemoto/fullstack-web-development-workshop-app/releases/tag/v2.2) で確認できます。手順通りに進めてコードが動かない場合、ここと見比べてみてください。
 
 ### 🛠️ 変更をコミットしてpushする
 
