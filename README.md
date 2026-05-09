@@ -1,6 +1,6 @@
 # 実践フルスタックWeb開発ワークショップ
 
-![システム概要](docs/images/overview.png)
+![システム概要](docs/images/overview.webp)
 
 ## 前提
 
