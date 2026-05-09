@@ -1,4 +1,4 @@
-# Chapter 6：REST APIの実装（Django REST Framework）
+﻿# Chapter 6：REST APIの実装（Django REST Framework）
 
 この章では、Chapter 5で定義したモデルをもとに、フロントエンドから呼び出せるREST APIを実装します。Django REST Framework（DRF）を使うと、Serializerによるデータ変換とViewSetによるCRUD処理を少ないコードで実現できます。
 
@@ -306,6 +306,8 @@ curl http://localhost:8000/api/books/
 - DRFのModelSerializerでモデルとJSONの変換・バリデーションを実装した
 - ModelViewSetとRouterを使ってCRUD APIを実装した
 - curlでAPIを単体確認する習慣を身につけた
+
+> **参考コード**：この章完了時点のコードは [v2.1 - REST APIの実装](https://github.com/ot-nemoto/fullstack-web-development-workshop-app/releases/tag/v2.1) で確認できます。手順通りに進めてコードが動かない場合、ここと見比べてみてください。
 
 ### 🛠️ 変更をコミットしてpushする
 

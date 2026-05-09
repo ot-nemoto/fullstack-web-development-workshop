@@ -17,6 +17,28 @@
 
 ---
 
+## チェックポイント（完成形コード）
+
+各章完了時点のコードを [fullstack-web-development-workshop-app](https://github.com/ot-nemoto/fullstack-web-development-workshop-app) リポジトリの Release として公開しています。手順通りに進めてコードが動かない場合、対応するリリースと見比べてください。
+
+| 章 | リリース |
+|----|---------|
+| Ch.2 開発環境の構築 | [v0.9](https://github.com/ot-nemoto/fullstack-web-development-workshop-app/releases/tag/v0.9) |
+| Ch.3 はじめての全通 | [v1.0](https://github.com/ot-nemoto/fullstack-web-development-workshop-app/releases/tag/v1.0) |
+| Ch.5 データベース設計とDjangoモデル | [v2.0](https://github.com/ot-nemoto/fullstack-web-development-workshop-app/releases/tag/v2.0) |
+| Ch.6 REST APIの実装 | [v2.1](https://github.com/ot-nemoto/fullstack-web-development-workshop-app/releases/tag/v2.1) |
+| Ch.7 JavaScriptとNext.js基礎 | [v2.2](https://github.com/ot-nemoto/fullstack-web-development-workshop-app/releases/tag/v2.2) |
+| Ch.8 フロントエンドとバックエンドの接続 | [v2.3](https://github.com/ot-nemoto/fullstack-web-development-workshop-app/releases/tag/v2.3) |
+| Ch.9 本の管理機能 | [v2.4](https://github.com/ot-nemoto/fullstack-web-development-workshop-app/releases/tag/v2.4) |
+| Ch.10 認証 | [v2.5](https://github.com/ot-nemoto/fullstack-web-development-workshop-app/releases/tag/v2.5) |
+| Ch.11 貸出管理機能 | [v2.6](https://github.com/ot-nemoto/fullstack-web-development-workshop-app/releases/tag/v2.6) |
+| Ch.12 バッチ処理 | [v2.7](https://github.com/ot-nemoto/fullstack-web-development-workshop-app/releases/tag/v2.7) |
+| Ch.13 テスト | [v3.0](https://github.com/ot-nemoto/fullstack-web-development-workshop-app/releases/tag/v3.0) |
+| Ch.14 CI/CD | [v3.1](https://github.com/ot-nemoto/fullstack-web-development-workshop-app/releases/tag/v3.1) |
+| Ch.15 本番環境 | [v3.2](https://github.com/ot-nemoto/fullstack-web-development-workshop-app/releases/tag/v3.2) |
+
+---
+
 ## [はじめに](chapters/00_はじめに.md)
 
 - 本書を執筆した背景
