@@ -1,5 +1,7 @@
 # 実践フルスタックWeb開発ワークショップ
 
+![Next.js・Django・MySQL の三層構造と、環境構築・API実装・品質管理の3ステップからなるシステム概要図](docs/images/overview.webp)
+
 ## 前提
 
 | 項目 | 内容 |
